@@ -1,0 +1,81 @@
+.tooltip {
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  margin: 5px;
+  padding-right: 5px;
+  max-width: 285px;
+  color: white;
+  background-color: black;
+  font-family: 'ＭＳ Ｐゴシック';
+  font-size: 12px;
+}
+
+.border-normal {
+  padding-top: 5px;
+  border: 7px solid black;
+  border-image: url("img/ui/tooltip-border-normal.png") 7;
+}
+.border-nx {
+  /* margin-left: 1em; */
+  border: 12px solid black;
+  border-image: url("img/ui/tooltip-border-nx.png") 12;
+}
+
+.item-different-line {
+  border-left-color: #00f800 !important;
+}
+.item-differentOp-line {
+  border-left-color: #00f800 !important;
+  color: #00f800 !important;
+}
+.item-different-line .text-color-LTYELLOW  {
+  color: #00f800 !important;
+}
+.tooltip > div {
+  border-left: solid #000 3px;
+  padding-left: 3px;
+  line-height: 1.2em;
+}
+.label {
+  padding-top: 8px;
+  color: #00ffff;
+}
+
+.name {
+  padding-top: 8px;
+}
+
+.image {
+  margin: 0px;
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+.rank {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.grade {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+}
+
+.text-color-BTBLUE {color: #50a0f8;}
+.text-color-CTPURPLE {color: #dd82dd;}
+.text-color-CYAN {color: #00ffff;}
+.text-color-GOLDYELLOW {color: #ffdf00;}
+.text-color-GRAY {color: #777;}
+.text-color-GREEN {color: #00cc00;}
+.text-color-LTGREEN {color: #00ff00;}
+.text-color-LTORANGE {color: #ff9900;}
+.text-color-LTRED {color: #f80000;}
+.text-color-LTYELLOW {color: #f8f800;}
+.text-color-WHITE {color: #fff;}
+
+.item-name-U {color: #d8b888;}
+.item-name-NX {color: #b44444;}
+.item-name-EX {color: #b2b2f8;}
+.item-name-T {color: #00f800;}
