@@ -1,4 +1,4 @@
-/* global status_type, extra_status_type, job_type, item_type, not_equipment */
+/* global version, status_type, extra_status_type, job_type, item_type, not_equipment */
 
 let itemdata = [];
 let textdata = {};
@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('app').appendChild(render(item.Id))
     })
   }
+
+  document.getElementById('version').innerText = version;
 });
 
 const render = (id) => {
