@@ -1,10 +1,14 @@
 /* global version, status_type, extra_status_type, job_type, item_type, not_equipment */
 
+const SEARCH_LIMIT = 2000;
 let itemdata = [];
 let textdata = {};
 document.addEventListener('DOMContentLoaded', async () => {
   const params = (new URL(window.location.href)).searchParams;
-  if (params.toString() === '') return; // TODO: 入口
+  if (params.toString() === '') {
+    document.getElementById('app').appendChild(index());
+    return;
+  }
 
   const itemdata_url = 'data/itemData.json';
   const textdata_url = 'data/textData.json';
@@ -22,15 +26,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const hit = itemdata.filter(e => e.Rank !== 'NX' && e.Type == type);
     const result = document.createElement('p');
     document.getElementById('app').appendChild(result);
-    result.innerText = `${item_type[type]}: ${hit.length}件`;
+    result.innerText = `${item_type[type]}: ${hit.length}件${
+      hit.length > SEARCH_LIMIT
+      ? ` (${SEARCH_LIMIT}件に制限しています)`
+      : ''}`;
 
-    hit.slice(0, 1000).map(item => {
-      document.getElementById('app').appendChild(render(item.Id))
-    })
+    hit.slice(0, SEARCH_LIMIT).map((item) => {
+      document.getElementById('app').appendChild(render(item.Id));
+    });
   }
 
   document.getElementById('version').innerText = version;
 });
+
+const index = () => { undefined; };
 
 const render = (id) => {
   const item = itemdata.find(e => e.Id == id);
@@ -65,7 +74,7 @@ const render = (id) => {
       `<img class="grade" src="img/ui/type-icon-${item.Grade}.gif" />`);
     }
   }
-  { // name
+  {
     const row = document.createElement('div');
     tooltip.appendChild(row);
     row.className = 'name';
@@ -81,19 +90,18 @@ const render = (id) => {
     }
   }
   if (item.AtParam.Max || item.OpPrt.length || item.OpBit.length){
-    // <基本情報>
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
     row.className = 'label';
     row.innerText = '<基本情報>';
   }
-  if (!not_equipment.includes(item.Type)){ // type
+  if (!not_equipment.includes(item.Type)){
     const row = document.createElement('div');
     tooltip.appendChild(row);
     row.innerText = '- ' + item_type[item.Type];
   }
-  { // 攻撃力
+  {
     const atmin = item.AtParam.Min || 0;
     const atmax = item.AtParam.Max || 0;
     const speed = item.AtParam.Speed || 0;
@@ -106,17 +114,16 @@ const render = (id) => {
       if (speed) {
         html += ` (<span class='text-color-LTYELLOW'>${(speed/100).toFixed(2)}</span>秒)`;
       }
-      // 
       row.innerHTML = html;
       if (nxitem && !equals(item.AtParam, nxitem.AtParam)) {
         row.className = 'item-different-line';
       }
     }
   }
-  { // 射程距離
+  {
     const range = item.AtParam.Range || 0;
     if (range !== 0) {
-      const html = `- 射程距離 <span class='text-color-LTYELLOW'>${range}</span>`
+      const html = `- 射程距離 <span class='text-color-LTYELLOW'>${range}</span>`;
       const row = document.createElement('div');
       tooltip.appendChild(row);
       row.innerHTML = html;
@@ -125,7 +132,7 @@ const render = (id) => {
       }
     }
   }
-  { // baseop
+  {
     item.OpPrt.map((baseop, idx) => {
       if (baseop.Id === -1) return null;
 
@@ -135,12 +142,12 @@ const render = (id) => {
         const min = item.ValueTable[index][0];
         const max = item.ValueTable[index][1];
         if (min === max) return min;
-        return `[${min}~${max}]`
+        return `[${min}~${max}]`;
       });
       let opText = applyValue(replaceTextData(
         textdata.OptionProper[baseop.Id]), ...Value);
       if (opText === 'undefined') {
-        opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`
+        opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
       }
       row.innerHTML = '- ' + opText;
       if (nxitem && !equals(item.OpPrt[idx], nxitem.OpPrt[idx])) {
@@ -149,7 +156,7 @@ const render = (id) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
-  { // option
+  {
     item.OpBit.map((option, idx) => {
       if (option.Id === -1) return null;
 
@@ -158,7 +165,7 @@ const render = (id) => {
       let opText = applyValue(replaceTextData(
         textdata.OptionBasic[option.Id]), ...option.Value);
       if (opText === 'undefined') {
-        opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`
+        opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
       }
       opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
         (match, p1, p2, p3, ) => {
@@ -171,15 +178,14 @@ const render = (id) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
-  // TODO: padding (ONLY DIFF MODE)
-  if (nxitem || item.Rank === 'NX') { // <錬成 オプション 情報>
+  if (nxitem || item.Rank === 'NX') {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
     row.className = 'label';
     row.innerText = '<錬成 オプション 情報>';
   }
-  { // nxoption
+  {
     item.OpNxt.map(option => {
       if (option.Id === -1) return null;
 
@@ -188,7 +194,7 @@ const render = (id) => {
       let opText = applyValue(replaceTextData(
         textdata.OptionBasic[option.Id]), ...option.Value);
       if (opText === 'undefined') {
-        opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`
+        opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
       }
       opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
         (match, p1, p2, p3, ) => {
@@ -210,7 +216,7 @@ const render = (id) => {
     }
 
   }
-  { // <説明>
+  {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
@@ -223,7 +229,7 @@ const render = (id) => {
 
     row.innerHTML = '- ' + replaceTextData(item.Text);
   }
-  if (Object.keys(item.Require).length) { // <要求能力値>
+  if (Object.keys(item.Require).length) {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
@@ -246,7 +252,7 @@ const render = (id) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
-  if (item.Job.length){ // <着用/使用可能な職業>
+  if (item.Job.length){
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
@@ -270,30 +276,29 @@ const render = (id) => {
   } else {
     return tooltip;
   }
-}
+};
 
 
 const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
-function applyValue(text) {
-  const args = arguments;
+function applyValue(text, ...args) {
   return text.replace(/%v(\d)/g, (org, matched) => {
     return args[parseInt(matched) + 1];
   }).replace(/[+-]([+-])/g, "$1");
 }
 
 const replaceTextData = (text) => {
-  text = ("" + text)
+  text = String(text)
     .replace(/\r\n/g, "<br />")
     .replace(/(%d)?%a/g, "<br />")
     .replace(/(\[[^\]]*?)(\d)(.*?\])/g, "$1%v$2$3")
-    .replace(/\[(.*?)\]/g, "<span class='text-color-LTYELLOW'>$1</span>")
+    .replace(/\[(.*?)\]/g, "<span class='text-color-LTYELLOW'>$1</span>");
   return replaceColorTag(text);
-}
+};
 
 const replaceColorTag = (text) => {
   return text.replace(/<c:([^> ]+?)>(.+?)<n>/g,
   (string, matched1, matched2) => {
     return `<span class='text-color-${matched1}'>${matched2}</span>`;
   });
-}
+};

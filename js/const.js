@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const version = '2021/09/08 v0.672'
+const version = '2021/09/08 v0.672';
 
 const status_type = {
   0: "レベル",
