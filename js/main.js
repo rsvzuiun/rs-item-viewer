@@ -19,9 +19,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   itemdata = await (await fetch(itemdata_url)).json();
   textdata = await (await fetch(textdata_url)).json();
 
+  const query = params.get('q');
+  if (query) {
+    const hit = itemdata.filter(e => e.Rank !== 'NX' && e.Name.match(query));
+    const result = document.createElement('p');
+    document.getElementById('app').appendChild(result);
+    result.innerText = `${query}: ${hit.length}件${
+      hit.length > SEARCH_LIMIT
+      ? ` (${SEARCH_LIMIT}件に制限しています)`
+      : ''}`;
+
+    hit.slice(0, SEARCH_LIMIT).map((item) => {
+      document.getElementById('app').appendChild(render(item.Id));
+    });
+    return;
+  }
+
   const id = parseInt(params.get('id'));
   if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
     document.getElementById('app').appendChild(render(params.get('id')));
+    return;
   }
 
   const type = params.get('type');
@@ -37,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     hit.slice(0, SEARCH_LIMIT).map((item) => {
       document.getElementById('app').appendChild(render(item.Id));
     });
+    return;
   }
 });
 
