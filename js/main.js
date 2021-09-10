@@ -5,6 +5,8 @@ const SEARCH_LIMIT = 2000;
 let itemdata = [];
 let textdata = {};
 document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('version').innerText = version;
+
   const params = (new URL(window.location.href)).searchParams;
   if (params.toString() === '') {
     document.getElementById('app').appendChild(index());
@@ -36,8 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('app').appendChild(render(item.Id));
     });
   }
-
-  document.getElementById('version').innerText = version;
 });
 
 const index = () => {
