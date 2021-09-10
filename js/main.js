@@ -59,6 +59,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 const index = () => {
+  const root = document.createDocumentFragment();
+  const form = document.createElement('form');
+  root.appendChild(form);
+  form.action = '.';
+  form.method = 'get';
+  form.innerHTML = `
+    <label for='q'>キーワード: </label>
+    <input type='text' name= 'q' id='q' />
+    <button type='submit'>検索</button>
+  `;
+
   const build = (groups) => {
     const frag = document.createDocumentFragment();
     for (let value of groups) {
@@ -81,7 +92,8 @@ const index = () => {
     }
     return frag;
   };
-  return build(type_categories);
+  root.appendChild(build(type_categories));
+  return root;
 };
 
 const render = (id) => {
