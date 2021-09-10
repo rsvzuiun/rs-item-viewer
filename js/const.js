@@ -1,3 +1,4 @@
+'use strict';
 /* eslint-disable no-unused-vars */
 const version = '2021/09/08 v0.672';
 

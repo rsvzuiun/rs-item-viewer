@@ -1,3 +1,4 @@
+'use strict';
 /* global version, status_type, extra_status_type, job_type, item_type,
 not_equipment, type_categories */
 
@@ -5,12 +6,22 @@ const SEARCH_LIMIT = 2000;
 let itemdata = [];
 let textdata = {};
 document.addEventListener('DOMContentLoaded', async () => {
-  document.getElementById('version').innerText = version;
+  document.getElementById('app').appendChild(await app());
+  document.getElementById('app').insertAdjacentHTML('afterend', `
+  <hr />
+  <div id='version'>${version}</div>
+  <footer>
+    当サイトで利用している画像及びデータは、株式会社ゲームオンに帰属します。<br />
+    許可無くご利用又は転用になられる事は出来ませんので、予めご了承下さい。<br />
+    Copyright (c) L&K Co., Ltd. All Rights Reserved. License to GameOn Co., Ltd.
+  </footer>`);
+  return;
+});
 
+const app = async () => {
   const params = (new URL(window.location.href)).searchParams;
   if (params.toString() === '') {
-    document.getElementById('app').appendChild(index());
-    return;
+    return index();
   }
 
   const itemdata_url = 'data/itemData.json';
@@ -21,42 +32,43 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const query = params.get('q');
   if (query) {
+    const frag = document.createDocumentFragment();
     const hit = itemdata.filter(e => e.Rank !== 'NX' && e.Name.match(query));
     const result = document.createElement('p');
-    document.getElementById('app').appendChild(result);
+    frag.appendChild(result);
     result.innerText = `${query}: ${hit.length}件${
       hit.length > SEARCH_LIMIT
       ? ` (${SEARCH_LIMIT}件に制限しています)`
       : ''}`;
 
     hit.slice(0, SEARCH_LIMIT).map((item) => {
-      document.getElementById('app').appendChild(render(item.Id));
+      frag.appendChild(render(item.Id));
     });
-    return;
+    return frag;
   }
 
   const id = parseInt(params.get('id'));
   if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
-    document.getElementById('app').appendChild(render(params.get('id')));
-    return;
+    return render(params.get('id'));
   }
 
   const type = params.get('type');
   if (type >= 0 && Object.keys(item_type).includes(type)) {
+    const frag = document.createDocumentFragment();
     const hit = itemdata.filter(e => e.Rank !== 'NX' && e.Type == type);
     const result = document.createElement('p');
-    document.getElementById('app').appendChild(result);
+    frag.appendChild(result);
     result.innerText = `${item_type[type]}: ${hit.length}件${
       hit.length > SEARCH_LIMIT
       ? ` (${SEARCH_LIMIT}件に制限しています)`
       : ''}`;
 
     hit.slice(0, SEARCH_LIMIT).map((item) => {
-      document.getElementById('app').appendChild(render(item.Id));
+      frag.appendChild(render(item.Id));
     });
-    return;
+    return frag;
   }
-});
+};
 
 const index = () => {
   const root = document.createDocumentFragment();
@@ -117,7 +129,7 @@ const render = (id) => {
 
     if (item.ImageId >= 0){
       image.insertAdjacentHTML('beforeend',
-      `<img src="img/item/${item.ImageId}.png" />`);
+      `<img src="img/item/${item.ImageId}.png" width="34" height="34" />`);
     }
 
     if (item.Rank !== 'N') {
