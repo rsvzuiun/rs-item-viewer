@@ -308,7 +308,7 @@ const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 function applyValue(text, ...args) {
   return text.replace(/%v(\d)/g, (org, matched) => {
-    return args[parseInt(matched) + 1];
+    return args[parseInt(matched)];
   }).replace(/[+-]([+-])/g, "$1");
 }
 
