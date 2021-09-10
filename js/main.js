@@ -119,12 +119,15 @@ const render = (id) => {
     tooltip.className = 'tooltip border-normal';
   }
 
-  if (item.ImageId >= 0) {
+  {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
+    const anchor = document.createElement('a');
+    row.appendChild(anchor);
+    anchor.href = `?id=${id}`;
     const image = document.createElement('div');
-    row.appendChild(image);
+    anchor.appendChild(image);
     image.className = 'image';
 
     if (item.ImageId >= 0){
