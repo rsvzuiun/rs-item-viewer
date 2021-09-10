@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 const render = (id) => {
-  const item = itemdata[id];
-  const nxitem = item.NxId ? itemdata[item.NxId] : undefined;
+  const item = itemdata.find(e => e.Id == id);
+  const nxitem = item.NxId ? itemdata.find(e => e.Id == item.NxId) : undefined;
 
   const tooltip = document.createElement('div');
   if (item.Rank === 'NX') {
