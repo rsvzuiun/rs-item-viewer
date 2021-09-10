@@ -1,4 +1,5 @@
-/* global version, status_type, extra_status_type, job_type, item_type, not_equipment */
+/* global version, status_type, extra_status_type, job_type, item_type,
+not_equipment, type_categories */
 
 const SEARCH_LIMIT = 2000;
 let itemdata = [];
@@ -39,7 +40,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('version').innerText = version;
 });
 
-const index = () => { undefined; };
+const index = () => {
+  const build = (groups) => {
+    const frag = document.createDocumentFragment();
+    for (let value of groups) {
+      const child = document.createElement('div');
+      frag.appendChild(child);
+      if (typeof(value[0]) === 'string') {
+        const head = document.createElement('h2');
+        head.innerText = value[0];
+        child.className = 'index-frame';
+        child.appendChild(head);
+        child.appendChild(build(value.slice(1)));
+      } else {
+        for (let i of value) {
+          const image = document.createElement('div');
+          image.className = 'index-image';
+          image.innerHTML = `<a href='?type=${i}'><img src='img/type/${i}.png' /><br />${item_type[i]}</a>`;
+          child.appendChild(image);
+        }
+      }
+    }
+    return frag;
+  };
+  return build(type_categories);
+};
 
 const render = (id) => {
   const item = itemdata.find(e => e.Id == id);

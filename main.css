@@ -1,3 +1,21 @@
+h2 {
+  font-size: 1em;
+  margin: 0px;
+  min-width: 300px;
+}
+.index-frame {
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  border: 1px solid black;
+}
+.index-image {
+  display: inline-block;
+  text-align: center;
+  min-width: 60px;
+  font-size: x-small;
+}
+
 .tooltip {
   display: inline-block;
   vertical-align: top;
