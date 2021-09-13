@@ -337,7 +337,7 @@ const render = (id) => {
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
 
-  if (item.NxId && item.Rank !== 'NX') {
+  if (item.NxId && item.Rank !== 'NX' && item.NxId !== item.Id) {
     const root = document.createElement('div');
     root.className = 'nx-pair';
     root.appendChild(tooltip);
