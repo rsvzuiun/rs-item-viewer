@@ -41,6 +41,7 @@ const app = async () => {
   const not_query = params.get('nq');
   const type = params.get('type');
   const op = params.get('op');
+  const group = params.get('group');
 
   const frag = document.createDocumentFragment();
   let hit = itemdata;
@@ -54,6 +55,12 @@ const app = async () => {
   } else {
     hit = hit.filter(e => e.Rank !== 'NX');
   }
+  if (group === 'w') {
+    hit = hit.filter(e => e.AtParam.Range > 0);
+  }
+  if (group === 'nw') {
+    hit = hit.filter(e => e.AtParam.Range <= 0);
+  }
   const result = document.createElement('p');
   frag.appendChild(result);
 
@@ -62,6 +69,8 @@ const app = async () => {
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type) restext += ` ${item_type[type]}`;
   if (op) restext += ` "${textdata.OptionBasic[op]}"`;
+  if (group === 'w') restext += ' 武器';
+  if (group === 'nw') restext += ' 武器以外';
   restext += ` ${hit.length}件`;
   if (hit.length > SEARCH_LIMIT)
     restext += ` (${SEARCH_LIMIT}件に制限しています)`;
