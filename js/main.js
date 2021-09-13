@@ -43,7 +43,7 @@ const app = async () => {
   const op = params.get('op');
 
   const frag = document.createDocumentFragment();
-  let hit = itemdata.filter(e => e.Rank !== 'NX');
+  let hit = itemdata;
   if (query) hit = hit.filter(e => e.Name.match(query));
   if (not_query) hit = hit.filter(e => !e.Name.match(not_query));
   if (type) hit = hit.filter(e => e.Type == type);
@@ -51,6 +51,8 @@ const app = async () => {
     hit = hit.filter(e => 
       e.OpBit.some(i => i.Id == op) || e.OpNxt.some(i => i.Id == op)
     );
+  } else {
+    hit = hit.filter(e => e.Rank !== 'NX');
   }
   const result = document.createElement('p');
   frag.appendChild(result);
