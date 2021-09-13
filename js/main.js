@@ -30,44 +30,46 @@ const app = async () => {
   itemdata = await (await fetch(itemdata_url)).json();
   textdata = await (await fetch(textdata_url)).json();
 
-  const query = params.get('q');
-  if (query) {
-    const frag = document.createDocumentFragment();
-    const hit = itemdata.filter(e => e.Rank !== 'NX' && e.Name.match(query));
-    const result = document.createElement('p');
-    frag.appendChild(result);
-    result.innerText = `${query}: ${hit.length}件${
-      hit.length > SEARCH_LIMIT
-      ? ` (${SEARCH_LIMIT}件に制限しています)`
-      : ''}`;
-
-    hit.slice(0, SEARCH_LIMIT).map((item) => {
-      frag.appendChild(render(item.Id));
-    });
-    return frag;
-  }
-
   const id = parseInt(params.get('id'));
   if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
     return render(params.get('id'));
   }
 
-  const type = params.get('type');
-  if (type >= 0 && Object.keys(item_type).includes(type)) {
-    const frag = document.createDocumentFragment();
-    const hit = itemdata.filter(e => e.Rank !== 'NX' && e.Type == type);
-    const result = document.createElement('p');
-    frag.appendChild(result);
-    result.innerText = `${item_type[type]}: ${hit.length}件${
-      hit.length > SEARCH_LIMIT
-      ? ` (${SEARCH_LIMIT}件に制限しています)`
-      : ''}`;
+  // ここから検索
 
-    hit.slice(0, SEARCH_LIMIT).map((item) => {
-      frag.appendChild(render(item.Id));
-    });
-    return frag;
+  const query = params.get('q');
+  const not_query = params.get('nq');
+  const type = params.get('type');
+  const op = params.get('op');
+
+  const frag = document.createDocumentFragment();
+  let hit = itemdata.filter(e => e.Rank !== 'NX');
+  if (query) hit = hit.filter(e => e.Name.match(query));
+  if (not_query) hit = hit.filter(e => !e.Name.match(not_query));
+  if (type) hit = hit.filter(e => e.Type == type);
+  if (op) {
+    hit = hit.filter(e => 
+      e.OpBit.some(i => i.Id == op) || e.OpNxt.some(i => i.Id == op)
+    );
   }
+  const result = document.createElement('p');
+  frag.appendChild(result);
+
+  let restext = '';
+  if (query) restext += ` 含む"${query}"`;
+  if (not_query) restext += ` 含まない"${not_query}"`;
+  if (type) restext += ` ${item_type[type]}`;
+  if (op) restext += ` "${textdata.OptionBasic[op]}"`;
+  restext += ` ${hit.length}件`;
+  if (hit.length > SEARCH_LIMIT)
+    restext += ` (${SEARCH_LIMIT}件に制限しています)`;
+  result.innerText = restext;
+
+  hit.slice(0, SEARCH_LIMIT).map((item) => {
+    frag.appendChild(render(item.Id));
+  });
+
+  return frag;
 };
 
 const index = () => {
