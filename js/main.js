@@ -336,6 +336,47 @@ const render = (id) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
+  {
+    const row = document.createElement('div');
+    tooltip.appendChild(row);
+
+    row.className = 'label';
+    row.innerText = '<システム情報>';
+
+    const Id = document.createElement('div');
+    tooltip.appendChild(Id);
+    Id.innerHTML = `- ID ${yellow(item['Id'])}`;
+
+    if (item['StackSize'] !== 1) {
+      const StackSize = document.createElement('div');
+      tooltip.appendChild(StackSize);
+      StackSize.innerHTML = `- 重ね置き ${yellow(item['StackSize'])}`;
+    }
+
+    if (item['Grade'] !== 'N') {
+      const Durability = document.createElement('div');
+      tooltip.appendChild(Durability);
+      Durability.innerHTML = `- 耐久減少 ${yellow(item['Durability'])}型`;
+    }
+
+    const DropLv = document.createElement('div');
+    tooltip.appendChild(DropLv);
+    DropLv.innerHTML = `- ドロップレベル ${yellow(item['DropLv'])}`;
+
+    const DropFactor = document.createElement('div');
+    tooltip.appendChild(DropFactor);
+    DropFactor.innerHTML = `- ドロップ係数 ${yellow(item['DropFactor'])}`;
+
+    const Price = document.createElement('div');
+    tooltip.appendChild(Price);
+    Price.innerHTML = `- 価格 ${
+      yellow(Math.floor(item['Price']*item['PriceFactor']/100).toLocaleString())
+    } Gold`;
+
+    const Flags = document.createElement('div');
+    tooltip.appendChild(Flags);
+    Flags.innerHTML = `- Flags ${yellow(item['Flags'])}`;
+  }
 
   if (item.NxId && item.Rank !== 'NX' && item.NxId !== item.Id) {
     const root = document.createElement('div');
@@ -351,6 +392,8 @@ const render = (id) => {
 
 const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
+
 function applyValue(text, ...args) {
   return text.replace(/%v(\d)/g, (org, matched) => {
     return args[parseInt(matched)];
@@ -362,7 +405,7 @@ const replaceTextData = (text) => {
     .replace(/\r\n/g, "<br />")
     .replace(/(%d)?%a/g, "<br />")
     .replace(/(\[[^\]]*?)(\d)(.*?\])/g, "$1%v$2$3")
-    .replace(/\[(.*?)\]/g, "<span class='text-color-LTYELLOW'>$1</span>");
+    .replace(/\[(.*?)\]/g, yellow("$1"));
   return replaceColorTag(text);
 };
 
