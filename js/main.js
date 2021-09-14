@@ -229,6 +229,7 @@ const render = (id) => {
       });
       let opText = applyValue(replaceTextData(
         textdata.OptionProper[baseop.Id]), ...Value);
+      if (!opText) return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
       }
@@ -247,8 +248,9 @@ const render = (id) => {
 
       let opText = applyValue(replaceTextData(
         textdata.OptionBasic[option.Id]), ...option.Value);
+      if (opText === '') return null;
       if (opText === 'undefined') {
-        opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
+        opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
       }
       opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
         (match, p1, p2, p3, ) => {
@@ -276,6 +278,7 @@ const render = (id) => {
 
       let opText = applyValue(replaceTextData(
         textdata.OptionBasic[option.Id]), ...option.Value);
+      if (!opText) return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
       }
