@@ -408,11 +408,12 @@ const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
 
 function replaceOpText(text, ...args) {
-  return String(text)
+  text = String(text)
   .replace(/\r\n/g, '<br />')
   .replace(/\[([+-]?)([0-7])\]/g, (org, sign, opid) => {
     return yellow(`${sign}${args[parseInt(opid)]}`);
   });
+  return replaceColorTag(text);
 }
 
 const replaceTextData = (text) => {
