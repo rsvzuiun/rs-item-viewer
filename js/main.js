@@ -227,8 +227,7 @@ const render = (id) => {
         if (min === max) return min;
         return `[${min}~${max}]`;
       });
-      let opText = applyValue(replaceTextData(
-        textdata.OptionProper[baseop.Id]), ...Value);
+      let opText = replaceOpText(textdata.OptionProper[baseop.Id], ...Value);
       if (!opText) return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
@@ -246,8 +245,7 @@ const render = (id) => {
 
       const row = document.createElement('div');
 
-      let opText = applyValue(replaceTextData(
-        textdata.OptionBasic[option.Id]), ...option.Value);
+      let opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
       if (opText === '') return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
@@ -276,8 +274,7 @@ const render = (id) => {
 
       const row = document.createElement('div');
 
-      let opText = applyValue(replaceTextData(
-        textdata.OptionBasic[option.Id]), ...option.Value);
+      let opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
       if (!opText) return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
@@ -410,19 +407,16 @@ const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
 
-function applyValue(text, ...args) {
-  return text.replace(/%v(\d)/g, (org, matched) => {
-    return args[parseInt(matched)];
-  }).replace(/[+-]([+-])/g, "$1");
+function replaceOpText(text, ...args) {
+  return String(text)
+  .replace(/\r\n/g, '<br />')
+  .replace(/\[([+-]?)([0-7])\]/g, (org, sign, opid) => {
+    return yellow(`${sign}${args[parseInt(opid)]}`);
+  });
 }
 
 const replaceTextData = (text) => {
-  text = String(text)
-    .replace(/\r\n/g, "<br />")
-    .replace(/(%d)?%a/g, "<br />")
-    .replace(/(\[[^\]]*?)(\d)(.*?\])/g, "$1%v$2$3")
-    .replace(/\[(.*?)\]/g, yellow("$1"));
-  return replaceColorTag(text);
+  return replaceColorTag(String(text).replace(/\r\n/g, "<br />"));
 };
 
 const replaceColorTag = (text) => {
