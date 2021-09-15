@@ -1,6 +1,6 @@
 'use strict';
 /* eslint-disable no-unused-vars */
-const version = '2021/09/08 v0.672';
+const version = '2021/09/15 v0.673';
 
 const status_type = {
   0: "レベル",
@@ -138,7 +138,7 @@ const item_type = {
 };
 const not_equipment = [
   35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
-  53, 59, 60, 65, 66, 67, 68
+  53, 59, 60, 62, 65, 66, 67, 68
 ];
 
 const type_categories = [
