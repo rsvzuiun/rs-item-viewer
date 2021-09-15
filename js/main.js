@@ -19,23 +19,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 const app = async () => {
+  const textdata_url = 'data/textData.json';
+  const itemdata_url = 'data/itemData.json';
+
+  textdata = await (await fetch(textdata_url)).json();
+
   const params = (new URL(window.location.href)).searchParams;
   if (params.toString() === '') {
     return index();
   }
 
-  const itemdata_url = 'data/itemData.json';
-  const textdata_url = 'data/textData.json';
-
   itemdata = await (await fetch(itemdata_url)).json();
-  textdata = await (await fetch(textdata_url)).json();
 
   const id = parseInt(params.get('id'));
   if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
     return render(params.get('id'));
   }
-
-  // ここから検索
 
   const query = params.get('q');
   const not_query = params.get('nq');
@@ -90,10 +89,50 @@ const index = () => {
   form.action = '.';
   form.method = 'get';
   form.innerHTML = `
-    <label for='q'>キーワード: </label>
-    <input type='text' name= 'q' id='q' />
-    <button type='submit'>検索</button>
+<label for='q'>キーワード:</label>
+  <input type='text' name='q' id='q' />
+  <br />
+<label for='type'>部位: </label>
+  <input type='text' id='selecttype' list='selecttype-list' />
+  <datalist id='selecttype-list'></datalist>
+  <input type='hidden' id='type' name='type' />
+  <br />
+<label for='selectop'>オプション:</label>
+  <input type='text' id='selectop' list='selectop-list' />
+  <datalist id='selectop-list'></datalist>
+  <input type='hidden' id='op' name='op' />
+  <br />
+<label for='group'>フィルタ:</label>
+  <input type='radio' name='group' value='all' checked='checked'>全て</input>
+  <input type='radio' name='group' value='w'>武器</input>
+  <input type='radio' name='group' value='nw'>武器以外</input>
+  <br />
+<button type='submit'>検索</button>
   `;
+  const selectoplist = form.querySelector('#selectop-list');
+  for (const [k, v] of Object.entries(textdata.OptionBasic)) {
+    const option = document.createElement('option');
+    option.value = `${k}: ${v.replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}`;
+    selectoplist.appendChild(option);
+  }
+  form.appendChild(selectoplist);
+  form.querySelector('#selectop').addEventListener('change', (e) => {
+    const m = e.target.value.match(/^(\d+)/);
+    if (m) document.getElementById('op').value = m[1];
+  });
+
+  const selecttypelist = form.querySelector('#selecttype-list');
+  for (const [k, v] of Object.entries(item_type)) {
+    if (not_equipment.includes(parseInt(k))) continue;
+    const option = document.createElement('option');
+    option.value = `${k}: ${v}`;
+    selecttypelist.appendChild(option);
+  }
+  form.appendChild(selecttypelist);
+  form.querySelector('#selecttype').addEventListener('change', (e) => {
+    const m = e.target.value.match(/^(\d+)/);
+    if (m) document.getElementById('type').value = m[1];
+  });
 
   const build = (groups) => {
     const frag = document.createDocumentFragment();
@@ -268,7 +307,7 @@ const render = (id) => {
     row.className = 'label';
     row.innerText = '<錬成 オプション 情報>';
   }
-  {
+  if (item.Rank === 'NX') {
     item.OpNxt.map(option => {
       if (option.Id === -1) return null;
 
