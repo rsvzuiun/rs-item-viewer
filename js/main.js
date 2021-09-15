@@ -1,6 +1,6 @@
 'use strict';
 /* global version, status_type, extra_status_type, job_type, item_type,
-not_equipment, type_categories */
+not_equipment, type_categories, engraved */
 
 const SEARCH_LIMIT = 2000;
 let itemdata = [];
@@ -67,7 +67,7 @@ const app = async () => {
   if (query) restext += ` 含む"${query}"`;
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type) restext += ` ${item_type[type]}`;
-  if (op) restext += ` "${textdata.OptionBasic[op]}"`;
+  if (op) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
   if (group === 'w') restext += ' 武器';
   if (group === 'nw') restext += ' 武器以外';
   restext += ` ${hit.length}件`;
@@ -300,6 +300,59 @@ const render = (id) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
+  if (item?.OpPrt[0]?.Id === 773) {
+    const q = item.OpBit.find(e => e.Id === 774);
+    try {
+      const [setid, equipid] = q.Value;
+
+      const label = document.createElement('div');
+      tooltip.appendChild(label);
+
+      label.className = 'label';
+      label.innerText = `<刻印 - ${
+        engraved[setid].name
+      }[${
+        engraved[setid][equipid].name
+      }]>`;
+
+      {
+        const row = document.createElement('div');
+        tooltip.appendChild(row);
+        row.innerHTML = replaceColorTag(
+          '<c:CTPURPLE>- 同じ刻印装備の着用制限<n> <c:LTYELLOW>0/1<n>');
+      }
+      {
+        const row = document.createElement('div');
+        tooltip.appendChild(row);
+        row.innerText = '- レベル 30';
+      }
+      engraved[setid][equipid].op.map(option => {
+        const row = document.createElement('div');
+
+        let opText = '';
+        if (option.Id === -1) {
+          opText = replaceOpText(option.Text, ...option.Value);
+        } else {
+          opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
+          if (!opText) return null;
+          if (opText === 'undefined') {
+            opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
+          }
+          opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
+            (match, p1, p2, p3, ) => {
+            return `<span class='text-color-LTYELLOW'>${job_type[p3]}</span> ${p1}`;
+          });
+        }
+        row.innerHTML = '- ' + opText;
+        // if (nxitem) {
+        //   row.className = 'item-different-line';
+        // }
+        return row;
+      }).filter(v => v).map(elm => tooltip.appendChild(elm));
+    } catch (error) {
+      console.error(error);
+    }
+  }
   if (nxitem || item.Rank === 'NX') {
     const row = document.createElement('div');
     tooltip.appendChild(row);
@@ -449,8 +502,8 @@ const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
 function replaceOpText(text, ...args) {
   text = String(text)
   .replace(/\r\n/g, '<br />')
-  .replace(/\[([+-]?)([0-7])\]/g, (org, sign, opid) => {
-    return yellow(`${sign}${args[parseInt(opid)]}`);
+  .replace(/\[([+-]?)([0-7])\](0*％?)/g, (org, sign, opid, post) => {
+    return yellow(`${sign}${args[parseInt(opid)]}${post}`);
   });
   return replaceColorTag(text);
 }
