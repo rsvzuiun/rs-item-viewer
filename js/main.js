@@ -1,55 +1,94 @@
-'use strict';
-/* global version, status_type, extra_status_type, job_type, item_type,
-not_equipment, type_categories, engraved */
+// @ts-check
+/* global version, itemdata_url, textdata_url, status_type, extra_status_type,
+job_type, item_type, not_equipment, type_categories, engraved */
+/// <reference path="./const.js" />
+/// <reference path="./engraved.js" />
+
+/**
+ * @typedef {{
+ *   Id: number,
+ *   ImageId: number,
+ *   NxId: number,
+ *   Type: number,
+ *   Name: string,
+ *   Rank: string,
+ *   Grade: string,
+ *   AtParam: {Range: number, Speed: number, Min: number, Max: number},
+ *   Food: number,
+ *   ValueTable: number[][],
+ *   OpPrt: {Id: number, ValueIndex: number[]}[],
+ *   OpBit: {Id: number, Value: number[]}[],
+ *   OpNxt: {Id: number, Value: number[]}[],
+ *   Require: {[key: string]: number | object,
+ *   Extra: {StatusType: number, MulValue: number, ValueIndex: number}},
+ *   Job: number[],
+ *   Text: string,
+ *   StackSize: number,
+ *   Durability: number,
+ *   DropLv: number,
+ *   DropFactor: number,
+ *   Price: number,
+ *   PriceType: number,
+ *   PriceFactor: number,
+ *   Flags: string,
+ * }} Item
+ * @type {Array<Item>}
+ */
+let itemdata = undefined;
+
+/** @type {{OptionProper: ArrayLike<string>, OptionBasic: ArrayLike<string>}} */
+let textdata = undefined;
 
 const SEARCH_LIMIT = 2000;
-let itemdata = [];
-let textdata = {};
+
 document.addEventListener('DOMContentLoaded', async () => {
-  document.getElementById('app').appendChild(await app());
-  document.getElementById('app').insertAdjacentHTML('afterend', `
-  <hr />
-  <div id='version'>${version}</div>
-  <footer>
-    当サイトで利用している画像及びデータは、株式会社ゲームオンに帰属します。<br />
-    許可無くご利用又は転用になられる事は出来ませんので、予めご了承下さい。<br />
-    Copyright (c) L&K Co., Ltd. All Rights Reserved. License to GameOn Co., Ltd.
-  </footer>`);
-  return;
+  [itemdata, textdata] = await Promise.all(
+    [itemdata_url, textdata_url].map(
+      url => fetch(url).then(response => response.json())
+    ));
+  customElements.define('spa-anchor', SPAAnchor, { extends: 'a' });
+  window.addEventListener('popstate', () => {
+    update();
+  });
+
+  update();
 });
 
-const app = async () => {
-  const textdata_url = 'data/textData.json';
-  const itemdata_url = 'data/itemData.json';
+const update = async () => {
+  const app = document.getElementById('app');
+  app.textContent = '';
+  app.appendChild(router());
+  // app.innerHTML = `
+  // <a is="spa-anchor" href='?id=1192'>test</a>
+  // `;
+  app.appendChild(footer());
+};
 
-  textdata = await (await fetch(textdata_url)).json();
-
+const router = () => {
   const params = (new URL(window.location.href)).searchParams;
+
   if (params.toString() === '') {
     return index();
   }
-
-  itemdata = await (await fetch(itemdata_url)).json();
-
   const id = parseInt(params.get('id'));
   if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
-    return render(params.get('id'));
+    return render(id);
   }
 
   const query = params.get('q');
   const not_query = params.get('nq');
-  const type = params.get('type');
-  const op = params.get('op');
+  const type = parseInt(params.get('type'));
+  const op = parseInt(params.get('op'));
   const group = params.get('group');
 
   const frag = document.createDocumentFragment();
   let hit = itemdata;
   if (query) hit = hit.filter(e => e.Name.match(query));
   if (not_query) hit = hit.filter(e => !e.Name.match(not_query));
-  if (type) hit = hit.filter(e => e.Type == type);
+  if (type) hit = hit.filter(e => e.Type === type);
   if (op) {
     hit = hit.filter(e => 
-      e.OpBit.some(i => i.Id == op) || e.OpNxt.some(i => i.Id == op)
+      e.OpBit.some(i => i.Id === op) || e.OpNxt.some(i => i.Id === op)
     );
   } else {
     hit = hit.filter(e => e.Rank !== 'NX');
@@ -116,8 +155,11 @@ const index = () => {
     selectoplist.appendChild(option);
   }
   form.appendChild(selectoplist);
+
   form.querySelector('#selectop').addEventListener('change', (e) => {
+    // @ts-ignore
     const m = e.target.value.match(/^(\d+)/);
+    // @ts-ignore
     if (m) document.getElementById('op').value = m[1];
   });
 
@@ -130,7 +172,9 @@ const index = () => {
   }
   form.appendChild(selecttypelist);
   form.querySelector('#selecttype').addEventListener('change', (e) => {
+    // @ts-ignore
     const m = e.target.value.match(/^(\d+)/);
+    // @ts-ignore
     if (m) document.getElementById('type').value = m[1];
   });
 
@@ -149,7 +193,7 @@ const index = () => {
         for (let i of value) {
           const image = document.createElement('div');
           image.className = 'index-image';
-          image.innerHTML = `<a href='?type=${i}'><img src='img/type/${i}.png' /><br />${item_type[i]}</a>`;
+          image.innerHTML = `<a is='spa-anchor' href='?type=${i}'><img src='img/type/${i}.png' /><br />${item_type[i]}</a>`;
           child.appendChild(image);
         }
       }
@@ -160,6 +204,20 @@ const index = () => {
   return root;
 };
 
+const footer = () => {
+  const footer = document.createElement('div');
+  footer.innerHTML = `
+  <hr />
+  <div id='version'>${version}</div>
+  <footer>
+    当サイトで利用している画像及びデータは、株式会社ゲームオンに帰属します。<br />
+    許可無くご利用又は転用になられる事は出来ませんので、予めご了承下さい。<br />
+    Copyright (c) L&K Co., Ltd. All Rights Reserved. License to GameOn Co., Ltd.
+  </footer>`;
+  return footer;
+};
+
+/** @param {number} id */
 const render = (id) => {
   const item = itemdata.find(e => e.Id == id);
   const nxitem = item.NxId ? itemdata.find(e => e.Id == item.NxId) : undefined;
@@ -494,11 +552,13 @@ const render = (id) => {
   }
 };
 
-
+/** @param {object} a, @param {object} b */
 const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+/** @param {string | number} text */
 const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
 
+/** @param {string} text, @param  {...string|number} args */
 function replaceOpText(text, ...args) {
   text = String(text)
   .replace(/\r\n/g, '<br />')
@@ -508,13 +568,27 @@ function replaceOpText(text, ...args) {
   return replaceColorTag(text);
 }
 
+/** @param {string} text */
 const replaceTextData = (text) => {
   return replaceColorTag(String(text).replace(/\r\n/g, "<br />"));
 };
 
+/** @param {string} text */
 const replaceColorTag = (text) => {
   return text.replace(/<c:([^> ]+?)>(.+?)<n>/g,
   (string, matched1, matched2) => {
     return `<span class='text-color-${matched1}'>${matched2}</span>`;
   });
 };
+
+class SPAAnchor extends HTMLAnchorElement {
+  constructor() {
+    super();
+    /** @type {(this: GlobalEventHandlers, ev: MouseEvent) => any} */
+    this.onclick = (e) => {
+      e.preventDefault();
+      window.history.pushState(null, '', this.href);
+      update();
+    };
+  }
+}

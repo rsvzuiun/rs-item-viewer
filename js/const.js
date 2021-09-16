@@ -1,7 +1,11 @@
-'use strict';
+// @ts-check
 /* eslint-disable no-unused-vars */
 const version = '2021/09/15 v0.673';
 
+const itemdata_url = 'data/itemData.json';
+const textdata_url = 'data/textData.json';
+
+/** @type {Object<number, string>} */
 const status_type = {
   0: "レベル",
   1: "力",
@@ -12,6 +16,8 @@ const status_type = {
   6: "カリスマ",
   7: "運"
 };
+
+/** @type {Object<number, string>} */
 const extra_status_type = {
   0: "レベル",
   1: "力",
@@ -22,11 +28,15 @@ const extra_status_type = {
   6: "知恵",
   7: "運"
 };
+
+/** @type {Object<number, string>} */
 const minipet_food_type = {
   1: "精霊型",
   2: "自然型",
   3: "神霊型"
 };
+
+/** @type {Object<number, string>} */
 const job_type = {
   0: "剣士",
   1: "戦士",
@@ -55,6 +65,8 @@ const job_type = {
   40: "男性キャラクター専用", // original
   41: "女性キャラクター専用"  // original
 };
+
+/** @type {Object<number, string>} */
 const item_type = {
   0: "ヘルメット",
   1: "冠",
@@ -136,6 +148,8 @@ const item_type = {
   77: "ウォーペイント",
   78: "コサージュ",
 };
+
+/** @type {Array<number>} */
 const not_equipment = [
   35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
   53, 59, 60, 62, 65, 66, 67, 68
