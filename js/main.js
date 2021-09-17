@@ -84,6 +84,8 @@ const router = () => {
   const not_query = params.get('nq');
   const type = parseInt(params.get('type'));
   const op = parseInt(params.get('op'));
+  const rank = params.get('rank');
+  const grade = params.get('grade');
   const group = params.get('group');
 
   const frag = document.createDocumentFragment();
@@ -95,8 +97,15 @@ const router = () => {
     hit = hit.filter(e => 
       e.OpBit.some(i => i.Id === op) || e.OpNxt.some(i => i.Id === op)
     );
-  } else {
+  }
+  if (!op && rank !== 'NX') {
     hit = hit.filter(e => e.Rank !== 'NX');
+  }
+  if (rank) {
+    hit = hit.filter(e => e.Rank === rank);
+  }
+  if (grade) {
+    hit = hit.filter(e => e.Grade === grade);
   }
   if (group === 'w') {
     hit = hit.filter(e => e.AtParam.Range > 0);
@@ -112,6 +121,8 @@ const router = () => {
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${item_type[type]}`;
   if (op) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
+  if (rank) restext += ` ${rank}`;
+  if (grade) restext += ` ${grade}`;
   if (group === 'w') restext += ' 武器';
   if (group === 'nw') restext += ' 武器以外';
   restext += ` ${hit.length}件`;
@@ -145,6 +156,18 @@ const index = () => {
   <input type='text' id='selectop' list='selectop-list' />
   <datalist id='selectop-list'></datalist>
   <input type='hidden' id='op' name='op' />
+  <br />
+<label for='rank'>等級</label>
+  <input type='radio' name='rank' value='' checked='checked'>全て</input>
+  <input type='radio' name='rank' value='N'>N</input>
+  <input type='radio' name='rank' value='U'>U</input>
+  <input type='radio' name='rank' value='NX'>NX</input>
+  <br />
+<label for='grade'>等級</label>
+  <input type='radio' name='grade' value='' checked='checked'>全て</input>
+  <input type='radio' name='grade' value='N'>N</input>
+  <input type='radio' name='grade' value='DX'>DX</input>
+  <input type='radio' name='grade' value='UM'>UM</input>
   <br />
 <label for='group'>フィルタ:</label>
   <input type='radio' name='group' value='' checked='checked'>全て</input>
