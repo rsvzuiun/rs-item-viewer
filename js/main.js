@@ -50,17 +50,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('popstate', () => {
     update();
   });
-
   update();
+  for (const form of document.getElementsByTagName('form')) {
+    form.addEventListener('submit', () => {
+      for (const input of form.getElementsByTagName('input')) {
+        console.log(input.value);
+        if (!input.value) input.setAttribute('disabled', 'disabled');
+      }
+      return true;
+    });
+  }
 });
 
 const update = async () => {
   const app = document.getElementById('app');
   app.textContent = '';
   app.appendChild(router());
-  // app.innerHTML = `
-  // <a is="spa-anchor" href='?id=1192'>test</a>
-  // `;
   app.appendChild(footer());
 };
 
@@ -85,8 +90,8 @@ const router = () => {
   let hit = itemdata;
   if (query) hit = hit.filter(e => e.Name.match(query));
   if (not_query) hit = hit.filter(e => !e.Name.match(not_query));
-  if (type) hit = hit.filter(e => e.Type === type);
-  if (op) {
+  if (type >= 0) hit = hit.filter(e => e.Type === type);
+  if (op >= 0) {
     hit = hit.filter(e => 
       e.OpBit.some(i => i.Id === op) || e.OpNxt.some(i => i.Id === op)
     );
@@ -105,7 +110,7 @@ const router = () => {
   let restext = '';
   if (query) restext += ` 含む"${query}"`;
   if (not_query) restext += ` 含まない"${not_query}"`;
-  if (type) restext += ` ${item_type[type]}`;
+  if (type >= 0) restext += ` ${item_type[type]}`;
   if (op) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
   if (group === 'w') restext += ' 武器';
   if (group === 'nw') restext += ' 武器以外';
@@ -142,7 +147,7 @@ const index = () => {
   <input type='hidden' id='op' name='op' />
   <br />
 <label for='group'>フィルタ:</label>
-  <input type='radio' name='group' value='all' checked='checked'>全て</input>
+  <input type='radio' name='group' value='' checked='checked'>全て</input>
   <input type='radio' name='group' value='w'>武器</input>
   <input type='radio' name='group' value='nw'>武器以外</input>
   <br />
