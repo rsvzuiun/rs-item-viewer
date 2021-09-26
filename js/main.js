@@ -298,16 +298,24 @@ const render = (id) => {
     }
   }
   if (item.AtParam.Max || item.OpPrt.length || item.OpBit.length){
-    const row = document.createElement('div');
-    tooltip.appendChild(row);
+    {
+      const row = document.createElement('div');
+      tooltip.appendChild(row);
 
-    row.className = 'label';
-    row.innerText = '<基本情報>';
-  }
-  if (!not_equipment.includes(item.Type)){
-    const row = document.createElement('div');
-    tooltip.appendChild(row);
-    row.innerText = '- ' + item_type[item.Type];
+      row.className = 'label';
+      row.innerText = '<基本情報>';
+    }
+    if (!not_equipment.includes(item.Type)) {
+      const row = document.createElement('div');
+      tooltip.appendChild(row);
+      row.innerText = '- ' + item_type[item.Type];
+    }
+    if (item.Flags.includes('<取引不可>')) {
+      const row = document.createElement('div');
+      tooltip.appendChild(row);
+      row.innerHTML = replaceColorTag(
+        '<c:CTPURPLE>- 取引不可アイテム<n>');
+    }
   }
   {
     const atmin = item.AtParam.Min || 0;
