@@ -52,12 +52,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   update();
   for (const form of document.getElementsByTagName('form')) {
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const url = new URL(window.location.href);
       for (const input of form.getElementsByTagName('input')) {
-        console.log(input.value);
-        if (!input.value) input.setAttribute('disabled', 'disabled');
+        if ((input.type === 'radio' && input.checked)
+            || (input.type !== 'radio' && input.name && input.value)) {
+          url.searchParams.set(input.name, input.value);
+        }
       }
-      return true;
+      window.history.pushState(null, '', url.search);
+      update();
     });
   }
 });
@@ -120,7 +125,7 @@ const router = () => {
   if (query) restext += ` 含む"${query}"`;
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${item_type[type]}`;
-  if (op) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
+  if (op >= 0) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
   if (rank) restext += ` ${rank}`;
   if (grade) restext += ` ${grade}`;
   if (group === 'w') restext += ' 武器';
