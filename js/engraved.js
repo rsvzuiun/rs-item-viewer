@@ -86,7 +86,7 @@ const engraved = {
       ]
     },
     10: { // 古代森の庇護
-      name: '',
+      name: '茎',
       op: [
         {Id: -1, Text: '最大HP [0]％ 増加', Value: [300]},
         {Id: 2, Value: [600]},
@@ -95,7 +95,7 @@ const engraved = {
       ]
     },
     11: { // 古代森のささやき
-      name: '',
+      name: '葉',
       op: [
         {Id: -1, Text: '最大HP [0]％ 増加', Value: [300]},
         {Id: -1, Text: '物理回避率 [0]％ 増加', Value: [15]},
