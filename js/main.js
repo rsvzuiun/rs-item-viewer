@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
       const url = new URL(window.location.href);
       for (const input of form.getElementsByTagName('input')) {
-        if ((input.type === 'radio' && input.checked)
+        if ((input.type === 'radio' && input.value && input.checked)
             || (input.type !== 'radio' && input.name && input.value)) {
           url.searchParams.set(input.name, input.value);
         }
@@ -92,6 +92,7 @@ const router = () => {
   const rank = params.get('rank');
   const grade = params.get('grade');
   const group = params.get('group');
+  const job = parseInt(params.get('job'));
 
   const frag = document.createDocumentFragment();
   let hit = itemdata;
@@ -118,6 +119,10 @@ const router = () => {
   if (group === 'nw') {
     hit = hit.filter(e => e.AtParam.Range <= 0);
   }
+  if (job >= 0) {
+    hit = hit.filter(e => e.Job.includes(job));
+    // hit = hit.filter(e => !e.Job.length || e.Job.includes(job));
+  }
   const result = document.createElement('p');
   frag.appendChild(result);
 
@@ -126,6 +131,7 @@ const router = () => {
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${item_type[type]}`;
   if (op >= 0) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
+  if (job >= 0) restext += ` ${job_type[job]}`;
   if (rank) restext += ` ${rank}`;
   if (grade) restext += ` ${grade}`;
   if (group === 'w') restext += ' 武器';
@@ -162,17 +168,22 @@ const index = () => {
   <datalist id='selectop-list'></datalist>
   <input type='hidden' id='op' name='op' />
   <br />
+<label for='selectjob'>職業:</label>
+  <input type='text' id='selectjob' list='selectjob-list' />
+  <datalist id='selectjob-list'></datalist>
+  <input type='hidden' id='job' name='job' />
+  <br />
 <label for='rank'>等級</label>
   <input type='radio' name='rank' value='' checked='checked'>全て</input>
   <input type='radio' name='rank' value='N'>N</input>
-  <input type='radio' name='rank' value='U'>U</input>
-  <input type='radio' name='rank' value='NX'>NX</input>
+  <input type='radio' name='rank' value='U'><img src='img/ui/type-icon-U.gif' /></input>
+  <input type='radio' name='rank' value='NX'><img src='img/ui/type-icon-NX.gif' /></input>
   <br />
 <label for='grade'>等級</label>
   <input type='radio' name='grade' value='' checked='checked'>全て</input>
   <input type='radio' name='grade' value='N'>N</input>
-  <input type='radio' name='grade' value='DX'>DX</input>
-  <input type='radio' name='grade' value='UM'>UM</input>
+  <input type='radio' name='grade' value='DX'><img src='img/ui/type-icon-DX.gif' /></input>
+  <input type='radio' name='grade' value='UM'><img src='img/ui/type-icon-UM.gif' /></input>
   <br />
 <label for='group'>フィルタ:</label>
   <input type='radio' name='group' value='' checked='checked'>全て</input>
@@ -209,6 +220,21 @@ const index = () => {
     const m = e.target.value.match(/^(\d+)/);
     // @ts-ignore
     if (m) document.getElementById('type').value = m[1];
+  });
+
+  const selectjoblist = form.querySelector('#selectjob-list');
+  for (const [k, v] of Object.entries(job_type)) {
+    if (k === '40' || k === '41') continue;
+    const option = document.createElement('option');
+    option.value = `${k}: ${v}`;
+    selectjoblist.appendChild(option);
+  }
+  form.appendChild(selectjoblist);
+  form.querySelector('#selectjob').addEventListener('change', (e) => {
+    // @ts-ignore
+    const m = e.target.value.match(/^(\d+)/);
+    // @ts-ignore
+    if (m) document.getElementById('job').value = m[1];
   });
 
   const build = (groups) => {
