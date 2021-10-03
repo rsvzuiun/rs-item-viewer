@@ -279,7 +279,8 @@ const footer = () => {
 /** @param {number} id */
 const render = (id) => {
   const item = itemdata.find(e => e.Id == id);
-  const nxitem = item.NxId ? itemdata.find(e => e.Id == item.NxId) : undefined;
+  const nxitem = (item.NxId && item.NxId !== item.Id)
+                  ? itemdata.find(e => e.Id == item.NxId) : undefined;
 
   const tooltip = document.createElement('div');
   if (item.Rank === 'NX') {
@@ -292,7 +293,7 @@ const render = (id) => {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
-    const anchor = document.createElement('a');
+    const anchor = document.createElement('a', {is: 'spa-anchor'});
     row.appendChild(anchor);
     anchor.href = `?id=${id}`;
     const image = document.createElement('div');
@@ -385,19 +386,17 @@ const render = (id) => {
 
       const row = document.createElement('div');
 
-      const Value = baseop.ValueIndex.map(index => {
-        const min = item.ValueTable[index][0];
-        const max = item.ValueTable[index][1];
-        if (min === max) return min;
-        return `[${min}~${max}]`;
-      });
+      const Value = opPrtValue(item, idx);
       let opText = replaceOpText(textdata.OptionProper[baseop.Id], ...Value);
       if (!opText) return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
       }
       row.innerHTML = '- ' + opText;
-      if (nxitem && !equals(item.OpPrt[idx], nxitem.OpPrt[idx])) {
+      if (nxitem && (
+             item.OpPrt[idx].Id !== nxitem.OpPrt[idx].Id
+          || !equals(Value, opPrtValue(nxitem, idx))
+          )) {
         row.className = 'item-different-line';
       }
       return row;
@@ -414,16 +413,20 @@ const render = (id) => {
       if (opText === 'undefined') {
         opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
       }
-      opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
-        (match, p1, p2, p3, ) => {
-        return `<span class='text-color-LTYELLOW'>${job_type[p3]}</span> ${p1}`;
-      });
       row.innerHTML = '- ' + opText;
       if (nxitem && !equals(item.OpBit[idx], nxitem.OpBit[idx])) {
         row.className = 'item-different-line';
       }
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
+  }
+  if (nxitem && item.OpBit.length < nxitem.OpBit.length) {
+    for (let i=0; i<nxitem.OpBit.length-item.OpBit.length; i++){
+        const row = document.createElement('div');
+      row.className = 'text-color-GRAY item-different-line';
+      row.innerText = '- なし';
+      tooltip.appendChild(row);
+    }
   }
   if (item?.OpPrt[0]?.Id === 773) {
     const q = item.OpBit.find(e => e.Id === 774);
@@ -461,17 +464,10 @@ const render = (id) => {
           opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
           if (!opText) return null;
           if (opText === 'undefined') {
-            opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
+            opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
           }
-          opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
-            (match, p1, p2, p3, ) => {
-            return `<span class='text-color-LTYELLOW'>${job_type[p3]}</span> ${p1}`;
-          });
         }
         row.innerHTML = '- ' + opText;
-        // if (nxitem) {
-        //   row.className = 'item-different-line';
-        // }
         return row;
       }).filter(v => v).map(elm => tooltip.appendChild(elm));
     } catch (error) {
@@ -494,12 +490,8 @@ const render = (id) => {
       let opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
       if (!opText) return null;
       if (opText === 'undefined') {
-        opText = `&lt;unknown_base id=${option.Id} value=${option.Value}&gt;`;
+        opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
       }
-      opText = opText.replace(/(.+?)(\(.+?)(\d+)(.+系列 職業\))/,
-        (match, p1, p2, p3, ) => {
-        return `<span class='text-color-LTYELLOW'>${job_type[p3]}</span> ${p1}`;
-      });
       row.innerHTML = '- ' + opText;
       if (nxitem) {
         row.className = 'item-different-line';
@@ -514,7 +506,6 @@ const render = (id) => {
       row.innerText = '- なし';
       tooltip.appendChild(row);
     }
-
   }
   {
     const row = document.createElement('div');
@@ -608,7 +599,7 @@ const render = (id) => {
     Flags.innerHTML = `- Flags ${yellow(item['Flags'])}`;
   }
 
-  if (item.NxId && item.Rank !== 'NX' && item.NxId !== item.Id) {
+  if (nxitem && item.Rank !== 'NX') {
     const root = document.createElement('div');
     root.className = 'nx-pair';
     root.appendChild(tooltip);
@@ -629,6 +620,8 @@ const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
 function replaceOpText(text, ...args) {
   text = String(text)
   .replace(/\r\n/g, '<br />')
+  .replace('スキルレベル [+0]([1]系列 職業)',
+    `<c:LTYELLOW>${job_type[args[1]]}<n> スキルレベル [+0]`)
   .replace(/\[([+-]?)([0-7])\](0*％?)/g, (org, sign, opid, post) => {
     return yellow(`${sign}${args[parseInt(opid)]}${post}`);
   });
@@ -645,6 +638,16 @@ const replaceColorTag = (text) => {
   return text.replace(/<c:([^> ]+?)>(.+?)<n>/g,
   (string, matched1, matched2) => {
     return `<span class='text-color-${matched1}'>${matched2}</span>`;
+  });
+};
+
+/** @param {Item} item, @param {number} idx */
+const opPrtValue = (item, idx) => {
+  return item.OpPrt[idx].ValueIndex.map(index => {
+    const min = item.ValueTable[index][0];
+    const max = item.ValueTable[index][1];
+    if (min === max) return min;
+    return `[${min}~${max}]`;
   });
 };
 
