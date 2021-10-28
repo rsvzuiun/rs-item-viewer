@@ -39,7 +39,7 @@ let itemdata = undefined;
 /** @type {{OptionProper: ArrayLike<string>, OptionBasic: ArrayLike<string>}} */
 let textdata = undefined;
 
-const SEARCH_LIMIT = 2000;
+let SEARCH_LIMIT = 2000;
 
 document.addEventListener('DOMContentLoaded', async () => {
   [itemdata, textdata] = await Promise.all(
@@ -80,6 +80,10 @@ const router = () => {
   if (params.toString() === '') {
     return index();
   }
+
+  const hidden = params.get('oo');
+  if (hidden) { SEARCH_LIMIT = Infinity; }
+
   const id = parseInt(params.get('id'));
   if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
     return render(id);
