@@ -348,6 +348,12 @@ const render = (id) => {
       row.innerHTML = replaceColorTag(
         '<c:CTPURPLE>- 取引不可アイテム<n>');
     }
+    if (item.Flags.includes('<銀行取引不可>')) {
+      const row = document.createElement('div');
+      tooltip.appendChild(row);
+      row.innerHTML = replaceColorTag(
+        '<c:CTPURPLE>- 銀行取引不可<n>');
+    }
   }
   {
     const atmin = item.AtParam.Min || 0;
