@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 const update = async () => {
   const app = document.getElementById('app');
   app.textContent = '';
+  app.appendChild(header());
   app.appendChild(router());
   app.appendChild(footer());
 };
@@ -265,6 +266,14 @@ const index = () => {
   };
   root.appendChild(build(type_categories));
   return root;
+};
+
+const header = () => {
+  const header = document.createElement('div');
+  header.innerHTML = `
+  <a is='spa-anchor' href='.'>[戻る]</a>
+  `;
+  return header;
 };
 
 const footer = () => {
