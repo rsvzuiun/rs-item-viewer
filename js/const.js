@@ -1,6 +1,6 @@
 // @ts-check
 /* eslint-disable no-unused-vars */
-const version = '2021/11/10 v0.767';
+const version = '2021/11/10 v0.0767';
 
 const itemdata_url = 'data/itemData.json';
 const textdata_url = 'data/textData.json';
