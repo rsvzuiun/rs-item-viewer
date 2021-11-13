@@ -285,7 +285,7 @@ const footer = () => {
   const footer = document.createElement('div');
   footer.innerHTML = `
   <hr />
-  <div id='version'>${version}</div>
+  <div><a href="https://github.com/rsvzuiun/rs-item-viewer">[CODE]</a> ${version}</div>
   <footer>
     当サイトで利用している画像及びデータは、株式会社ゲームオンに帰属します。<br />
     許可無くご利用又は転用になられる事は出来ませんので、予めご了承下さい。<br />
