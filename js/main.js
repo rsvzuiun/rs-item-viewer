@@ -94,6 +94,7 @@ const router = () => {
   const not_query = params.get('nq');
   const type = parseInt(params.get('type'));
   const op = parseInt(params.get('op'));
+  const baseop = parseInt(params.get('baseop'));
   const rank = params.get('rank');
   const grade = params.get('grade');
   const group = params.get('group');
@@ -109,7 +110,10 @@ const router = () => {
       e.OpBit.some(i => i.Id === op) || e.OpNxt.some(i => i.Id === op)
     );
   }
-  if (!op && rank !== 'NX') {
+  if (baseop >= 0) {
+    hit = hit.filter(e => e.OpPrt.some(i => i.Id === baseop));
+  }
+  if ((!op || !baseop) && rank !== 'NX') {
     hit = hit.filter(e => e.Rank !== 'NX');
   }
   if (rank) {
@@ -135,7 +139,8 @@ const router = () => {
   if (query) restext += ` 含む"${query}"`;
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${item_type[type]}`;
-  if (op >= 0) restext += ` "${textdata.OptionBasic[op].replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
+  if (op >= 0) restext += ` "${textdata.OptionBasic[op]?.replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
+  if (baseop >= 0) restext += ` "${textdata.OptionProper[baseop]?.replace(/<c:([^> ]+?)>(.+?)<n>/g, '$2')}"`;
   if (job >= 0) restext += ` ${job_type[job]}`;
   if (rank) restext += ` ${rank}`;
   if (grade) restext += ` ${grade}`;
