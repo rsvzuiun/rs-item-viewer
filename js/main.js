@@ -85,11 +85,7 @@ const router = () => {
   const hidden = params.get('oo');
   if (hidden) { SEARCH_LIMIT = Infinity; }
 
-  const id = parseInt(params.get('id'));
-  if (id >= 0 && itemdata.map(e => e.Id).includes(id)) {
-    return render(id);
-  }
-
+  const id = params.get('id');
   const query = params.get('q');
   const not_query = params.get('nq');
   const type = parseInt(params.get('type'));
@@ -102,6 +98,20 @@ const router = () => {
 
   const frag = document.createDocumentFragment();
   let hit = itemdata;
+
+  if (id) {
+    const m = id.match(/^(\d+)(-)?(\d+)?$/);
+    if (m) {
+      if (m[3]) { // begin-end
+        hit = hit.filter(e => parseInt(m[1]) <= e.Id && e.Id <= parseInt(m[3]))
+      } else if (m[2]) { // begin-
+        hit = hit.filter(e => parseInt(m[1]) <= e.Id)
+      } else if (m[1]) { // id
+        return render(parseInt(m[1]));
+      }
+    }
+  }
+
   if (query) hit = hit.filter(e => e.Name.match(query));
   if (not_query) hit = hit.filter(e => !e.Name.match(not_query));
   if (type >= 0) hit = hit.filter(e => e.Type === type);
@@ -461,11 +471,11 @@ const render = (id) => {
       tooltip.appendChild(label);
 
       label.className = 'label';
-      label.innerText = `<刻印 - ${
+      label.innerText = engraved[setid] ? `<刻印 - ${
         engraved[setid].name
       }[${
         engraved[setid][equipid].name
-      }]>`;
+      }]>` : `<刻印 - #${setid}>`;
 
       {
         const row = document.createElement('div');
@@ -478,22 +488,24 @@ const render = (id) => {
         tooltip.appendChild(row);
         row.innerText = '- レベル 30';
       }
-      engraved[setid][equipid].op.map(option => {
-        const row = document.createElement('div');
+      if (engraved[setid]) {
+        engraved[setid][equipid].op.map(option => {
+          const row = document.createElement('div');
 
-        let opText = '';
-        if (option.Id === -1) {
-          opText = replaceOpText(option.Text, ...option.Value);
-        } else {
-          opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
-          if (!opText) return null;
-          if (opText === 'undefined') {
-            opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+          let opText = '';
+          if (option.Id === -1) {
+            opText = replaceOpText(option.Text, ...option.Value);
+          } else {
+            opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
+            if (!opText) return null;
+            if (opText === 'undefined') {
+              opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+            }
           }
-        }
-        row.innerHTML = '- ' + opText;
-        return row;
-      }).filter(v => v).map(elm => tooltip.appendChild(elm));
+          row.innerHTML = '- ' + opText;
+          return row;
+        }).filter(v => v).map(elm => tooltip.appendChild(elm));
+      }
     } catch (error) {
       console.error(error);
     }
