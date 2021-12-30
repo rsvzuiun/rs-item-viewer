@@ -31,6 +31,7 @@ job_type, item_type, not_equipment, type_categories, engraved */
  *   PriceType: number,
  *   PriceFactor: number,
  *   Flags: string,
+ *   Extra: number,
  * }} Item
  * @type {Array<Item>}
  */
@@ -425,6 +426,10 @@ const render = (id) => {
       if (!opText) return null;
       if (opText === 'undefined') {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
+      } else {
+        opText = opText.replace(/\[([+-]?)e\](0*％?)/g, (org, sign, post) => {
+            return yellow(`${sign}${item.Extra}${post}`);
+          })
       }
       row.innerHTML = '- ' + opText;
       if (nxitem && (
