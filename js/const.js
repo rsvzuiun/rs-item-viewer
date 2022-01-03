@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 const version = '2021/12/22 v0.0768';
 
-const itemdata_url = 'data/itemData.json';
+let itemdata_url = 'data/itemData.json';
 const textdata_url = 'data/textData.json';
 
 /** @type {Object<number, string>} */
@@ -152,7 +152,7 @@ const item_type = {
 /** @type {Array<number>} */
 const not_equipment = [
   35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
-  53, 59, 60, 62, 65, 66, 67, 68
+  53, 59, 60, 62, 65, 66, 67
 ];
 
 const type_categories = [

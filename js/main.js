@@ -17,7 +17,7 @@ job_type, item_type, not_equipment, type_categories, engraved */
  *   Food: number,
  *   ValueTable: number[][],
  *   OpPrt: {Id: number, ValueIndex: number[]}[],
- *   OpBit: {Id: number, Value: number[]}[],
+ *   OpBit: {Id: number, Value: number[], Text}[],
  *   OpNxt: {Id: number, Value: number[]}[],
  *   Require: {[key: string]: number | object,
  *   Extra: {StatusType: number, MulValue: number, ValueIndex: number}},
@@ -43,6 +43,13 @@ let textdata = undefined;
 let SEARCH_LIMIT = 2000;
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+  if ((new URL(window.location.href)).searchParams.get('kr')) {
+    itemdata_url = 'data/itemData-kr.json'
+  } else {
+    itemdata_url = 'data/itemData.json'
+  }
+
   [itemdata, textdata] = await Promise.all(
     [itemdata_url, textdata_url].map(
       url => fetch(url).then(response => response.json())
@@ -78,6 +85,10 @@ const update = async () => {
 
 const router = () => {
   const params = (new URL(window.location.href)).searchParams;
+
+  if (params.get('sandbox')) {
+    return sandbox();
+  }
 
   if (params.toString() === '') {
     return index();
@@ -167,6 +178,56 @@ const router = () => {
   });
 
   return frag;
+};
+
+const sandbox = () => {
+  const root = document.createElement('div');
+  root.innerHTML = `
+<textarea id='json' style='width: 80%; height: 30em'>{
+  "Id": 0,
+  "ImageId": 293,
+  "NxId": 0,
+  "Type": 35,
+  "Name": "ゴールド",
+  "Rank": "N",
+  "Grade": "N",
+  "AtParam": {
+    "Range": 0,
+    "Speed": 0,
+    "Min": 0,
+    "Max": 0
+  },
+  "Food": 0,
+  "ValueTable": [
+    [
+      40,
+      40
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "OpPrt": [],
+  "OpBit": [],
+  "OpNxt": [],
+  "Require": {},
+  "Job": [],
+  "Text": "お金",
+  "StackSize": 255,
+  "Durability": 50,
+  "DropLv": 1,
+  "DropFactor": 1000,
+  "Price": 200,
+  "PriceType": 0,
+  "PriceFactor": 100,
+  "Flags": "<ベルト着用可>",
+  "Extra": 0
+}</textarea>
+<button onclick="o=document.getElementById('output');o.textContent='';o.appendChild(gen_tooltip(JSON.parse(document.getElementById('json').value)))">conv</button>
+<div id='output'></div>
+  `;
+  return root;
 };
 
 const index = () => {
@@ -311,6 +372,11 @@ const render = (id) => {
   const nxitem = (item.NxId && item.NxId !== item.Id)
                   ? itemdata.find(e => e.Id == item.NxId) : undefined;
 
+  return gen_tooltip(item, nxitem);
+};
+
+/** @param {Item} item, @param {Item} nxitem */
+const gen_tooltip = (item, nxitem) => {
   const tooltip = document.createElement('div');
   if (item.Rank === 'NX') {
     tooltip.className = 'tooltip border-nx';
@@ -322,11 +388,15 @@ const render = (id) => {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
-    const anchor = document.createElement('a', {is: 'spa-anchor'});
-    row.appendChild(anchor);
-    anchor.href = `?id=${id}`;
     const image = document.createElement('div');
-    anchor.appendChild(image);
+    if (item.Id >= 0) {
+      const anchor = document.createElement('a', {is: 'spa-anchor'});
+      row.appendChild(anchor);
+      anchor.href = `?id=${item.Id}`;
+      anchor.appendChild(image);
+    } else {
+      row.appendChild(image);
+    }
     image.className = 'image';
 
     if (item.ImageId >= 0){
@@ -358,7 +428,7 @@ const render = (id) => {
       row.classList.add('item-different-line');
     }
   }
-  if (item.AtParam.Max || item.OpPrt.length || item.OpBit.length){
+  if (item.AtParam?.Max || item.OpPrt.length || item.OpBit.length){
     {
       const row = document.createElement('div');
       tooltip.appendChild(row);
@@ -371,13 +441,13 @@ const render = (id) => {
       tooltip.appendChild(row);
       row.innerText = '- ' + item_type[item.Type];
     }
-    if (item.Flags.includes('<取引不可>')) {
+    if (item.Flags?.includes('<取引不可>')) {
       const row = document.createElement('div');
       tooltip.appendChild(row);
       row.innerHTML = replaceColorTag(
         '<c:CTPURPLE>- 取引不可アイテム<n>');
     }
-    if (item.Flags.includes('<銀行取引不可>')) {
+    if (item.Flags?.includes('<銀行取引不可>')) {
       const row = document.createElement('div');
       tooltip.appendChild(row);
       row.innerHTML = replaceColorTag(
@@ -385,9 +455,9 @@ const render = (id) => {
     }
   }
   {
-    const atmin = item.AtParam.Min || 0;
-    const atmax = item.AtParam.Max || 0;
-    const speed = item.AtParam.Speed || 0;
+    const atmin = item.AtParam?.Min || 0;
+    const atmax = item.AtParam?.Max || 0;
+    const speed = item.AtParam?.Speed || 0;
 
     if (atmin !== 0 || atmax !== 0) {
       const row = document.createElement('div');
@@ -404,7 +474,7 @@ const render = (id) => {
     }
   }
   {
-    const range = item.AtParam.Range || 0;
+    const range = item.AtParam?.Range || 0;
     if (range !== 0) {
       const html = `- 射程距離 <span class='text-color-LTYELLOW'>${range}</span>`;
       const row = document.createElement('div');
@@ -415,7 +485,7 @@ const render = (id) => {
       }
     }
   }
-  {
+  if (item.OpPrt) {
     item.OpPrt.map((baseop, idx) => {
       if (baseop.Id === -1) return null;
 
@@ -443,15 +513,21 @@ const render = (id) => {
   }
   {
     item.OpBit.map((option, idx) => {
-      if (option.Id === -1) return null;
-
       const row = document.createElement('div');
 
-      let opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
-      if (opText === '') return null;
-      if (opText === 'undefined') {
-        opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+      let opText = '';
+      if (option.Text) {
+        opText = replaceOpText(option.Text, ...option.Value);
+      } else if (option.Id === -1) {
+        return null;
+      } else {
+        opText = replaceOpText(textdata.OptionBasic[option.Id], ...option.Value);
+        if (!opText) return null;
+        if (opText === 'undefined') {
+          opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+        }
       }
+
       row.innerHTML = '- ' + opText;
       if (nxitem && !equals(item.OpBit[idx], nxitem.OpBit[idx])) {
         row.className = 'item-different-line';
@@ -561,14 +637,13 @@ const render = (id) => {
 
     row.innerHTML = '- ' + replaceTextData(item.Text);
   }
-  if (Object.keys(item.Require).length) {
+  if (item.Require && Object.keys(item.Require).length) {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
     row.className = 'label';
     row.innerText = '<要求能力値>';
-  }
-  {
+
     Object.keys(item.Require).map(key => {
       const value = item.Require[key];
       const row = document.createElement('div');
@@ -584,21 +659,20 @@ const render = (id) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
-  if (item.Job.length){
+  if (item.Job?.length){
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
     row.className = 'label';
     row.innerText = '<着用/使用可能な職業>';
-  }
-  {
+ 
     item.Job.map(job => {
       const row = document.createElement('div');
       row.innerHTML = '- ' + job_type[job];
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
-  {
+  if (item.Id >= 0) {
     const row = document.createElement('div');
     tooltip.appendChild(row);
 
@@ -607,44 +681,52 @@ const render = (id) => {
 
     const Id = document.createElement('div');
     tooltip.appendChild(Id);
-    Id.innerHTML = `- ID ${yellow(item['Id'])}`;
+    Id.innerHTML = `- ID ${yellow(item.Id)}`;
 
-    if (item['StackSize'] !== 1) {
+    if (item.StackSize > 1) {
       const StackSize = document.createElement('div');
       tooltip.appendChild(StackSize);
-      StackSize.innerHTML = `- 重ね置き ${yellow(item['StackSize'])}`;
+      StackSize.innerHTML = `- 重ね置き ${yellow(item.StackSize)}`;
     }
 
-    if (item['Grade'] !== 'N') {
+    if (item.Grade !== 'N') {
       const Durability = document.createElement('div');
       tooltip.appendChild(Durability);
-      Durability.innerHTML = `- 耐久減少 ${yellow(item['Durability'])}型`;
+      Durability.innerHTML = `- 耐久減少 ${yellow(item.Durability)}型`;
     }
 
-    const DropLv = document.createElement('div');
-    tooltip.appendChild(DropLv);
-    DropLv.innerHTML = `- ドロップレベル ${yellow(item['DropLv'])}`;
+    if (item.DropLv) {
+      const DropLv = document.createElement('div');
+      tooltip.appendChild(DropLv);
+      DropLv.innerHTML = `- ドロップレベル ${yellow(item.DropLv)}`;
+    }
 
-    const DropFactor = document.createElement('div');
-    tooltip.appendChild(DropFactor);
-    DropFactor.innerHTML = `- ドロップ係数 ${yellow(item['DropFactor'])}`;
+    if (item.DropFactor) {
+      const DropFactor = document.createElement('div');
+      tooltip.appendChild(DropFactor);
+      DropFactor.innerHTML = `- ドロップ係数 ${yellow(item.DropFactor)}`;
+    }
 
-    const Price = document.createElement('div');
-    tooltip.appendChild(Price);
-    Price.innerHTML = `- 価格 ${
-      yellow(Math.floor(item['Price']*item['PriceFactor']/100).toLocaleString())
-    } Gold`;
+    if (item.Price && item.PriceFactor) {
+      const Price = document.createElement('div');
+      tooltip.appendChild(Price);
+      Price.innerHTML = `- 価格 ${
+        yellow(Math.floor(item.Price*item.PriceFactor/100).toLocaleString())
+      } Gold`;
+    }
 
-    const Flags = document.createElement('div');
-    tooltip.appendChild(Flags);
-    Flags.innerHTML = `- Flags ${yellow(item['Flags'])}`;
+    if (item.Flags) {
+      const Flags = document.createElement('div');
+      tooltip.appendChild(Flags);
+      Flags.innerHTML = `- Flags ${yellow(item.Flags)}`;
+    }
   }
 
   if (nxitem && item.Rank !== 'NX') {
     const root = document.createElement('div');
     root.className = 'nx-pair';
     root.appendChild(tooltip);
-    root.appendChild(render(item.NxId));
+    root.appendChild(gen_tooltip(nxitem, item));
     return root;
   } else {
     return tooltip;
