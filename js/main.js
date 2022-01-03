@@ -502,7 +502,6 @@ const gen_tooltip = (item, nxitem) => {
           })
       }
       row.innerHTML = '- ' + opText;
-      console.log(item)
       if (nxitem && (
              item.OpPrt[idx]?.Id !== nxitem.OpPrt[idx]?.Id
           || !equals(Value, opPrtValue(nxitem, idx))
