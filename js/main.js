@@ -59,6 +59,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     update();
   });
   update();
+});
+
+const update = async () => {
+  const app = document.getElementById('app');
+  app.textContent = '';
+  app.appendChild(header());
+  app.appendChild(router());
+  app.appendChild(footer());
   for (const form of document.getElementsByTagName('form')) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -72,16 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.history.pushState(null, '', url.search);
       update();
     });
-  }
-});
-
-const update = async () => {
-  const app = document.getElementById('app');
-  app.textContent = '';
-  app.appendChild(header());
-  app.appendChild(router());
-  app.appendChild(footer());
-};
+  }};
 
 const router = () => {
   const params = (new URL(window.location.href)).searchParams;
@@ -392,7 +391,11 @@ const gen_tooltip = (item, nxitem) => {
     if (item.Id >= 0) {
       const anchor = document.createElement('a', {is: 'spa-anchor'});
       row.appendChild(anchor);
-      anchor.href = `?id=${item.Id}`;
+      if ((new URL(window.location.href)).searchParams.get('kr')) {
+        anchor.href = `?kr=1&id=${item.Id}`;
+      } else {
+        anchor.href = `?id=${item.Id}`;
+      }
       anchor.appendChild(image);
     } else {
       row.appendChild(image);
@@ -739,12 +742,29 @@ const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 /** @param {string | number} text */
 const yellow = (text) => `<span class='text-color-LTYELLOW'>${text}</span>`;
 
-/** @param {string} text, @param  {...string|number} args */
-function replaceOpText(text, ...args) {
+/** @param {string} text, @param {...string|number} args */
+function replaceOpSpecial(text, ...args) {
   text = String(text)
-  .replace(/\r\n/g, '<br />')
   .replace('スキルレベル [+0]([1]系列 職業)',
     `<c:LTYELLOW>${job_type[args[1]]}<n> スキルレベル [+0]`)
+  .replace('$func837[0]',
+    `<c:LTYELLOW>${['異常系', '呪い系', '低下系'][args[0]]}<n>`)
+  .replace('$func837[1]', args[1]>0 ? '物理ダメージ [1]％ 増加' : '')
+  .replace('$func837[2]', args[2]>0 ? '知識ダメージ [2]％ 増加' : '')
+  .replace('$func838[0]', args[0]===14 ? '<c:LTYELLOW>出血<n>' : '[0]')
+  .replace('$func843[1]',
+    `<c:LTYELLOW>${['火', '1', '2', '3', '光'][args[1]]}<n>`)
+  .replace('$func844[0]',
+    `<c:LTYELLOW>${['火', '1', '2', '3', '光'][args[0]]}<n>`)
+  .replace('$func853[1]',
+    `<c:LTYELLOW>${['0', '1', '風', '3', '4'][args[1]]}<n>`)
+  return text
+}
+
+/** @param {string} text, @param {...string|number} args */
+function replaceOpText(text, ...args) {
+  text = replaceOpSpecial(text, ...args)
+  .replace(/\r\n/g, '<br />&nbsp;')
   .replace(/\[([+-]?)([0-7])\](0*％?)/g, (org, sign, opid, post) => {
     return yellow(`${sign}${args[parseInt(opid)]}${post}`);
   });
