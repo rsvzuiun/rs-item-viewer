@@ -106,6 +106,7 @@ const router = () => {
   const grade = params.get('grade');
   const group = params.get('group');
   const job = parseInt(params.get('job'));
+  const lv = parseInt(params.get('lv'));
 
   const frag = document.createDocumentFragment();
   let hit = itemdata;
@@ -152,6 +153,9 @@ const router = () => {
   if (job >= 0) {
     hit = hit.filter(e => e.Job.includes(job));
     // hit = hit.filter(e => !e.Job.length || e.Job.includes(job));
+  }
+  if (lv >= 0) {
+    hit = hit.filter(e => e.Require['0'] === lv);
   }
   const result = document.createElement('p');
   frag.appendChild(result);
