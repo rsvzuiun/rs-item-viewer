@@ -135,9 +135,6 @@ const router = () => {
   if (baseop >= 0) {
     hit = hit.filter(e => e.OpPrt.some(i => i.Id === baseop));
   }
-  if ((!op || !baseop) && rank !== 'NX') {
-    hit = hit.filter(e => e.Rank !== 'NX');
-  }
   if (rank) {
     hit = hit.filter(e => e.Rank === rank);
   }
@@ -152,10 +149,13 @@ const router = () => {
   }
   if (job >= 0) {
     hit = hit.filter(e => e.Job.includes(job));
-    // hit = hit.filter(e => !e.Job.length || e.Job.includes(job));
   }
   if (lv >= 0) {
     hit = hit.filter(e => e.Require['0'] === lv);
+  }
+  {
+    const nxids = hit.filter(e => e.Rank !== 'NX').map(e => e.NxId);
+    hit = hit.filter(e => !nxids.includes(e.Id));
   }
   const result = document.createElement('p');
   frag.appendChild(result);
