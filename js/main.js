@@ -112,15 +112,27 @@ const router = () => {
   let hit = itemdata;
 
   if (id) {
-    const m = id.match(/^(\d+)(-)?(\d+)?$/);
-    if (m) {
-      if (m[3]) { // begin-end
-        hit = hit.filter(e => parseInt(m[1]) <= e.Id && e.Id <= parseInt(m[3]))
-      } else if (m[2]) { // begin-
-        hit = hit.filter(e => parseInt(m[1]) <= e.Id)
-      } else if (m[1]) { // id
-        return render(parseInt(m[1]));
+    const maxid = itemdata.slice(-1)[0].Id;
+    const range = new Set(id.split(',').map(e => {
+      const m = e.match(/^(\d+)(-)?(\d+)?$/);
+      if (m) {
+        if (m[3]) { // begin-end
+          const min = parseInt(m[1]);
+          const max = parseInt(m[3]);
+          return [...Array(max - min + 1)].map((v,i) => i+min);
+        } else if (m[2]) { // begin-
+          const min = parseInt(m[1]);
+          return [...Array(maxid - min + 1)].map((v,i) => i+min);
+        } else if (m[1]) { // id
+          return parseInt(m[1])
+        }
       }
+    }).flat());
+
+    if (range.size === 1) {
+      return render([...range.keys()][0]);
+    } else {
+      hit = hit.filter(e => range.has(e.Id));
     }
   }
 
@@ -154,7 +166,7 @@ const router = () => {
     hit = hit.filter(e => e.Require['0'] === lv);
   }
   {
-    const nxids = hit.filter(e => e.Rank !== 'NX').map(e => e.NxId);
+    const nxids = hit.filter(e => e.Rank !== 'NX').map(e => e.NxId && e.Id !== e.NxId ? e.NxId : undefined);
     hit = hit.filter(e => !nxids.includes(e.Id));
   }
   const result = document.createElement('p');
@@ -364,6 +376,20 @@ const index = () => {
     return frag;
   };
   root.appendChild(build(type_categories));
+  const link_foot = document.createElement('div');
+  root.appendChild(link_foot);
+  link_foot.innerHTML = `
+<a is='spa-anchor' href='?id=4802-4815'>朱洛星</a>
+<a is='spa-anchor' href='?lv=680&grade=DX&rank=U'>賭博師</a>
+<a is='spa-anchor' href='?id=3626-3639,5651-5653,6403-6404,6939'>伝説</a>
+<a is='spa-anchor' href='?q=インフィニティ.*%27'>IFULT</a>
+/
+<a is='spa-anchor' href='?id=10212-10241'>秘密D</a>
+<a is='spa-anchor' href='?id=11351-11361'>ヤティカヌ</a>
+<a is='spa-anchor' href='?id=11445-11468'>閃の軌跡</a>
+<a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
+<a is='spa-anchor' href='?id=11741-11746'>デザコン2021</a>
+  `;
   return root;
 };
 
