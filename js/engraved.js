@@ -354,5 +354,19 @@ const engraved = {
         {Id: 4, Value: [50]},
       ]
     }
+  },
+  4: {
+    name: '日本17周年指輪',
+    1: { // 17th Anniversaryリング
+      name: 'スターピース',
+      op: [
+        {Id: -1, Text: '最大HP [0]％ 増加', Value: [10]},
+        {Id: -1, Text: '全てのスキルレベル [0] 増加', Value: [3]},
+        {Id: 41, Value: [30]},
+        {Id: 3, Value: [75]},
+        {Id: 1, Value: [75]},
+        {Id: 5, Value: [50]},
+      ]
+    }
   }
 };
