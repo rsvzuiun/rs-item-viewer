@@ -201,16 +201,16 @@ const router = () => {
     const nxids = hit.filter(e => e.Rank !== 'NX').map(e => e.NxId && e.Id !== e.NxId ? e.NxId : undefined);
     hit = hit.filter(e => !nxids.includes(e.Id));
   }
-  if (!A) {
+  if (A) {
     hit = hit.filter(e => !e.Name.includes('[A]'))
   }
-  if (!D) {
+  if (D) {
     hit = hit.filter(e => !e.Name.includes('[D]'))
   }
-  if (!E) {
+  if (E) {
     hit = hit.filter(e => !e.Name.includes('[E]'))
   }
-  if (!G) {
+  if (G) {
     hit = hit.filter(e => !e.Name.includes('[G]'))
   }
   const result = document.createElement('p');
