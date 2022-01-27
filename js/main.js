@@ -84,8 +84,11 @@ const update = async () => {
       proc_select('#selectjob', 'job');
 
       for (const input of form.getElementsByTagName('input')) {
-        if ((input.type === 'radio' && input.value && input.checked)
-            || (input.type !== 'radio' && input.name && input.value)) {
+        if (input.type === 'radio' || input.type === 'checkbox') {
+          if (input.value && input.checked) {
+            url.searchParams.set(input.name, input.value);
+          }
+        } else if (!input.name.includes('select') && input.value) {
           url.searchParams.set(input.name, input.value);
         }
       }
@@ -131,6 +134,11 @@ const router = () => {
   const group = params.get('group');
   const job = parseInt(params.get('job'));
   const lv = parseInt(params.get('lv'));
+
+  const A = params.get('A');
+  const D = params.get('D');
+  const E = params.get('E');
+  const G = params.get('G');
 
   const frag = document.createDocumentFragment();
   let hit = itemdata;
@@ -192,6 +200,18 @@ const router = () => {
   {
     const nxids = hit.filter(e => e.Rank !== 'NX').map(e => e.NxId && e.Id !== e.NxId ? e.NxId : undefined);
     hit = hit.filter(e => !nxids.includes(e.Id));
+  }
+  if (!A) {
+    hit = hit.filter(e => !e.Name.includes('[A]'))
+  }
+  if (!D) {
+    hit = hit.filter(e => !e.Name.includes('[D]'))
+  }
+  if (!E) {
+    hit = hit.filter(e => !e.Name.includes('[E]'))
+  }
+  if (!G) {
+    hit = hit.filter(e => !e.Name.includes('[G]'))
   }
   const result = document.createElement('p');
   frag.appendChild(result);
@@ -294,13 +314,13 @@ const index = () => {
   <datalist id='selectjob-list'></datalist>
   <input type='hidden' id='job' name='job' />
   <br />
-<label for='rank'>等級</label>
+<label for='rank'>等級:</label>
   <input type='radio' name='rank' value='' checked='checked'>全て</input>
   <input type='radio' name='rank' value='N'>N</input>
   <input type='radio' name='rank' value='U'><img src='img/ui/type-icon-U.gif' /></input>
   <input type='radio' name='rank' value='NX'><img src='img/ui/type-icon-NX.gif' /></input>
   <br />
-<label for='grade'>等級</label>
+<label for='grade'>等級:</label>
   <input type='radio' name='grade' value='' checked='checked'>全て</input>
   <input type='radio' name='grade' value='N'>N</input>
   <input type='radio' name='grade' value='DX'><img src='img/ui/type-icon-DX.gif' /></input>
@@ -311,8 +331,15 @@ const index = () => {
   <input type='radio' name='group' value='w'>武器</input>
   <input type='radio' name='group' value='nw'>武器以外</input>
   <br />
+<label>除外設定:</label>
+  <input type='checkbox' id='A' name='A' value='1'>[A]</input>
+  <input type='checkbox' id='D' name='D' value='1'>[D]</input>
+  <input type='checkbox' id='E' name='E' value='1'>[E]</input>
+  <input type='checkbox' id='G' name='G' value='1'>[G]</input>
+  <br />
 <button type='submit'>検索</button> <button type='reset' onclick='storage.clear();'>クリア</button>
   `;
+
   const selectoplist = form.querySelector('#selectop-list');
   for (const [k, v] of Object.entries(textdata.OptionBasic)) {
     const option = document.createElement('option');
