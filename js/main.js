@@ -3,6 +3,7 @@
 job_type, item_type, not_equipment, type_categories, engraved */
 /// <reference path="./const.js" />
 /// <reference path="./engraved.js" />
+/// <reference path="./form-storage.js" />
 
 /**
  * @typedef {{
@@ -42,6 +43,8 @@ let textdata = undefined;
 
 let SEARCH_LIMIT = 2000;
 
+let storage = undefined;
+
 document.addEventListener('DOMContentLoaded', async () => {
 
   if ((new URL(window.location.href)).searchParams.get('kr')) {
@@ -71,16 +74,37 @@ const update = async () => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const url = new URL(window.location.href);
+
+      const proc_select = (src, dst) => {
+        const m = form.querySelector(src).value.match(/^(\d+)/);
+        if (m) url.searchParams.set(dst, m[1]);
+      };
+      proc_select('#selectop', 'op');
+      proc_select('#selecttype', 'type');
+      proc_select('#selectjob', 'job');
+
       for (const input of form.getElementsByTagName('input')) {
         if ((input.type === 'radio' && input.value && input.checked)
             || (input.type !== 'radio' && input.name && input.value)) {
           url.searchParams.set(input.name, input.value);
         }
       }
+      storage.save();
       window.history.pushState(null, '', url.search);
       update();
     });
-  }};
+  }
+  if ((new URL(window.location.href)).searchParams.toString() === '') {
+    // @ts-ignore
+    storage = new FormStorage('form', {
+      name: 'rs-item-viewer',
+      ignores: [
+        '[type="hidden"]'
+      ]
+    });
+    storage.apply();
+  }
+};
 
 const router = () => {
   const params = (new URL(window.location.href)).searchParams;
@@ -256,17 +280,17 @@ const index = () => {
   <input type='text' name='q' id='q' />
   <br />
 <label for='type'>部位: </label>
-  <input type='text' id='selecttype' list='selecttype-list' />
+  <input type='text' id='selecttype' name='selecttype' list='selecttype-list' />
   <datalist id='selecttype-list'></datalist>
   <input type='hidden' id='type' name='type' />
   <br />
 <label for='selectop'>オプション:</label>
-  <input type='text' id='selectop' list='selectop-list' />
+  <input type='text' id='selectop' name='selectop' list='selectop-list' />
   <datalist id='selectop-list'></datalist>
   <input type='hidden' id='op' name='op' />
   <br />
 <label for='selectjob'>職業:</label>
-  <input type='text' id='selectjob' list='selectjob-list' />
+  <input type='text' id='selectjob' name='selectjob' list='selectjob-list' />
   <datalist id='selectjob-list'></datalist>
   <input type='hidden' id='job' name='job' />
   <br />
@@ -287,7 +311,7 @@ const index = () => {
   <input type='radio' name='group' value='w'>武器</input>
   <input type='radio' name='group' value='nw'>武器以外</input>
   <br />
-<button type='submit'>検索</button>
+<button type='submit'>検索</button> <button type='reset' onclick='storage.clear();'>クリア</button>
   `;
   const selectoplist = form.querySelector('#selectop-list');
   for (const [k, v] of Object.entries(textdata.OptionBasic)) {
@@ -297,13 +321,6 @@ const index = () => {
   }
   form.appendChild(selectoplist);
 
-  form.querySelector('#selectop').addEventListener('change', (e) => {
-    // @ts-ignore
-    const m = e.target.value.match(/^(\d+)/);
-    // @ts-ignore
-    if (m) document.getElementById('op').value = m[1];
-  });
-
   const selecttypelist = form.querySelector('#selecttype-list');
   for (const [k, v] of Object.entries(item_type)) {
     if (not_equipment.includes(parseInt(k))) continue;
@@ -312,12 +329,6 @@ const index = () => {
     selecttypelist.appendChild(option);
   }
   form.appendChild(selecttypelist);
-  form.querySelector('#selecttype').addEventListener('change', (e) => {
-    // @ts-ignore
-    const m = e.target.value.match(/^(\d+)/);
-    // @ts-ignore
-    if (m) document.getElementById('type').value = m[1];
-  });
 
   const selectjoblist = form.querySelector('#selectjob-list');
   for (const [k, v] of Object.entries(job_type)) {
@@ -327,12 +338,6 @@ const index = () => {
     selectjoblist.appendChild(option);
   }
   form.appendChild(selectjoblist);
-  form.querySelector('#selectjob').addEventListener('change', (e) => {
-    // @ts-ignore
-    const m = e.target.value.match(/^(\d+)/);
-    // @ts-ignore
-    if (m) document.getElementById('job').value = m[1];
-  });
 
   const link = document.createElement('div');
   root.appendChild(link);
