@@ -45,6 +45,8 @@ let SEARCH_LIMIT = 2000;
 
 let storage = undefined;
 
+let aborted = false;
+
 document.addEventListener('DOMContentLoaded', async () => {
 
   if ((new URL(window.location.href)).searchParams.get('kr')) {
@@ -58,7 +60,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       url => fetch(url).then(response => response.json())
     ));
   customElements.define('spa-anchor', SPAAnchor, { extends: 'a' });
-  window.addEventListener('popstate', () => {
+  window.addEventListener('popstate', async () => {
+    aborted = true;
+    await new Promise(resolve => setTimeout(resolve, 0));
     update();
   });
   update();
@@ -232,10 +236,12 @@ const router = async (app) => {
     restext += ` (${SEARCH_LIMIT}件に制限しています)`;
   result.innerText = restext;
 
-  await Promise.all(hit.slice(0, SEARCH_LIMIT).map(async (item) => {
-    await new Promise(resolve => setTimeout(resolve, 0));
+  aborted = false;
+  for await (const item of hit.slice(0, SEARCH_LIMIT)) {
+    if (aborted) break;
     app.appendChild(render(item.Id));
-  }));
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
 
   // return frag;
 };
