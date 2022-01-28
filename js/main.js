@@ -68,7 +68,7 @@ const update = async () => {
   const app = document.getElementById('app');
   app.textContent = '';
   app.appendChild(header());
-  app.appendChild(router());
+  await router(app);
   app.appendChild(footer());
   for (const form of document.getElementsByTagName('form')) {
     form.addEventListener('submit', (e) => {
@@ -109,15 +109,15 @@ const update = async () => {
   }
 };
 
-const router = () => {
+const router = async (app) => {
   const params = (new URL(window.location.href)).searchParams;
 
   if (params.get('sandbox')) {
-    return sandbox();
+    return sandbox(app);
   }
 
   if (params.toString() === '') {
-    return index();
+    return index(app);
   }
 
   const hidden = params.get('oo');
@@ -140,7 +140,7 @@ const router = () => {
   const E = params.get('E');
   const G = params.get('G');
 
-  const frag = document.createDocumentFragment();
+  // const frag = document.createDocumentFragment();
   let hit = itemdata;
 
   if (id) {
@@ -214,7 +214,7 @@ const router = () => {
     hit = hit.filter(e => !e.Name.includes('[G]'))
   }
   const result = document.createElement('p');
-  frag.appendChild(result);
+  app.appendChild(result);
 
   let restext = '';
   if (query) restext += ` 含む"${query}"`;
@@ -232,14 +232,15 @@ const router = () => {
     restext += ` (${SEARCH_LIMIT}件に制限しています)`;
   result.innerText = restext;
 
-  hit.slice(0, SEARCH_LIMIT).map((item) => {
-    frag.appendChild(render(item.Id));
-  });
+  await Promise.all(hit.slice(0, SEARCH_LIMIT).map(async (item) => {
+    await new Promise(resolve => setTimeout(resolve, 0));
+    app.appendChild(render(item.Id));
+  }));
 
-  return frag;
+  // return frag;
 };
 
-const sandbox = () => {
+const sandbox = (app) => {
   const root = document.createElement('div');
   root.innerHTML = `
 <textarea id='json' style='width: 80%; height: 30em'>{
@@ -286,10 +287,11 @@ const sandbox = () => {
 <button onclick="o=document.getElementById('output');o.textContent='';o.appendChild(gen_tooltip(JSON.parse(document.getElementById('json').value)))">conv</button>
 <div id='output'></div>
   `;
-  return root;
+  // return root;
+  app.appendChild(root);
 };
 
-const index = () => {
+const index = (app) => {
   const root = document.createDocumentFragment();
   const form = document.createElement('form');
   root.appendChild(form);
@@ -419,7 +421,8 @@ const index = () => {
 <a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
 <a is='spa-anchor' href='?id=11741-11746'>デザコン2021</a>
   `;
-  return root;
+  // return root;
+  app.appendChild(root);
 };
 
 const header = () => {
