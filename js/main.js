@@ -166,7 +166,9 @@ const router = async (app) => {
     }).flat());
 
     if (range.size === 1) {
-      return render([...range.keys()][0]);
+      app.appendChild(render([...range.keys()][0]));
+      return;
+      // return render([...range.keys()][0]);
     } else {
       hit = hit.filter(e => range.has(e.Id));
     }
