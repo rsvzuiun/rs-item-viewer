@@ -299,43 +299,40 @@ const index = () => {
 <label for='q'>キーワード:</label>
   <input type='text' name='q' id='q' />
   <br />
-<label for='type'>部位: </label>
+<label for='selecttype'>部位: </label>
   <input type='text' id='selecttype' name='selecttype' list='selecttype-list' />
   <datalist id='selecttype-list'></datalist>
-  <input type='hidden' id='type' name='type' />
   <br />
 <label for='selectop'>オプション:</label>
   <input type='text' id='selectop' name='selectop' list='selectop-list' />
   <datalist id='selectop-list'></datalist>
-  <input type='hidden' id='op' name='op' />
   <br />
 <label for='selectjob'>職業:</label>
   <input type='text' id='selectjob' name='selectjob' list='selectjob-list' />
   <datalist id='selectjob-list'></datalist>
-  <input type='hidden' id='job' name='job' />
   <br />
-<label for='rank'>等級:</label>
-  <input type='radio' name='rank' value='' checked='checked'>全て</input>
-  <input type='radio' name='rank' value='N'>N</input>
-  <input type='radio' name='rank' value='U'><img src='img/ui/type-icon-U.gif' /></input>
-  <input type='radio' name='rank' value='NX'><img src='img/ui/type-icon-NX.gif' /></input>
+等級:
+  <input type='radio' name='rank' id='rank-all' value='' checked='checked' /><label for='rank-all'>全て</label>
+  <input type='radio' name='rank' id='rank-N' value='N' /><label for='rank-N'>N</label>
+  <input type='radio' name='rank' id='rank-U' value='U' /><label for='rank-U'><img src='img/ui/type-icon-U.gif' /></label>
+  <input type='radio' name='rank' id='rank-NX' value='NX' /><label for='rank-NX'><img src='img/ui/type-icon-NX.gif' /></label>
   <br />
 <label for='grade'>等級:</label>
-  <input type='radio' name='grade' value='' checked='checked'>全て</input>
-  <input type='radio' name='grade' value='N'>N</input>
-  <input type='radio' name='grade' value='DX'><img src='img/ui/type-icon-DX.gif' /></input>
-  <input type='radio' name='grade' value='UM'><img src='img/ui/type-icon-UM.gif' /></input>
+  <input type='radio' name='grade' id='grade-all' value='' checked='checked' /><label for='grade-all'>全て</label>
+  <input type='radio' name='grade' id='grade-N' value='N' /><label for='grade-N'>N</label>
+  <input type='radio' name='grade' id='grade-DX' value='DX' /><label for='grade-DX'><img src='img/ui/type-icon-DX.gif' /></label>
+  <input type='radio' name='grade' id='grade-UM' value='UM' /><label for='grade-UM'><img src='img/ui/type-icon-UM.gif' /></label>
   <br />
 <label for='group'>フィルタ:</label>
-  <input type='radio' name='group' value='' checked='checked'>全て</input>
-  <input type='radio' name='group' value='w'>武器</input>
-  <input type='radio' name='group' value='nw'>武器以外</input>
+  <input type='radio' name='group' id='group-all' value='' checked='checked' /><label for='group-all'>全て</label>
+  <input type='radio' name='group' id='group-w' value='w' /><label for='group-w'>武器</label>
+  <input type='radio' name='group' id='group-nw' value='nw' /><label for='group-nw'>武器以外</label>
   <br />
 <label>除外設定:</label>
-  <input type='checkbox' id='A' name='A' value='1'>[A]</input>
-  <input type='checkbox' id='D' name='D' value='1'>[D]</input>
-  <input type='checkbox' id='E' name='E' value='1'>[E]</input>
-  <input type='checkbox' id='G' name='G' value='1'>[G]</input>
+  <input type='checkbox' id='A' name='A' value='1' /><label for='A'>[A]</label>
+  <input type='checkbox' id='D' name='D' value='1' /><label for='D'>[D]</label>
+  <input type='checkbox' id='E' name='E' value='1' /><label for='E'>[E]</label>
+  <input type='checkbox' id='G' name='G' value='1' /><label for='G'>[G]</label>
   <br />
 <button type='submit'>検索</button> <button type='reset' onclick='storage.clear();'>クリア</button>
   `;
