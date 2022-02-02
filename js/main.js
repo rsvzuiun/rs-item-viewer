@@ -143,6 +143,7 @@ const router = async (app) => {
   const D = params.get('D');
   const E = params.get('E');
   const G = params.get('G');
+  const R = params.get('R');
 
   // const frag = document.createDocumentFragment();
   let hit = itemdata;
@@ -218,6 +219,9 @@ const router = async (app) => {
   }
   if (G) {
     hit = hit.filter(e => !e.Name.includes('[G]'))
+  }
+  if (R) {
+    hit = hit.filter(e => !e.Name.includes('[R]'))
   }
   const result = document.createElement('p');
   app.appendChild(result);
@@ -343,6 +347,7 @@ const index = (app) => {
   <input type='checkbox' id='D' name='D' value='1' /><label for='D'>[D]</label>
   <input type='checkbox' id='E' name='E' value='1' /><label for='E'>[E]</label>
   <input type='checkbox' id='G' name='G' value='1' /><label for='G'>[G]</label>
+  <input type='checkbox' id='R' name='R' value='1' /><label for='R'>[R]</label>
   <br />
 <button type='submit'>検索</button> <button type='reset' onclick='storage.clear();'>クリア</button>
   `;
