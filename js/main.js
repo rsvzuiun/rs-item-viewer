@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if ((new URL(window.location.href)).searchParams.get('kr')) {
     itemdata_url = 'data/itemData-kr.json'
+    document.body.lang = 'kr'
   } else {
     itemdata_url = 'data/itemData.json'
   }
