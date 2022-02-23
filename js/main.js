@@ -471,6 +471,7 @@ const render = (id) => {
 /** @param {Item} item, @param {Item} nxitem */
 const gen_tooltip = (item, nxitem) => {
   const tooltip = document.createElement('div');
+  tooltip.translate = false;
   if (item.Rank === 'NX') {
     tooltip.className = 'tooltip border-nx';
   } else {
@@ -512,6 +513,7 @@ const gen_tooltip = (item, nxitem) => {
   }
   {
     const row = document.createElement('div');
+    row.translate = true;
     tooltip.appendChild(row);
     row.className = 'name';
 
@@ -730,6 +732,7 @@ const gen_tooltip = (item, nxitem) => {
   }
   {
     const row = document.createElement('div');
+    row.translate = true;
     tooltip.appendChild(row);
 
     row.innerHTML = '- ' + replaceTextData(item.Text);
