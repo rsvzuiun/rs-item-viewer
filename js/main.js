@@ -387,15 +387,15 @@ const index = (app) => {
 <a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=w'>1000UMU武器</a>
 <a is='spa-anchor' href='?q=%5E%28%E3%83%96%E3%83%AC%E3%82%A4%E3%83%96%7C%E3%83%AD%E3%82%A6%E3%83%90%E3%82%B9%E3%83%88%7C%E3%82%A4%E3%83%B3%E3%83%86%E3%83%AA%29&group=w'>ブレイブ・インテリ・ロウバスト</a>
 <a is='spa-anchor' href='?q=%5E%28%E3%82%AF%E3%83%AD%E3%82%A6%7C%E3%82%B7%E3%83%A3%E3%82%A4%E3%82%A8%E3%83%B3%29'>クロウ・シャイエン</a>
-<a href='?kr=1&id=11846-11933'>[韓国]1100DXU武器</a>
+<a href='?id=11846-11933'>1100DXU武器</a>
 <br />
 <a is='spa-anchor' href='?id=8285-8301'>BFU防具</a>
 <a is='spa-anchor' href='?q=%5C%5B%E9%81%BA%E7%89%A9%5C%5D'>遺物</a>
 <a is='spa-anchor' href='?lv=775&id=9122-&q=%5E%28%3F%21.*%5C%5B%28R%7CE%29%5C%5D%29.*%24&grade=UM&rank=U&group=nw'>775UMU防具</a>
 <a is='spa-anchor' href='?lv=800&q=%5E%28%3F%21.*%5C%5B%28R%7CE%29%5C%5D%29.*%24&grade=DX&rank=U&group=nw'>800DXU防具</a>
 <a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=nw'>1000UMU防具</a>
-<a href='?kr=1&id=11934-11975'>[韓国]1100DXU防具</a>
-<a href='?kr=1&id=11976-12023'>[韓国]1000UMU職鎧</a>
+<a href='?id=11934-11975'>1100DXU防具</a>
+<a href='?id=11976-12023'>1000UMU職鎧</a>
   `;
 
   const build = (groups) => {
@@ -847,8 +847,8 @@ function replaceOpSpecial(text, ...args) {
     `<c:LTYELLOW>${job_type[args[1]]}<n> スキルレベル [+0]`)
   .replace('$func837[0]',
     `<c:LTYELLOW>${['異常系', '呪い系', '低下系'][args[0]]}<n>`)
-  .replace('$func837[1]', args[1]>0 ? '物理ダメージ [1]％ 増加' : '')
-  .replace('$func837[2]', args[2]>0 ? '知識ダメージ [2]％ 増加' : '')
+  .replace('$func837[1]', args[1]>0 ? '物理 攻撃力[1]％ 増加' : '')
+  .replace('$func837[2]', args[2]>0 ? '魔法 攻撃力[2]％ 増加' : '')
   .replace('$func838[0]', args[0]===14 ? '<c:LTYELLOW>出血<n>' : '[0]')
   .replace('$func843[1]',
     `<c:LTYELLOW>${['火', '1', '2', '3', '光'][args[1]]}<n>`)
