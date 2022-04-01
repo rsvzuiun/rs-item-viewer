@@ -402,8 +402,8 @@ const index = (app) => {
 <a is='spa-anchor' href='?lv=775&id=9122-&q=%5E%28%3F%21.*%5C%5B%28R%7CE%29%5C%5D%29.*%24&grade=UM&rank=U&group=nw'>775UMU防具</a>
 <a is='spa-anchor' href='?lv=800&q=%5E%28%3F%21.*%5C%5B%28R%7CE%29%5C%5D%29.*%24&grade=DX&rank=U&group=nw'>800DXU防具</a>
 <a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=nw'>1000UMU防具</a>
-<a href='?id=11934-11975'>1100DXU防具</a>
-<a href='?id=11976-12023'>1000UMU職鎧</a>
+<a is='spa-anchor' href='?id=11934-11975'>1100DXU防具</a>
+<a is='spa-anchor' href='?id=11976-12023'>1000UMU職鎧</a>
   `;
 
   const build = (groups) => {
