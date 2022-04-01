@@ -206,10 +206,10 @@ const router = async (app) => {
     hit = hit.filter(e => itemdata[e].Require['0'] === lv);
   }
   {
-    const nxids = hit.filter(e => {
+    const nxids = hit.filter(e =>
       itemdata[e].Rank !== 'NX'
       && itemdata[e].Id !== itemdata[e].NxId
-      && itemdata[e].NxId})
+      && itemdata[e].NxId)
       .map(e => itemdata[e].NxId);
     hit = hit.filter(e => !nxids.includes(e))
   }
