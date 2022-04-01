@@ -312,7 +312,11 @@ const index = (app) => {
   form.method = 'get';
   form.innerHTML = `
 <label for='q'>キーワード:</label>
-  <input type='text' name='q' id='q' />
+  <input type='text' name='q' id='q' /><br />
+  (<a target='_blank' href='https://userweb.mnet.ne.jp/nakama/'>正規表現</a>が使えます 例:
+  <a is='spa-anchor' href='?q=%5Eフ.%2Bン%24'>^フ.+ン$</a>
+  <a is='spa-anchor' href='?q=ゲージング%7C辛苦'>ゲージング|辛苦</a>
+  )
   <br />
 <label for='selecttype'>部位: </label>
   <input type='text' id='selecttype' name='selecttype' list='selecttype-list' />
