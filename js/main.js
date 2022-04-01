@@ -261,7 +261,7 @@ const sandbox = (app) => {
   const root = document.createElement('div');
   root.innerHTML = `
 <textarea id='json' style='width: 80%; height: 30em'>{
-  "Id": 0,
+  "Id": -1,
   "ImageId": 293,
   "NxId": 0,
   "Type": 35,
@@ -291,17 +291,12 @@ const sandbox = (app) => {
   "Require": {},
   "Job": [],
   "Text": "お金",
-  "StackSize": 255,
-  "Durability": 50,
-  "DropLv": 1,
-  "DropFactor": 1000,
-  "Price": 200,
-  "PriceType": 0,
-  "PriceFactor": 100,
-  "Flags": "<ベルト着用可>",
   "Extra": 0
 }</textarea>
-<button onclick="o=document.getElementById('output');o.textContent='';o.appendChild(gen_tooltip(JSON.parse(document.getElementById('json').value)))">conv</button>
+<button onclick="
+o=document.getElementById('output');o.textContent='';try{o.appendChild(gen_tooltip(JSON.parse(document.getElementById('json').value)))}catch(e){o.textContent=e}
+
+">conv</button>
 <div id='output'></div>
   `;
   // return root;
