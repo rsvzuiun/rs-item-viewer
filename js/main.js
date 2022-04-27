@@ -437,6 +437,10 @@ const index = (app) => {
 <a is='spa-anchor' href='?id=11445-11468'>閃の軌跡</a>
 <a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
 <a is='spa-anchor' href='?id=11741-11746'>デザコン2021</a>
+/
+<a href='?kr=1&id=12257-12298'>[韓国]新協会武器</a>
+<a href='?kr=1&id=12299-12305'>[韓国]新協会補助</a>
+<a href='?kr=1&id=12306-12324'>[韓国]新協会防具</a>
   `;
   // return root;
   app.appendChild(root);
