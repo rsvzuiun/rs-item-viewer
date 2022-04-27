@@ -201,9 +201,15 @@ const router = async (app) => {
   }
   if (job >= 0) {
     hit = hit.filter(e => itemdata[e].Job.includes(job));
+  } else if (job === -1) {
+    hit = hit.filter(e => itemdata[e].Job.length === 0);
+  } else if (job === -2) {
+    hit = hit.filter(e => itemdata[e].Job.length > 0);
   }
-  if (lv >= 0) {
+  if (lv > 0) {
     hit = hit.filter(e => itemdata[e].Require['0'] === lv);
+  } else if (lv === 0) {
+    hit = hit.filter(e => itemdata[e].Require['0'] == null);
   }
   {
     const nxids = hit.filter(e =>
