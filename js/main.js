@@ -34,7 +34,7 @@ job_type, item_type, not_equipment, type_categories, engraved */
  *   Flags: string,
  *   Extra: number,
  * }} Item
- * @type {Array<Item>}
+ * @type {{[id: number]: Item}}
  */
 let itemdata = undefined;
 
@@ -147,10 +147,10 @@ const router = async (app) => {
   const R = params.get('R');
 
   // const frag = document.createDocumentFragment();
-  let hit = itemdata;
+  let hit = Object.keys(itemdata).map(e => parseInt(e));
 
   if (id) {
-    const maxid = itemdata.slice(-1)[0].Id;
+    const maxid = parseInt(Object.keys(itemdata).slice(-1)[0]);
     const range = new Set(id.split(',').map(e => {
       const m = e.match(/^(\d+)(-)?(\d+)?$/);
       if (m) {
@@ -172,57 +172,67 @@ const router = async (app) => {
       return;
       // return render([...range.keys()][0]);
     } else {
-      hit = hit.filter(e => range.has(e.Id));
+      hit = [...range.keys()].filter(e => itemdata[e]);
     }
   }
 
-  if (query) hit = hit.filter(e => e.Name.match(query));
-  if (not_query) hit = hit.filter(e => !e.Name.match(not_query));
-  if (type >= 0) hit = hit.filter(e => e.Type === type);
+  if (query) hit = hit.filter(e => itemdata[e].Name.match(query));
+  if (not_query) hit = hit.filter(e => !itemdata[e].Name.match(not_query));
+  if (type >= 0) hit = hit.filter(e => itemdata[e].Type === type);
   if (op >= 0) {
-    hit = hit.filter(e => 
-      e.OpBit.some(i => i.Id === op) || e.OpNxt.some(i => i.Id === op)
+    hit = hit.filter(e =>
+      itemdata[e].OpBit.some(i => i.Id === op) || itemdata[e].OpNxt.some(i => i.Id === op)
     );
   }
   if (baseop >= 0) {
-    hit = hit.filter(e => e.OpPrt.some(i => i.Id === baseop));
+    hit = hit.filter(e => itemdata[e].OpPrt.some(i => i.Id === baseop));
   }
   if (rank) {
-    hit = hit.filter(e => e.Rank === rank);
+    hit = hit.filter(e => itemdata[e].Rank === rank);
   }
   if (grade) {
-    hit = hit.filter(e => e.Grade === grade);
+    hit = hit.filter(e => itemdata[e].Grade === grade);
   }
   if (group === 'w') {
-    hit = hit.filter(e => e.AtParam.Range > 0);
+    hit = hit.filter(e => itemdata[e].AtParam.Range > 0);
   }
   if (group === 'nw') {
-    hit = hit.filter(e => e.AtParam.Range <= 0);
+    hit = hit.filter(e => itemdata[e].AtParam.Range <= 0);
   }
   if (job >= 0) {
-    hit = hit.filter(e => e.Job.includes(job));
+    hit = hit.filter(e => itemdata[e].Job.includes(job));
+  } else if (job === -1) {
+    hit = hit.filter(e => itemdata[e].Job.length === 0);
+  } else if (job === -2) {
+    hit = hit.filter(e => itemdata[e].Job.length > 0);
   }
-  if (lv >= 0) {
-    hit = hit.filter(e => e.Require['0'] === lv);
+  if (lv > 0) {
+    hit = hit.filter(e => itemdata[e].Require['0'] === lv);
+  } else if (lv === 0) {
+    hit = hit.filter(e => itemdata[e].Require['0'] == null);
   }
   {
-    const nxids = hit.filter(e => e.Rank !== 'NX').map(e => e.NxId && e.Id !== e.NxId ? e.NxId : undefined);
-    hit = hit.filter(e => !nxids.includes(e.Id));
+    const nxids = hit.filter(e =>
+      itemdata[e].Rank !== 'NX'
+      && itemdata[e].Id !== itemdata[e].NxId
+      && itemdata[e].NxId)
+      .map(e => itemdata[e].NxId);
+    hit = hit.filter(e => !nxids.includes(e))
   }
   if (A) {
-    hit = hit.filter(e => !e.Name.includes('[A]'))
+    hit = hit.filter(e => !itemdata[e].Name.includes('[A]'))
   }
   if (D) {
-    hit = hit.filter(e => !e.Name.includes('[D]'))
+    hit = hit.filter(e => !itemdata[e].Name.includes('[D]'))
   }
   if (E) {
-    hit = hit.filter(e => !e.Name.includes('[E]'))
+    hit = hit.filter(e => !itemdata[e].Name.includes('[E]'))
   }
   if (G) {
-    hit = hit.filter(e => !e.Name.includes('[G]'))
+    hit = hit.filter(e => !itemdata[e].Name.includes('[G]'))
   }
   if (R) {
-    hit = hit.filter(e => !e.Name.includes('[R]'))
+    hit = hit.filter(e => !itemdata[e].Name.includes('[R]'))
   }
   const result = document.createElement('p');
   app.appendChild(result);
@@ -244,9 +254,9 @@ const router = async (app) => {
   result.innerText = restext;
 
   aborted = false;
-  for await (const item of hit.slice(0, SEARCH_LIMIT)) {
+  for await (const e of hit.slice(0, SEARCH_LIMIT)) {
     if (aborted) break;
-    app.appendChild(render(item.Id));
+    app.appendChild(render(e));
     await new Promise(resolve => setTimeout(resolve, 0));
   }
 
@@ -257,7 +267,7 @@ const sandbox = (app) => {
   const root = document.createElement('div');
   root.innerHTML = `
 <textarea id='json' style='width: 80%; height: 30em'>{
-  "Id": 0,
+  "Id": -1,
   "ImageId": 293,
   "NxId": 0,
   "Type": 35,
@@ -287,17 +297,12 @@ const sandbox = (app) => {
   "Require": {},
   "Job": [],
   "Text": "お金",
-  "StackSize": 255,
-  "Durability": 50,
-  "DropLv": 1,
-  "DropFactor": 1000,
-  "Price": 200,
-  "PriceType": 0,
-  "PriceFactor": 100,
-  "Flags": "<ベルト着用可>",
   "Extra": 0
 }</textarea>
-<button onclick="o=document.getElementById('output');o.textContent='';o.appendChild(gen_tooltip(JSON.parse(document.getElementById('json').value)))">conv</button>
+<button onclick="
+o=document.getElementById('output');o.textContent='';try{o.appendChild(gen_tooltip(JSON.parse(document.getElementById('json').value)))}catch(e){o.textContent=e}
+
+">conv</button>
 <div id='output'></div>
   `;
   // return root;
@@ -312,7 +317,11 @@ const index = (app) => {
   form.method = 'get';
   form.innerHTML = `
 <label for='q'>キーワード:</label>
-  <input type='text' name='q' id='q' />
+  <input type='text' name='q' id='q' /><br />
+  (<a target='_blank' href='https://userweb.mnet.ne.jp/nakama/'>正規表現</a>が使えます 例:
+  <a is='spa-anchor' href='?q=%5Eフ.%2Bン%24'>^フ.+ン$</a>
+  <a is='spa-anchor' href='?q=ゲージング%7C辛苦'>ゲージング|辛苦</a>
+  )
   <br />
 <label for='selecttype'>部位: </label>
   <input type='text' id='selecttype' name='selecttype' list='selecttype-list' />
@@ -394,8 +403,8 @@ const index = (app) => {
 <a is='spa-anchor' href='?lv=775&id=9122-&q=%5E%28%3F%21.*%5C%5B%28R%7CE%29%5C%5D%29.*%24&grade=UM&rank=U&group=nw'>775UMU防具</a>
 <a is='spa-anchor' href='?lv=800&q=%5E%28%3F%21.*%5C%5B%28R%7CE%29%5C%5D%29.*%24&grade=DX&rank=U&group=nw'>800DXU防具</a>
 <a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=nw'>1000UMU防具</a>
-<a href='?id=11934-11975'>1100DXU防具</a>
-<a href='?id=11976-12023'>1000UMU職鎧</a>
+<a is='spa-anchor' href='?id=11934-11975'>1100DXU防具</a>
+<a is='spa-anchor' href='?id=11976-12023'>1000UMU職鎧</a>
   `;
 
   const build = (groups) => {
@@ -434,6 +443,10 @@ const index = (app) => {
 <a is='spa-anchor' href='?id=11445-11468'>閃の軌跡</a>
 <a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
 <a is='spa-anchor' href='?id=11741-11746'>デザコン2021</a>
+/
+<a href='?kr=1&id=12257-12298'>[韓国]新協会武器</a>
+<a href='?kr=1&id=12299-12305'>[韓国]新協会補助</a>
+<a href='?kr=1&id=12306-12324'>[韓国]新協会防具</a>
   `;
   // return root;
   app.appendChild(root);
@@ -462,9 +475,9 @@ const footer = () => {
 
 /** @param {number} id */
 const render = (id) => {
-  const item = itemdata.find(e => e.Id == id);
+  const item = itemdata[id];
   const nxitem = (item.NxId && item.NxId !== item.Id)
-                  ? itemdata.find(e => e.Id == item.NxId) : undefined;
+                  ? itemdata[item.NxId] : undefined;
 
   return gen_tooltip(item, nxitem);
 };
