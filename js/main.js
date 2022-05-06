@@ -803,7 +803,7 @@ const gen_tooltip = (item, nxitem) => {
       StackSize.innerHTML = `- 重ね置き ${yellow(item.StackSize)}`;
     }
 
-    if (item.Grade !== 'N') {
+    if (item.Durability) {
       const Durability = document.createElement('div');
       tooltip.appendChild(Durability);
       Durability.innerHTML = `- 耐久減少 ${yellow(item.Durability)}型`;
