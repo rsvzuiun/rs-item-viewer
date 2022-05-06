@@ -106,7 +106,7 @@ const engraved = {
   },
   2: {
     name: '閃の軌跡コラボ刻印',
-    1: { // 
+    1: {
       name: 'アヴァロンガーヴ',
       op: [
         {Id: 0, Value: [200]},
@@ -115,16 +115,16 @@ const engraved = {
         {Id: -1, Text: '敵物理致命打抵抗 [0]％減少', Value: [15]},
       ]
     },
-    2: { // 
+    2: {
       name: 'アドバンスジャケット',
       op: [
-        {Id: 0, Value: [200]},
-        {Id: 6, Value: [200]},
-        {Id: 182, Value: [10]},
-        {Id: -1, Text: '敵物理致命打抵抗 [0]％減少', Value: [15]},
+        {Id: 0, Value: [160]},
+        {Id: 6, Value: [160]},
+        {Id: 182, Value: [8]},
+        {Id: -1, Text: '敵物理致命打抵抗 [0]％減少', Value: [12]},
       ]
     },
-    3: { // 
+    3: {
       name: 'ヴァリアントコート',
       op: [
         {Id: 4, Value: [200]},
@@ -134,7 +134,7 @@ const engraved = {
         {Id: -1, Text: '魔法致命打発動確率 [0]％ 増加', Value: [5]},
       ]
     },
-    4: { // 
+    4: {
       name: 'ジェネラルコート',
       op: [
         {Id: 4, Value: [160]},
@@ -144,7 +144,7 @@ const engraved = {
         {Id: -1, Text: '魔法致命打発動確率 [0]％ 増加', Value: [4]},
       ]
     },
-    5: { // 
+    5: {
       name: 'ソルジャーグローブ',
       op: [
         {Id: 21, Value: [40]},
@@ -154,7 +154,7 @@ const engraved = {
         {Id: -1, Text: 'CP獲得ボーナス [0]％ 増加', Value: [15]},
       ]
     },
-    6: { // 
+    6: {
       name: 'ライダーグローブ',
       op: [
         {Id: 21, Value: [32]},
@@ -164,7 +164,7 @@ const engraved = {
         {Id: -1, Text: 'CP獲得ボーナス [0]％ 増加', Value: [12]},
       ]
     },
-    7: { // 
+    7: {
       name: 'ソーサラーグローブ',
       op: [
         {Id: 145, Value: [30]},
@@ -173,7 +173,7 @@ const engraved = {
         {Id: -1, Text: '魔法強打発動確率 [0]％ 増加', Value: [5]},
       ]
     },
-    8: { // 
+    8: {
       name: 'ドレスグローブ',
       op: [
         {Id: 145, Value: [25]},
@@ -182,7 +182,7 @@ const engraved = {
         {Id: -1, Text: '魔法強打発動確率 [0]％ 増加', Value: [4]},
       ]
     },
-    9: { // 
+    9: {
       name: 'ライトニングゴーグル',
       op: [
         {Id: 185, Value: [30]},
@@ -192,7 +192,7 @@ const engraved = {
         {Id: 14, Value: [3, 1]},
       ]
     },
-    10: { // 
+    10: {
       name: 'パンツァーゴーグル',
       op: [
         {Id: 185, Value: [24]},
@@ -202,7 +202,7 @@ const engraved = {
         {Id: 14, Value: [4, 1]},
       ]
     },
-    11: { // 
+    11: {
       name: 'ローゼンクラウン',
       op: [
         {Id: 145, Value: [20]},
@@ -212,7 +212,7 @@ const engraved = {
         {Id: 18, Value: [3, 1]},
       ]
     },
-    12: { // 
+    12: {
       name: '覚醒ハチマキ',
       op: [
         {Id: 145, Value: [16]},
@@ -222,7 +222,7 @@ const engraved = {
         {Id: 18, Value: [4, 1]},
       ]
     },
-    13: { // 
+    13: {
       name: '金剛黒帯',
       op: [
         {Id: 0, Value: [200]},
@@ -232,7 +232,7 @@ const engraved = {
         {Id: 16, Value: [3, 1]},
       ]
     },
-    14: { // 
+    14: {
       name: '真・闘魂ベルト',
       op: [
         {Id: 0, Value: [160]},
@@ -242,7 +242,7 @@ const engraved = {
         {Id: 16, Value: [4, 1]},
       ]
     },
-    15: { // 
+    15: {
       name: 'ヴィクトリーベルト',
       op: [
         {Id: 4, Value: [200]},
@@ -251,7 +251,7 @@ const engraved = {
         {Id: 16, Value: [3, 1]},
       ]
     },
-    16: { // 
+    16: {
       name: 'ひんやりベルト',
       op: [
         {Id: 4, Value: [160]},
@@ -260,7 +260,7 @@ const engraved = {
         {Id: 16, Value: [3, 1]},
       ]
     },
-    17: { // 
+    17: {
       name: '覇者のメダリオン',
       op: [
         {Id: 21, Value: [10]},
@@ -270,7 +270,7 @@ const engraved = {
         {Id: -1, Text: '最終ダメージ [0]％ 増加', Value: [5]},
       ]
     },
-    18: { // 
+    18: {
       name: 'パシオンルージュ',
       op: [
         {Id: 21, Value: [8]},
@@ -280,7 +280,7 @@ const engraved = {
         {Id: -1, Text: '最終ダメージ [0]％ 増加', Value: [4]},
       ]
     },
-    19: { // 
+    19: {
       name: 'グラールロケット',
       op: [
         {Id: -1, Text: 'すべてのステータス [0] 増加', Value: [100]},
@@ -290,7 +290,7 @@ const engraved = {
         {Id: 320, Value: [5]},
       ]
     },
-    20: { // 
+    20: {
       name: 'アビスシャドウ',
       op: [
         {Id: -1, Text: 'すべてのステータス [0] 増加', Value: [80]},
@@ -300,7 +300,7 @@ const engraved = {
         {Id: 320, Value: [4]},
       ]
     },
-    21: { // 
+    21: {
       name: 'ストレガーZ',
       op: [
         {Id: 95, Value: [80]},
@@ -310,7 +310,7 @@ const engraved = {
         {Id: -1, Text: '物理強打発動確率 [0]％ 増加', Value: [5]},
       ]
     },
-    22: { // 
+    22: {
       name: 'ダマスカスブーツ',
       op: [
         {Id: 95, Value: [64]},
@@ -320,7 +320,7 @@ const engraved = {
         {Id: -1, Text: '物理強打発動確率 [0]％ 増加', Value: [4]},
       ]
     },
-    23: { // 
+    23: {
       name: 'エンハンスブーツ',
       op: [
         {Id: 95, Value: [80]},
@@ -330,7 +330,7 @@ const engraved = {
         {Id: 128, Value: [5, 2]},
       ]
     },
-    24: { // 
+    24: {
       name: 'アドバンスギア',
       op: [
         {Id: 95, Value: [64]},
