@@ -1,6 +1,6 @@
 // @ts-check
 /* eslint-disable no-unused-vars */
-const version = '2021/03/02 v0.0773';
+const version = '2021/05/18 v0.0775';
 
 let itemdata_url = 'data/itemData.json';
 const textdata_url = 'data/textData.json';
@@ -62,6 +62,7 @@ const job_type = {
   21: "黒魔術師",
   22: "マスケッティア",
   23: "アルケミスト",
+  24: "キャプテン",
   40: "男性キャラクター専用", // original
   41: "女性キャラクター専用"  // original
 };
@@ -85,7 +86,7 @@ const item_type = {
   14: "肩刺青",
   15: "十字架",
   16: "共用鎧",
-  17: "職業鎧",
+  17: "専用鎧",
   18: "片手剣",
   19: "盾",
   20: "両手剣",

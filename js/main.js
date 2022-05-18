@@ -624,7 +624,7 @@ const gen_tooltip = (item, nxitem) => {
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
   }
-  {
+  if (item.OpBit.some(e => e.Id !== 0)) {  // TODO: 例外系の見直し
     item.OpBit.map((option, idx) => {
       const row = document.createElement('div');
 
@@ -647,6 +647,8 @@ const gen_tooltip = (item, nxitem) => {
       }
       return row;
     }).filter(v => v).map(elm => tooltip.appendChild(elm));
+  } else {
+    console.log(item)
   }
   if (nxitem && item.OpBit.length < nxitem.OpBit.length) {
     for (let i=0; i<nxitem.OpBit.length-item.OpBit.length; i++){
