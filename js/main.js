@@ -194,10 +194,18 @@ const router = async (app) => {
     hit = hit.filter(e => itemdata[e].Grade === grade);
   }
   if (group === 'w') {
-    hit = hit.filter(e => itemdata[e].AtParam.Range > 0);
+    hit = hit.filter(e => {
+      const item = itemdata[e]
+      return (item.AtParam.Range > 0)
+              || (item.Job.includes(7) && ![17, 50, 59, 73].includes(item.Type))
+    });
   }
   if (group === 'nw') {
-    hit = hit.filter(e => itemdata[e].AtParam.Range <= 0);
+    hit = hit.filter(e => {
+      const item = itemdata[e]
+      return (item.AtParam.Range <= 0)
+              && !(item.Job.includes(7) && ![17, 50, 59, 73].includes(item.Type))
+    });
   }
   if (job >= 0) {
     hit = hit.filter(e => itemdata[e].Job.includes(job));
