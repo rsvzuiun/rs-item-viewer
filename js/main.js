@@ -149,6 +149,11 @@ const router = async (app) => {
   // const frag = document.createDocumentFragment();
   let hit = Object.keys(itemdata).map(e => parseInt(e));
 
+  const keyword = params.get("keyword");
+  if (keyword) {
+    hit = hit.filter(e => itemdata[e].Text.match(keyword));
+  }
+
   if (id) {
     const maxid = parseInt(Object.keys(itemdata).slice(-1)[0]);
     const range = new Set(id.split(',').map(e => {
