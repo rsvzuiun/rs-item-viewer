@@ -913,8 +913,8 @@ const replaceColorTag = (text) => {
 /** @param {Item} item, @param {number} idx */
 const opPrtValue = (item, idx) => {
   return item.OpPrt[idx].ValueIndex.map(index => {
-    const min = item.ValueTable[index][0];
-    const max = item.ValueTable[index][1];
+    const min = item.ValueTable?.[index]?.[0];
+    const max = item.ValueTable?.[index]?.[1];
     if (min === max) return min;
     return `[${min}~${max}]`;
   });
