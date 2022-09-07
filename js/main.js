@@ -490,6 +490,7 @@ const index = (app) => {
 <a is='spa-anchor' href='?id=11445-11468'>閃の軌跡</a>
 <a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
 <a is='spa-anchor' href='?id=11741-11746'>デザコン2021</a>
+<a is='spa-anchor' href='?id=12344-12349'>デザコン2022</a>
 /
 <a is='spa-anchor' href='?id=12257-12298'>新協会武器</a>
 <a is='spa-anchor' href='?id=12299-12305'>新協会補助</a>
