@@ -85,7 +85,8 @@ h2 {
 .text-color-CTPURPLE {color: #ff73ff;}
 .text-color-CYAN {color: #00ffff;}
 .text-color-GOLDYELLOW {color: #ffdf00;}
-.text-color-GRAY {color: #777;}
+.text-color-GRAY {color: #777; }
+.text-color-GRAY > .text-color-LTYELLOW {color: #777; }
 .text-color-GREEN {color: #00cc00;}
 .text-color-LTGREEN {color: #00ff00;}
 .text-color-LTORANGE {color: #ff9900;}

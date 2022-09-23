@@ -1,6 +1,6 @@
 // @ts-check
 /* global version, itemdata_url, textdata_url, status_type, extra_status_type,
-job_type, item_type, not_equipment, type_categories, engraved */
+job_type, item_type, not_equipment, type_categories, engraved_ring, engraved */
 /// <reference path="./const.js" />
 /// <reference path="./engraved.js" />
 /// <reference path="./form-storage.js" />
@@ -486,6 +486,7 @@ const index = (app) => {
 <a is='spa-anchor' href='?q=インフィニティ.*%27'>IFULT</a>
 /
 <a is='spa-anchor' href='?id=10212-10241'>秘密D</a>
+<a is='spa-anchor' href='?id=10362-10366'>混沌指</a>
 <a is='spa-anchor' href='?id=11351-11361'>ヤティカヌ</a>
 <a is='spa-anchor' href='?id=11445-11468'>閃の軌跡</a>
 <a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
@@ -773,6 +774,41 @@ const gen_tooltip = (item, nxitem) => {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+  if (
+    item?.OpPrt[1]?.Id &&
+    Object.keys(engraved_ring).includes(item?.OpPrt[1]?.Id.toString())
+  ) {
+    const label = document.createElement("div");
+    tooltip.appendChild(label);
+
+    label.className = "label";
+    label.innerText = "<刻印効果>";
+
+    if (engraved_ring[item.OpPrt[1].Id]) {
+      engraved_ring[item.OpPrt[1].Id]
+        .map((option) => {
+          const row = document.createElement("div");
+
+          let opText = "";
+          if (option.Id === -1) {
+            opText = replaceOpText(option.Text, ...option.Value);
+          } else {
+            opText = replaceOpText(
+              textdata.OptionBasic[option.Id],
+              ...option.Value
+            );
+            if (!opText) return null;
+            if (opText === "undefined") {
+              opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+            }
+          }
+          row.innerHTML = "- " + opText;
+          return row;
+        })
+        .filter((v) => v)
+        .map((elm) => tooltip.appendChild(elm));
     }
   }
   if (nxitem || item.Rank === "NX") {
