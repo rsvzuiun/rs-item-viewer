@@ -33,6 +33,7 @@ job_type, item_type, not_equipment, type_categories, engraved_ring, engraved */
  *   PriceFactor: number,
  *   Flags: string,
  *   Extra: number,
+ *   Exclusive: boolean,
  * }} Item
  * @type {{[id: number]: Item}}
  */
@@ -618,6 +619,13 @@ const gen_tooltip = (item, nxitem) => {
       const row = document.createElement("div");
       tooltip.appendChild(row);
       row.innerHTML = replaceColorTag("<c:CTPURPLE>- 銀行取引不可<n>");
+    }
+    if (item.Exclusive) {
+      const row = document.createElement("div");
+      tooltip.appendChild(row);
+      row.innerHTML = replaceColorTag(
+        "<c:CTPURPLE>- 装備数制限(<n><c:LTYELLOW>0/1<n><c:CTPURPLE>)<n>"
+      );
     }
   }
   {
