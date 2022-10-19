@@ -444,7 +444,7 @@ const index = (app) => {
 <a is='spa-anchor' href='?q=%5E%28%E3%83%96%E3%83%AC%E3%82%A4%E3%83%96%7C%E3%83%AD%E3%82%A6%E3%83%90%E3%82%B9%E3%83%88%7C%E3%82%A4%E3%83%B3%E3%83%86%E3%83%AA%29&group=w'>ブレイブ・インテリ・ロウバスト</a>
 <a is='spa-anchor' href='?q=%5E%28%E3%82%AF%E3%83%AD%E3%82%A6%7C%E3%82%B7%E3%83%A3%E3%82%A4%E3%82%A8%E3%83%B3%29'>クロウ・シャイエン</a>
 <a is='spa-anchor' href='?id=11846-11933,12107-12110'>1100DXU武器</a>
-<a href='?kr=1&id=12502-12582'>[韓国]1250UMU武器</a>
+<a is='spa-anchor' href='?id=12502-12582'>1250UMU武器</a>
 <br />
 <a is='spa-anchor' href='?id=8285-8301'>BFU防具</a>
 <a is='spa-anchor' href='?q=%5C%5B%E9%81%BA%E7%89%A9%5C%5D'>遺物</a>
