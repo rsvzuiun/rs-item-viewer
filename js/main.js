@@ -1014,7 +1014,7 @@ function replaceOpText(text, ...args) {
   text = replaceOpSpecial(text, ...args)
     .replace(/\r\n/g, "<br />&nbsp;")
     .replace(/\[([+-]?)([0-7])\](0*％?)/g, (org, sign, opid, post) => {
-      return yellow(`${sign}${args[parseInt(opid)]}${post}`);
+      return yellow(`${sign}${args[parseInt(opid)].toLocaleString()}${post}`);
     });
   return replaceColorTag(text);
 }
