@@ -668,6 +668,7 @@ const gen_tooltip = (item, nxitem) => {
       const row = document.createElement("div");
 
       const Value = opPrtValue(item, idx);
+      row.title = `baseop: ${baseop.Id}, ${JSON.stringify(Value)}`;
       let opText = replaceOpText(textdata.OptionProper[baseop.Id], ...Value);
       if (!opText) return null;
       if (opText === "undefined") {
@@ -694,6 +695,7 @@ const gen_tooltip = (item, nxitem) => {
     // TODO: 例外系の見直し
     item.OpBit.map((option, idx) => {
       const row = document.createElement("div");
+      row.title = `op: ${option.Id}, ${JSON.stringify(option.Value)}`;
 
       let opText = "";
       if (option.Text) {
@@ -831,6 +833,7 @@ const gen_tooltip = (item, nxitem) => {
       if (option.Id === -1) return null;
 
       const row = document.createElement("div");
+      row.title = `op: ${option.Id}, ${JSON.stringify(option.Value)}`;
 
       let opText = replaceOpText(
         textdata.OptionBasic[option.Id],
@@ -1037,6 +1040,7 @@ const replaceColorTag = (text) => {
 /** @param {Item} item, @param {number} idx */
 const opPrtValue = (item, idx) => {
   return item.OpPrt[idx].ValueIndex.map((index) => {
+    if (index == 2) return item.Extra;
     const min = item.ValueTable?.[index]?.[0];
     const max = item.ValueTable?.[index]?.[1];
     if (min === max) return min;
