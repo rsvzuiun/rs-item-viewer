@@ -675,7 +675,7 @@ const gen_tooltip = (item, nxitem) => {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
       } else {
         opText = opText.replace(/\[([+-]?)e\](0*％?)/g, (org, sign, post) => {
-          return yellow(`${sign}${item.Extra}${post}`);
+          return yellow(`${sign}${item.Extra.toLocaleString()}${post}`);
         });
       }
       row.innerHTML = "- " + opText;
@@ -1040,7 +1040,7 @@ const replaceColorTag = (text) => {
 /** @param {Item} item, @param {number} idx */
 const opPrtValue = (item, idx) => {
   return item.OpPrt[idx].ValueIndex.map((index) => {
-    if (index == 2) return item.Extra;
+    if (index == 2) return "null";
     const min = item.ValueTable?.[index]?.[0];
     const max = item.ValueTable?.[index]?.[1];
     if (min === max) return min;
