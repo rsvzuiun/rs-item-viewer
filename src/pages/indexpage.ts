@@ -101,6 +101,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=nw'>1000UMU防具</a>
 <a is='spa-anchor' href='?id=11934-11975'>1100DXU防具</a>
 <a is='spa-anchor' href='?id=11976-12023,12155-12158'>1000UMU職鎧</a>
+<a href='?kr=1&id=12818-12853'>[韓国]1250UMU防具</a>
 `;
 
   const build = (groups: any) => {
