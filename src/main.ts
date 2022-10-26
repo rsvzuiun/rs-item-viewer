@@ -2,6 +2,7 @@ import "./main.css";
 import * as C from "./const";
 import { engraved, engraved_ring } from "./engraved";
 import { Item, ItemData, Require, TextData } from "./types";
+import { genSPAAnchor } from "./SPAAnchor";
 
 import FormStorage from "form-storage";
 
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       fetch(url).then((response) => response.json())
     )
   );
-  customElements.define("spa-anchor", SPAAnchor, { extends: "a" });
+  customElements.define("spa-anchor", genSPAAnchor(update), { extends: "a" });
   window.addEventListener("popstate", async () => {
     aborted = true;
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -1008,15 +1009,3 @@ const opPrtValue = (item: Item, idx: number): string[] => {
     return `[${min}~${max}]`;
   });
 };
-
-class SPAAnchor extends HTMLAnchorElement {
-  constructor() {
-    super();
-    /** @type {(this: GlobalEventHandlers, ev: MouseEvent) => any} */
-    this.onclick = (e) => {
-      e.preventDefault();
-      window.history.pushState(null, "", this.href);
-      update();
-    };
-  }
-}
