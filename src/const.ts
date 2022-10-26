@@ -1,9 +1,9 @@
 // @ts-check
 /* eslint-disable no-unused-vars */
-const version = "2022/10/19 v0.0782";
+export const version = "2022/10/19 v0.0782"
 
-let itemdata_url = "data/itemData.json";
-const textdata_url = "data/textData.json";
+export let itemdata_url = "data/itemData.json"
+export const textdata_url = "data/textData.json"
 
 /** @type {Object<number, string>} */
 const status_type = {
@@ -15,7 +15,7 @@ const status_type = {
   5: "知識",
   6: "カリスマ",
   7: "運",
-};
+}
 
 /** @type {Object<number, string>} */
 const extra_status_type = {
@@ -27,14 +27,14 @@ const extra_status_type = {
   5: "知識",
   6: "知恵",
   7: "運",
-};
+}
 
 /** @type {Object<number, string>} */
 const minipet_food_type = {
   1: "精霊型",
   2: "自然型",
   3: "神霊型",
-};
+}
 
 /** @type {Object<number, string>} */
 const job_type = {
@@ -65,7 +65,7 @@ const job_type = {
   24: "キャプテン",
   40: "男性キャラクター専用", // original
   41: "女性キャラクター専用", // original
-};
+}
 
 /** @type {Object<number, string>} */
 const item_type = {
@@ -150,13 +150,13 @@ const item_type = {
   78: "コサージュ",
   80: "チェインアンカー",
   81: "ラム酒",
-};
+}
 
 /** @type {Array<number>} */
 const not_equipment = [
   35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
   59, 60, 62, 65, 66, 67,
-];
+]
 
 const type_categories = [
   [
@@ -183,4 +183,4 @@ const type_categories = [
       52, 59, 60, 65, 66, 67,
     ],
   ],
-];
+]
