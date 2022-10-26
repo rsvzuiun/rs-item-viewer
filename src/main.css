@@ -25,7 +25,7 @@ h2 {
   max-width: 285px;
   color: white;
   background-color: black;
-  font-family: 'ＭＳ Ｐゴシック';
+  font-family: "ＭＳ Ｐゴシック";
   font-size: 12px;
 }
 
@@ -47,7 +47,7 @@ h2 {
   border-left-color: #00f800 !important;
   color: #00f800 !important;
 }
-.item-different-line .text-color-LTYELLOW  {
+.item-different-line .text-color-LTYELLOW {
   color: #00f800 !important;
 }
 .tooltip > div {
@@ -81,20 +81,52 @@ h2 {
   bottom: 1px;
 }
 
-.text-color-BTBLUE {color: #50a0f8;}
-.text-color-CTPURPLE {color: #ff73ff;}
-.text-color-CYAN {color: #00ffff;}
-.text-color-GOLDYELLOW {color: #ffdf00;}
-.text-color-GRAY {color: #777; }
-.text-color-GRAY > .text-color-LTYELLOW {color: #777; }
-.text-color-GREEN {color: #00cc00;}
-.text-color-LTGREEN {color: #00ff00;}
-.text-color-LTORANGE {color: #ff9900;}
-.text-color-LTRED {color: #f80000;}
-.text-color-LTYELLOW {color: #f8f800;}
-.text-color-WHITE {color: #fff;}
+.text-color-BTBLUE {
+  color: #50a0f8;
+}
+.text-color-CTPURPLE {
+  color: #ff73ff;
+}
+.text-color-CYAN {
+  color: #00ffff;
+}
+.text-color-GOLDYELLOW {
+  color: #ffdf00;
+}
+.text-color-GRAY {
+  color: #777;
+}
+.text-color-GRAY > .text-color-LTYELLOW {
+  color: #777;
+}
+.text-color-GREEN {
+  color: #00cc00;
+}
+.text-color-LTGREEN {
+  color: #00ff00;
+}
+.text-color-LTORANGE {
+  color: #ff9900;
+}
+.text-color-LTRED {
+  color: #f80000;
+}
+.text-color-LTYELLOW {
+  color: #f8f800;
+}
+.text-color-WHITE {
+  color: #fff;
+}
 
-.item-name-U {color: #d8b888;}
-.item-name-NX {color: #b44444;}
-.item-name-EX {color: #b2b2f8;}
-.item-name-T {color: #00f800;}
+.item-name-U {
+  color: #d8b888;
+}
+.item-name-NX {
+  color: #b44444;
+}
+.item-name-EX {
+  color: #b2b2f8;
+}
+.item-name-T {
+  color: #00f800;
+}
