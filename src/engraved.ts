@@ -1,7 +1,6 @@
-"use strict";
-/* eslint-disable no-unused-vars */
+import { Option } from "./types"
 
-const engraved_ring = {
+export const engraved_ring: { [id: number]: Option[] } = {
   708: [
     // 混沌
     { Id: -1, Text: "ダブルクリティカルダメージ増加 +[0]％", Value: [1] },
@@ -52,10 +51,18 @@ const engraved_ring = {
       Value: [4],
     },
   ],
-};
+}
 
 // {Id: -1, Text: '', Value: [0]},
-const engraved = {
+export const engraved: {
+  [group: number]: {
+    name: string
+    [id: number]: {
+      name: string
+      op: Option[]
+    }
+  }
+} = {
   1: {
     name: "ヤティカヌの刻印",
     1: {
@@ -65,7 +72,7 @@ const engraved = {
         { Id: -1, Text: "防御力 [0]％ 増加", Value: [300] },
         { Id: 6, Value: [750] },
         { Id: -1, Text: "物理致命打発動確率 [0]％ 増加", Value: [40] },
-        { Id: 184, Text: "物理致命打ダメージ [0]％ 増加", Value: [25] },
+        { Id: 184, Value: [25] },
       ],
     },
     2: {
@@ -163,7 +170,7 @@ const engraved = {
       op: [
         { Id: -1, Text: "最大HP [0]％ 増加", Value: [300] },
         { Id: -1, Text: "物理回避率 [0]％ 増加", Value: [15] },
-        { Id: -1, Text: "全ての属性抵抗 [0]％ 増加", Value: ["30"] },
+        { Id: -1, Text: "全ての属性抵抗 [0]％ 増加", Value: [30] },
         { Id: 655, Value: [13] },
       ],
     },
@@ -447,4 +454,4 @@ const engraved = {
       ],
     },
   },
-};
+}
