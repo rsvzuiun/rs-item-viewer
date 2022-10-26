@@ -1,4 +1,4 @@
-import { Option } from "./types"
+import { Option } from "./types";
 
 export const engraved_ring: { [id: number]: Option[] } = {
   708: [
@@ -51,17 +51,17 @@ export const engraved_ring: { [id: number]: Option[] } = {
       Value: [4],
     },
   ],
-}
+};
 
 // {Id: -1, Text: '', Value: [0]},
 export const engraved: {
   [group: number]: {
-    name: string
+    name: string;
     [id: number]: {
-      name: string
-      op: Option[]
-    }
-  }
+      name: string;
+      op: Option[];
+    };
+  };
 } = {
   1: {
     name: "ヤティカヌの刻印",
@@ -454,4 +454,4 @@ export const engraved: {
       ],
     },
   },
-}
+};
