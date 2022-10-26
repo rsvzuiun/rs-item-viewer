@@ -973,6 +973,18 @@ function replaceOpSpecial(text: string, ...args: (string | number)[]) {
     .replace(
       "$func853[1]",
       `<c:LTYELLOW>${["0", "1", "風", "3", "4"][args[1] as number]}<n>`
+    )
+    .replace(
+      "$func942[0]",
+      `<c:LTYELLOW>${["物理", "魔法"][args[0] as number]}<n>`
+    )
+    .replace(
+      "$func945[1]",
+      `<c:LTYELLOW>${["増加", "減少"][args[1] as number]}<n>`
+    )
+    .replace(
+      "$func951[1]",
+      `<c:LTYELLOW>${["0", "1", "2", "3", "4", "??系"][args[1] as number]}<n>`
     );
   return text;
 }
