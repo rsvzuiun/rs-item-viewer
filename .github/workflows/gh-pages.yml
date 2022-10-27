@@ -5,7 +5,9 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
-      - "**/*.md"
+      - "**.md"
+      - ".gitignore"
+      - ".github/**.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
