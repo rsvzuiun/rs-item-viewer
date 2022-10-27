@@ -4,7 +4,9 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
-      - "**/*.md"
+      - "**.md"
+      - ".gitignore"
+      - ".github/**.yml"
   pull_request:
 
 jobs:
