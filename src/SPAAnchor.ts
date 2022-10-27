@@ -1,4 +1,4 @@
-export const genSPAAnchor = (callback: () => any) => {
+export const genSPAAnchor = (callback: () => unknown) => {
   class SPAAnchor extends HTMLAnchorElement {
     constructor() {
       super();

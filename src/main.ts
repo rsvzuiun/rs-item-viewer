@@ -26,10 +26,10 @@ let aborted = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (new URL(window.location.href).searchParams.get("kr")) {
-    itemdata_url = "data/itemData-kr.json";
+    itemdata_url = C.itemdatakr_url;
     document.body.lang = "kr";
   } else {
-    itemdata_url = "data/itemData.json";
+    itemdata_url = C.itemdata_url;
   }
 
   [itemdata, textdata] = await Promise.all(
@@ -461,8 +461,8 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       }
       return row;
     })
-      .filter((v) => v)
-      .map((elm) => tooltip.appendChild(elm!));
+      .filter((v): v is HTMLDivElement => v !== null)
+      .map((elm) => tooltip.appendChild(elm));
   }
   if (item.OpBit.some((e) => e.Id !== 0)) {
     // TODO: 例外系の見直し
@@ -492,8 +492,8 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       }
       return row;
     })
-      .filter((v) => v)
-      .map((elm) => tooltip.appendChild(elm!));
+      .filter((v): v is HTMLDivElement => v !== null)
+      .map((elm) => tooltip.appendChild(elm));
   } else {
     // console.log(item);
   }
@@ -538,6 +538,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
             let opText = "";
             if (option.Id === -1) {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               opText = replaceOpText(option.Text!, ...option.Value);
             } else {
               opText = replaceOpText(
@@ -552,8 +553,8 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
             row.innerHTML = "- " + opText;
             return row;
           })
-          .filter((v) => v)
-          .map((elm) => tooltip.appendChild(elm!));
+          .filter((v): v is HTMLDivElement => v !== null)
+          .map((elm) => tooltip.appendChild(elm));
       }
     } catch (error) {
       console.error(error);
@@ -576,6 +577,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
           let opText = "";
           if (option.Id === -1) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             opText = replaceOpText(option.Text!, ...option.Value);
           } else {
             opText = replaceOpText(
@@ -590,8 +592,8 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
           row.innerHTML = "- " + opText;
           return row;
         })
-        .filter((v) => v)
-        .map((elm) => tooltip.appendChild(elm!));
+        .filter((v): v is HTMLDivElement => v !== null)
+        .map((elm) => tooltip.appendChild(elm));
     }
   }
   if (nxitem || item.Rank === "NX") {
@@ -622,8 +624,8 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       }
       return row;
     })
-      .filter((v) => v)
-      .map((elm) => tooltip.appendChild(elm!));
+      .filter((v): v is HTMLDivElement => v !== null)
+      .map((elm) => tooltip.appendChild(elm));
   }
   if (nxitem && item.Rank !== "NX") {
     for (let i = 0; i < 4; i++) {
@@ -656,7 +658,8 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
     (Object.keys(item.Require) as (keyof Require)[])
       .map((key) => {
-        const value = item.Require[key]!;
+        const value = item.Require[key];
+        if (typeof value === "undefined") throw Error();
         const row = document.createElement("div");
         if (typeof value === "number") {
           const html = /* html */ `- ${

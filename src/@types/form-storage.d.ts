@@ -1,10 +1,10 @@
 declare module "form-storage" {
   export default class FormStorage {
-    constructor(selector: any, opt: any);
+    constructor(selector: unknown, opt: unknown);
     save(): void;
     clear(): void;
     setCheckbox(): void;
-    getState(): any;
+    getState(): unknown;
     applyState(str: string): boolean;
     apply(): void;
   }

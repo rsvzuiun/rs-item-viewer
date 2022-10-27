@@ -1,6 +1,7 @@
 export const version = "2022/10/19 v0.0782";
 
-export let itemdata_url = "data/itemData.json";
+export const itemdata_url = "data/itemData.json";
+export const itemdatakr_url = "data/itemData-kr.json";
 export const textdata_url = "data/textData.json";
 
 export const status_type: { [type: number]: string } = {

@@ -104,9 +104,10 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a href='?kr=1&id=12818-12853'>[韓国]1250UMU防具</a>
 `;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const build = (groups: any) => {
     const frag = document.createDocumentFragment();
-    for (let value of groups) {
+    for (const value of groups) {
       const child = document.createElement("div");
       frag.appendChild(child);
       if (typeof value[0] === "string") {
@@ -116,7 +117,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
         child.appendChild(head);
         child.appendChild(build(value.slice(1)));
       } else {
-        for (let i of value) {
+        for (const i of value) {
           const image = document.createElement("div");
           image.className = "index-image";
           image.innerHTML = `<a is='spa-anchor' href='?type=${i}'><img src='img/type/${i}.png' /><br />${C.item_type[i]}</a>`;
