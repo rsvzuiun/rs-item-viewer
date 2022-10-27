@@ -461,7 +461,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       }
       return row;
     })
-      .filter((v): v is HTMLDivElement => v !== null)
+      .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
   if (item.OpBit.some((e) => e.Id !== 0)) {
@@ -492,7 +492,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       }
       return row;
     })
-      .filter((v): v is HTMLDivElement => v !== null)
+      .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   } else {
     // console.log(item);
@@ -553,7 +553,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
             row.innerHTML = "- " + opText;
             return row;
           })
-          .filter((v): v is HTMLDivElement => v !== null)
+          .flatMap((v) => v ?? [])
           .map((elm) => tooltip.appendChild(elm));
       }
     } catch (error) {
@@ -592,7 +592,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
           row.innerHTML = "- " + opText;
           return row;
         })
-        .filter((v): v is HTMLDivElement => v !== null)
+        .flatMap((v) => v ?? [])
         .map((elm) => tooltip.appendChild(elm));
     }
   }
@@ -624,7 +624,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       }
       return row;
     })
-      .filter((v): v is HTMLDivElement => v !== null)
+      .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
   if (nxitem && item.Rank !== "NX") {
@@ -676,7 +676,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
         }
         return row;
       })
-      .filter((v) => v)
+      .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
   if (item.Job?.length) {
@@ -691,7 +691,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       row.innerHTML = "- " + C.job_type[job];
       return row;
     })
-      .filter((v) => v)
+      .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
   if (item.Id >= 0) {
