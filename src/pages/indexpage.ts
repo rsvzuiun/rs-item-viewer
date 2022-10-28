@@ -104,30 +104,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a href='?kr=1&id=12818-12853'>[韓国]1250UMU防具</a>
 `;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const build = (groups: any) => {
-    const frag = document.createDocumentFragment();
-    for (const value of groups) {
-      const child = document.createElement("div");
-      frag.appendChild(child);
-      if (typeof value[0] === "string") {
-        const head = document.createElement("h2");
-        head.innerText = value[0];
-        child.className = "index-frame";
-        child.appendChild(head);
-        child.appendChild(build(value.slice(1)));
-      } else {
-        for (const i of value) {
-          const image = document.createElement("div");
-          image.className = "index-image";
-          image.innerHTML = `<a is='spa-anchor' href='?type=${i}'><img src='img/type/${i}.png' /><br />${C.item_type[i]}</a>`;
-          child.appendChild(image);
-        }
-      }
-    }
-    return frag;
-  };
-  root.appendChild(build(C.type_categories));
+  root.appendChild(buildToc(toc));
   const link_foot = document.createElement("div");
   root.appendChild(link_foot);
   link_foot.innerHTML = /* html */ `
@@ -149,4 +126,179 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a is='spa-anchor' href='?id=12306-12324'>新協会防具</a>
 `;
   app.appendChild(root);
+};
+
+type IndexItem = {
+  href: string;
+  icon: string;
+  text: string;
+};
+type IndexToc = {
+  label?: string;
+  content: (number | IndexItem | IndexToc)[];
+};
+
+const toc: IndexToc = {
+  content: [
+    {
+      label: "武器",
+      content: [
+        {
+          label: "剣士・戦士",
+          content: [
+            {
+              href: "?group=w&job=0",
+              icon: "img/item/1187.png",
+              text: "片手剣",
+            },
+            { href: "?type=19&job=0", icon: "img/item/431.png", text: "盾" },
+            20,
+            71,
+          ],
+        },
+        {
+          label: "ランサー・アーチャー",
+          content: [26, 27, 28, 3, 13],
+        },
+        {
+          label: "ウィザード・ウルフマン",
+          content: [
+            21,
+            12,
+            22,
+            74,
+            {
+              href: "?group=mw&job=3",
+              icon: "img/item/1019.png",
+              text: "爪",
+            },
+          ],
+        },
+        {
+          label: "ビショップ・追放天使",
+          content: [
+            23,
+            { href: "?type=19&job=4", icon: "img/item/428.png", text: "盾" },
+            24,
+            15,
+          ],
+        },
+        {
+          label: "ビーストテイマー・サマナー",
+          content: [29, 14],
+        },
+        {
+          label: "シーフ・武道家",
+          content: [
+            25,
+            72,
+            70,
+            73,
+            {
+              href: "?group=mw&job=7",
+              icon: "img/item/3007.png",
+              text: "手足",
+            },
+          ],
+        },
+        {
+          label: "プリンセス・リトルウィッチ",
+          content: [
+            30,
+            31,
+            {
+              href: "?group=w&job=13",
+              icon: "img/item/518.png",
+              text: "ワンド/メイス",
+            },
+            75,
+          ],
+        },
+        {
+          label: "ネクロマンサー・悪魔",
+          content: [
+            33,
+            15,
+            {
+              href: "?group=w&job=14",
+              icon: "img/item/421.png",
+              text: "ネクロ武器",
+            },
+            {
+              href: "?type=31&job=14",
+              icon: "img/item/510.png",
+              text: "ネクロ補助",
+            },
+          ],
+        },
+        {
+          label: "霊術師・闘士",
+          content: [54, 76, 55, 77],
+        },
+        {
+          label: "光奏師・獣人",
+          content: [56, 58, 12],
+        },
+        {
+          label: "メイド・黒魔術師",
+          content: [
+            57,
+            78,
+            61,
+            {
+              href: "?type=15&job=21",
+              icon: "img/item/848.png",
+              text: "十字架",
+            },
+          ],
+        },
+        {
+          label: "マスケッティア・アルケミスト",
+          content: [63, 64, 68, 69],
+        },
+        {
+          label: "キャプテン",
+          content: [80, 81],
+        },
+      ],
+    },
+    {
+      label: "防具",
+      content: [8, 0, 1, 11, 10, 6, 2, 4, 5, 16, 17, 7, 9],
+    },
+    {
+      label: "その他",
+      content: [
+        34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
+        52, 59, 60, 65, 66, 67,
+      ],
+    },
+  ],
+};
+
+const buildToc = (toc: IndexToc): HTMLDivElement => {
+  const frag = document.createElement("div");
+  frag.className = "index-frame";
+  if (toc.label) {
+    const head = document.createElement("h2");
+    head.innerText = toc.label;
+    frag.appendChild(head);
+  }
+  for (const i of toc.content) {
+    if (typeof i === "number") {
+      const cell = document.createElement("div");
+      cell.className = "index-image";
+      cell.innerHTML = /* html */ `<a is='spa-anchor' href='?type=${i}'><img src='img/type/${i}.png' width="34" height="34" /><br />${C.item_type[i]}</a>`;
+      frag.appendChild(cell);
+    } else if ("href" in i) {
+      const cell = document.createElement("div");
+      cell.className = "index-image";
+      cell.innerHTML = /* html */ `<a is='spa-anchor' href='${i.href}'><img src='${i.icon}' width="34" height="34" /><br />${i.text}</a>`;
+      frag.appendChild(cell);
+    } else if ("content" in i) {
+      frag.appendChild(buildToc(i));
+    }
+  }
+
+  return frag;
 };

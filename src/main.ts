@@ -1,7 +1,7 @@
 import "./main.css";
 import * as C from "./const";
 import { engraved, engraved_ring } from "./engraved";
-import { Item, ItemData, Require, TextData } from "./types";
+import { Item, ItemData, TextData } from "./types";
 import {
   equals,
   yellow,
@@ -11,6 +11,7 @@ import {
   opPrtValue,
 } from "./util";
 import { genSPAAnchor } from "./SPAAnchor";
+import { isIndex, isKr, getParams } from "./params";
 import { index, sandbox } from "./pages";
 
 import FormStorage from "form-storage";
@@ -25,7 +26,7 @@ let storage: FormStorage;
 let aborted = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (new URL(window.location.href).searchParams.get("kr")) {
+  if (isKr()) {
     itemdata_url = C.itemdatakr_url;
     document.body.lang = "kr";
   } else {
@@ -82,7 +83,7 @@ const update = async () => {
       update();
     });
   }
-  if (new URL(window.location.href).searchParams.toString() === "") {
+  if (isIndex()) {
     storage = new FormStorage("form", {
       name: "rs-item-viewer",
       ignores: ['[type="hidden"]'],
@@ -92,42 +93,41 @@ const update = async () => {
 };
 
 const router = async (app: HTMLElement) => {
-  const params = new URL(window.location.href).searchParams;
-
-  if (params.get("sandbox")) {
-    return sandbox(app);
-  }
-
-  if (params.toString() === "") {
+  if (isIndex()) {
     return index(app, textdata);
   }
 
-  const hidden = params.get("oo");
-  if (hidden) {
+  const params = getParams();
+
+  if (params.sandbox) {
+    return sandbox(app);
+  }
+
+  if (params.infty) {
     SEARCH_LIMIT = Infinity;
   }
 
-  const id = params.get("id");
-  const query = params.get("q");
-  const not_query = params.get("nq");
-  const type = parseInt(params.get("type") || "");
-  const op = parseInt(params.get("op") || "");
-  const baseop = parseInt(params.get("baseop") || "");
-  const rank = params.get("rank");
-  const grade = params.get("grade");
-  const group = params.get("group");
-  const job = parseInt(params.get("job") || "");
-  const lv = parseInt(params.get("lv") || "");
+  const id = params.id;
+  const query = params.query;
+  const not_query = params.not_query;
+  const type = params.type;
+  const op = params.op;
+  const baseop = params.baseop;
+  const rank = params.rank;
+  const grade = params.grade;
+  const group = params.group;
+  const job = params.job;
+  const lv = params.lv;
 
-  const A = params.get("A");
-  const D = params.get("D");
-  const E = params.get("E");
-  const G = params.get("G");
-  const R = params.get("R");
+  const A = params.A;
+  const D = params.D;
+  const E = params.E;
+  const G = params.G;
+  const R = params.R;
 
   let hit = Object.keys(itemdata).map((e) => parseInt(e));
 
-  const keyword = params.get("keyword");
+  const keyword = params.keyword;
   if (keyword) {
     hit = hit.filter((e) => itemdata[e].Text.match(keyword));
   }
@@ -191,7 +191,17 @@ const router = async (app: HTMLElement) => {
       const item = itemdata[e];
       return (
         item.AtParam.Range > 0 ||
-        (item.Job.includes(7) && ![17, 50, 59, 73].includes(item.Type))
+        (item.Job.includes(7) &&
+          ![17, 73, ...C.not_equipment].includes(item.Type))
+      );
+    });
+  }
+  if (group === "mw") {
+    hit = hit.filter((e) => {
+      const item = itemdata[e];
+      return (
+        item.Job.includes(7) &&
+        ![17, 22, 70, 73, ...C.not_equipment].includes(item.Type)
       );
     });
   }
@@ -200,7 +210,10 @@ const router = async (app: HTMLElement) => {
       const item = itemdata[e];
       return (
         item.AtParam.Range <= 0 &&
-        !(item.Job.includes(7) && ![17, 50, 59, 73].includes(item.Type))
+        !(
+          item.Job.includes(7) &&
+          ![17, 73, ...C.not_equipment].includes(item.Type)
+        )
       );
     });
   }
@@ -215,17 +228,6 @@ const router = async (app: HTMLElement) => {
     hit = hit.filter((e) => itemdata[e].Require["0"] === lv);
   } else if (lv === 0) {
     hit = hit.filter((e) => itemdata[e].Require["0"] == null);
-  }
-  {
-    const nxids = hit
-      .filter(
-        (e) =>
-          itemdata[e].Rank !== "NX" &&
-          itemdata[e].Id !== itemdata[e].NxId &&
-          itemdata[e].NxId
-      )
-      .map((e) => itemdata[e].NxId);
-    hit = hit.filter((e) => !nxids.includes(e));
   }
   if (A) {
     hit = hit.filter((e) => !itemdata[e].Name.includes("[A]"));
@@ -242,6 +244,29 @@ const router = async (app: HTMLElement) => {
   if (R) {
     hit = hit.filter((e) => !itemdata[e].Name.includes("[R]"));
   }
+
+  if (params.unknown) {
+    const ops = Object.keys(textdata.OptionBasic).map((e) => parseInt(e));
+    const baseops = Object.keys(textdata.OptionProper).map((e) => parseInt(e));
+    hit = hit.filter(
+      (e) =>
+        itemdata[e].OpPrt.filter((baseop) => !baseops.includes(baseop.Id))
+          .length ||
+        itemdata[e].OpBit.filter((op) => !ops.includes(op.Id)).length ||
+        itemdata[e].OpNxt.filter((op) => !ops.includes(op.Id)).length
+    );
+  } else {
+    const nxids = hit
+      .filter(
+        (e) =>
+          itemdata[e].Rank !== "NX" &&
+          itemdata[e].Id !== itemdata[e].NxId &&
+          itemdata[e].NxId
+      )
+      .map((e) => itemdata[e].NxId);
+    hit = hit.filter((e) => !nxids.includes(e));
+  }
+
   const result = document.createElement("p");
   app.appendChild(result);
 
@@ -656,7 +681,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     row.className = "label";
     row.innerText = "<要求能力値>";
 
-    (Object.keys(item.Require) as (keyof Require)[])
+    (Object.keys(item.Require) as (keyof typeof item.Require)[])
       .map((key) => {
         const value = item.Require[key];
         if (typeof value === "undefined") throw Error();
