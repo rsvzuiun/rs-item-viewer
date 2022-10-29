@@ -58,6 +58,6 @@ export const getParams = (): Params => {
     G: Boolean(searchParams.get("G")),
     R: Boolean(searchParams.get("R")),
 
-    unknown: Boolean(searchParams.get("unkown")),
+    unknown: Boolean(searchParams.get("unknown")),
   };
 };
