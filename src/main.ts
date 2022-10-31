@@ -129,7 +129,7 @@ const router = async (app: HTMLElement) => {
 
   const keyword = params.keyword;
   if (keyword) {
-    hit = hit.filter((e) => itemdata[e].Text.match(keyword));
+    hit = hit.filter((e) => itemdata[e]?.Text.match(keyword));
   }
 
   if (id) {
@@ -167,32 +167,33 @@ const router = async (app: HTMLElement) => {
     }
   }
 
-  if (query) hit = hit.filter((e) => itemdata[e].Name.match(query));
-  if (not_query) hit = hit.filter((e) => !itemdata[e].Name.match(not_query));
-  if (type >= 0) hit = hit.filter((e) => itemdata[e].Type === type);
+  if (query) hit = hit.filter((e) => itemdata[e]?.Name.match(query));
+  if (not_query) hit = hit.filter((e) => !itemdata[e]?.Name.match(not_query));
+  if (type >= 0) hit = hit.filter((e) => itemdata[e]?.Type === type);
   if (op >= 0) {
     hit = hit.filter(
       (e) =>
-        itemdata[e].OpBit.some((i) => i.Id === op) ||
-        itemdata[e].OpNxt.some((i) => i.Id === op)
+        itemdata[e]?.OpBit.some((i) => i.Id === op) ||
+        itemdata[e]?.OpNxt.some((i) => i.Id === op)
     );
   }
   if (baseop >= 0) {
-    hit = hit.filter((e) => itemdata[e].OpPrt.some((i) => i.Id === baseop));
+    hit = hit.filter((e) => itemdata[e]?.OpPrt.some((i) => i.Id === baseop));
   }
   if (rank) {
-    hit = hit.filter((e) => itemdata[e].Rank === rank);
+    hit = hit.filter((e) => itemdata[e]?.Rank === rank);
   }
   if (grade) {
-    hit = hit.filter((e) => itemdata[e].Grade === grade);
+    hit = hit.filter((e) => itemdata[e]?.Grade === grade);
   }
   if (group === "w") {
     hit = hit.filter((e) => {
       const item = itemdata[e];
       return (
-        item.AtParam.Range > 0 ||
-        (item.Job.includes(7) &&
-          ![17, 73, ...C.not_equipment].includes(item.Type))
+        item &&
+        (item.AtParam.Range > 0 ||
+          (item.Job.includes(7) &&
+            ![17, 73, ...C.not_equipment].includes(item.Type)))
       );
     });
   }
@@ -200,6 +201,7 @@ const router = async (app: HTMLElement) => {
     hit = hit.filter((e) => {
       const item = itemdata[e];
       return (
+        item &&
         item.Job.includes(7) &&
         ![17, 22, 70, 73, ...C.not_equipment].includes(item.Type)
       );
@@ -209,6 +211,7 @@ const router = async (app: HTMLElement) => {
     hit = hit.filter((e) => {
       const item = itemdata[e];
       return (
+        item &&
         item.AtParam.Range <= 0 &&
         !(
           item.Job.includes(7) &&
@@ -218,31 +221,31 @@ const router = async (app: HTMLElement) => {
     });
   }
   if (job >= 0) {
-    hit = hit.filter((e) => itemdata[e].Job.includes(job));
+    hit = hit.filter((e) => itemdata[e]?.Job.includes(job));
   } else if (job === -1) {
-    hit = hit.filter((e) => itemdata[e].Job.length === 0);
+    hit = hit.filter((e) => itemdata[e]?.Job.length === 0);
   } else if (job === -2) {
-    hit = hit.filter((e) => itemdata[e].Job.length > 0);
+    hit = hit.filter((e) => itemdata[e]?.Job.length ?? 0 > 0);
   }
   if (lv > 0) {
-    hit = hit.filter((e) => itemdata[e].Require["0"] === lv);
+    hit = hit.filter((e) => itemdata[e]?.Require["0"] === lv);
   } else if (lv === 0) {
-    hit = hit.filter((e) => itemdata[e].Require["0"] == null);
+    hit = hit.filter((e) => itemdata[e]?.Require["0"] == null);
   }
   if (A) {
-    hit = hit.filter((e) => !itemdata[e].Name.includes("[A]"));
+    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[A]"));
   }
   if (D) {
-    hit = hit.filter((e) => !itemdata[e].Name.includes("[D]"));
+    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[D]"));
   }
   if (E) {
-    hit = hit.filter((e) => !itemdata[e].Name.includes("[E]"));
+    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[E]"));
   }
   if (G) {
-    hit = hit.filter((e) => !itemdata[e].Name.includes("[G]"));
+    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[G]"));
   }
   if (R) {
-    hit = hit.filter((e) => !itemdata[e].Name.includes("[R]"));
+    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[R]"));
   }
 
   if (params.unknown) {
@@ -250,20 +253,20 @@ const router = async (app: HTMLElement) => {
     const baseops = Object.keys(textdata.OptionProper).map((e) => parseInt(e));
     hit = hit.filter(
       (e) =>
-        itemdata[e].OpPrt.filter((baseop) => !baseops.includes(baseop.Id))
+        itemdata[e]?.OpPrt.filter((baseop) => !baseops.includes(baseop.Id))
           .length ||
-        itemdata[e].OpBit.filter((op) => !ops.includes(op.Id)).length ||
-        itemdata[e].OpNxt.filter((op) => !ops.includes(op.Id)).length
+        itemdata[e]?.OpBit.filter((op) => !ops.includes(op.Id)).length ||
+        itemdata[e]?.OpNxt.filter((op) => !ops.includes(op.Id)).length
     );
   } else {
     const nxids = hit
       .filter(
         (e) =>
-          itemdata[e].Rank !== "NX" &&
-          itemdata[e].Id !== itemdata[e].NxId &&
-          itemdata[e].NxId
+          itemdata[e]?.Rank !== "NX" &&
+          itemdata[e]?.Id !== itemdata[e]?.NxId &&
+          itemdata[e]?.NxId
       )
-      .map((e) => itemdata[e].NxId);
+      .map((e) => itemdata[e]?.NxId);
     hit = hit.filter((e) => !nxids.includes(e));
   }
 
@@ -324,7 +327,7 @@ const footer = () => {
 };
 
 const render = (id: number) => {
-  const item = itemdata[id];
+  const item = itemdata[id] as Item;
   const nxitem =
     item.NxId && item.NxId !== item.Id ? itemdata[item.NxId] : undefined;
 
@@ -334,11 +337,9 @@ const render = (id: number) => {
 const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
   const tooltip = document.createElement("div");
   tooltip.translate = false;
-  if (item.Rank === "NX") {
-    tooltip.className = "tooltip border-nx";
-  } else {
-    tooltip.className = "tooltip border-normal";
-  }
+  tooltip.className = `tooltip ${
+    item.Rank === "NX" ? "border-nx" : "border-normal"
+  }`;
 
   {
     const row = document.createElement("div");
@@ -348,11 +349,7 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     if (item.Id >= 0) {
       const anchor = document.createElement("a", { is: "spa-anchor" });
       row.appendChild(anchor);
-      if (new URL(window.location.href).searchParams.get("kr")) {
-        anchor.href = `?kr=1&id=${item.Id}`;
-      } else {
-        anchor.href = `?id=${item.Id}`;
-      }
+      anchor.href = `?${isKr() ? "kr=1&" : ""}id=${item.Id}`;
       anchor.appendChild(image);
     } else {
       row.appendChild(image);
@@ -630,19 +627,25 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
   }
   if (item.Rank === "NX") {
     item.OpNxt.map((option) => {
-      if (option.Id === -1) return null;
-
       const row = document.createElement("div");
       row.title = `op: ${option.Id}, ${JSON.stringify(option.Value)}`;
 
-      let opText = replaceOpText(
-        textdata.OptionBasic[option.Id],
-        ...option.Value
-      );
-      if (!opText) return null;
-      if (opText === "undefined") {
-        opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+      let opText = "";
+      if (option.Text) {
+        opText = replaceOpText(option.Text, ...option.Value);
+      } else if (option.Id === -1) {
+        return null;
+      } else {
+        opText = replaceOpText(
+          textdata.OptionBasic[option.Id],
+          ...option.Value
+        );
+        if (!opText) return null;
+        if (opText === "undefined") {
+          opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
+        }
       }
+
       row.innerHTML = "- " + opText;
       if (nxitem) {
         row.className = "item-different-line";
