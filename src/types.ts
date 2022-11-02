@@ -75,11 +75,9 @@ export type Item = {
   Exclusive: boolean;
 };
 
-export type ItemData = {
-  [id: number]: Item;
-};
+export type ItemData = ArrayLike<Item | undefined>;
 
 export type TextData = {
-  OptionProper: { [id: number]: string };
-  OptionBasic: { [id: number]: string };
+  OptionProper: ArrayLike<string | undefined>;
+  OptionBasic: ArrayLike<string | undefined>;
 };

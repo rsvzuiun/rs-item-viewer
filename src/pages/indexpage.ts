@@ -57,6 +57,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
   const selectoplist = form.querySelector("#selectop-list");
   if (selectoplist == null) throw new Error();
   for (const [k, v] of Object.entries(textdata.OptionBasic)) {
+    if (typeof v === "undefined") continue;
     const option = document.createElement("option");
     option.value = `${k}: ${v.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")}`;
     selectoplist.appendChild(option);
