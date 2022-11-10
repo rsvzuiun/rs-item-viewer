@@ -38,7 +38,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       fetch(url).then((response) => response.json())
     )
   );
-  customElements.define("spa-anchor", genSPAAnchor(update), { extends: "a" });
+  customElements.define(
+    "spa-anchor",
+    genSPAAnchor(async () => {
+      aborted = true;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      update();
+    }),
+    { extends: "a" }
+  );
   window.addEventListener("popstate", async () => {
     aborted = true;
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -274,6 +282,11 @@ const router = async (app: HTMLElement) => {
   app.appendChild(result);
 
   let restext = "";
+  if (lv > 0) {
+    restext += `装備Lv${lv}`;
+  } else if (lv === 0) {
+    restext += "装備Lvなし";
+  }
   if (query) restext += ` 含む"${query}"`;
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${C.item_type[type]}`;
@@ -287,15 +300,24 @@ const router = async (app: HTMLElement) => {
       /<c:([^> ]+?)>(.+?)<n>/g,
       "$2"
     )}"`;
-  if (job >= 0) restext += ` ${C.job_type[job]}`;
-  if (rank) restext += ` ${rank}`;
+  if (job >= 0) {
+    restext += ` ${C.job_type[job]}`;
+  } else if (job === -1) {
+    restext += "職業制限なし";
+  } else if (job === -2) {
+    restext += "職業制限あり";
+  }
   if (grade) restext += ` ${grade}`;
+  if (rank) restext += ` ${rank}`;
   if (group === "w") restext += " 武器";
   if (group === "nw") restext += " 武器以外";
+  if (group === "mw") restext += " 手足武器";
   restext += ` ${hit.length}件`;
   if (hit.length > SEARCH_LIMIT)
     restext += ` (${SEARCH_LIMIT}件に制限しています)`;
   result.innerText = restext;
+
+  window.scroll(0, 0);
 
   aborted = false;
   for await (const e of hit.slice(0, SEARCH_LIMIT)) {
