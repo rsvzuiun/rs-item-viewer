@@ -7,52 +7,73 @@ export const index = (app: HTMLElement, textdata: TextData) => {
   root.appendChild(form);
   form.action = ".";
   form.method = "get";
+
   form.innerHTML = /* html */ `
-<label for='q'>キーワード:</label>
-  <input type='text' name='q' id='q' /><br />
-  (<a target='_blank' href='https://userweb.mnet.ne.jp/nakama/'>正規表現</a>が使えます 例:
-  <a is='spa-anchor' href='?q=%5Eフ.%2Bン%24'>^フ.+ン$</a>
-  <a is='spa-anchor' href='?q=ゲージング%7C辛苦'>ゲージング|辛苦</a>
-  )
-  <br />
-<label for='selecttype'>部位: </label>
-  <input type='text' id='selecttype' name='selecttype' list='selecttype-list' />
-  <datalist id='selecttype-list'></datalist>
-  <br />
-<label for='selectop'>オプション:</label>
-  <input type='text' id='selectop' name='selectop' list='selectop-list' />
-  <datalist id='selectop-list'></datalist>
-  <br />
-<label for='selectjob'>職業:</label>
-  <input type='text' id='selectjob' name='selectjob' list='selectjob-list' />
-  <datalist id='selectjob-list'></datalist>
-  <br />
+<label for="q">キーワード:</label> <input type="search" name="q" id="q" /><br />
+(<a target="_blank" href="https://userweb.mnet.ne.jp/nakama/">正規表現</a>が使えます 例:
+<a is="spa-anchor" href="?q=%5Eフ.%2Bン%24">^フ.+ン$</a>
+<a is="spa-anchor" href="?q=ゲージング%7C辛苦">ゲージング|辛苦</a>
+)
+<br />
+<label for="selecttype">部位: </label>
+<input type="search" id="selecttype" name="selecttype" list="selecttype-list" />
+<datalist id="selecttype-list"></datalist>
+<br />
+<label for="selectop">オプション:</label>
+<input type="search" id="selectop" name="selectop" list="selectop-list" />
+<datalist id="selectop-list"></datalist>
+<br />
+<label for="selectjob">職業:</label>
+<input type="search" id="selectjob" name="selectjob" list="selectjob-list" />
+<datalist id="selectjob-list"></datalist>
+<br />
 等級:
-  <input type='radio' name='rank' id='rank-all' value='' checked='checked' /><label for='rank-all'>全て</label>
-  <input type='radio' name='rank' id='rank-N' value='N' /><label for='rank-N'>N</label>
-  <input type='radio' name='rank' id='rank-U' value='U' /><label for='rank-U'><img src='img/ui/type-icon-U.gif' /></label>
-  <input type='radio' name='rank' id='rank-NX' value='NX' /><label for='rank-NX'><img src='img/ui/type-icon-NX.gif' /></label>
-  <br />
-<label for='grade'>等級:</label>
-  <input type='radio' name='grade' id='grade-all' value='' checked='checked' /><label for='grade-all'>全て</label>
-  <input type='radio' name='grade' id='grade-N' value='N' /><label for='grade-N'>N</label>
-  <input type='radio' name='grade' id='grade-DX' value='DX' /><label for='grade-DX'><img src='img/ui/type-icon-DX.gif' /></label>
-  <input type='radio' name='grade' id='grade-UM' value='UM' /><label for='grade-UM'><img src='img/ui/type-icon-UM.gif' /></label>
-  <br />
-<label for='group'>フィルタ:</label>
-  <input type='radio' name='group' id='group-all' value='' checked='checked' /><label for='group-all'>全て</label>
-  <input type='radio' name='group' id='group-w' value='w' /><label for='group-w'>武器</label>
-  <input type='radio' name='group' id='group-nw' value='nw' /><label for='group-nw'>武器以外</label>
-  <br />
-<label>除外設定:</label>
-  <input type='checkbox' id='A' name='A' value='1' /><label for='A'>[A]</label>
-  <input type='checkbox' id='D' name='D' value='1' /><label for='D'>[D]</label>
-  <input type='checkbox' id='E' name='E' value='1' /><label for='E'>[E]</label>
-  <input type='checkbox' id='G' name='G' value='1' /><label for='G'>[G]</label>
-  <input type='checkbox' id='R' name='R' value='1' /><label for='R'>[R]</label>
-  <br />
-<button type='submit'>検索</button> <button type='reset' onclick='storage.clear();'>クリア</button>
-`;
+<input type="radio" name="rank" id="rank-all" value="" checked="checked" /><label for="rank-all">全て</label>
+<input type="radio" name="rank" id="rank-N" value="N" /><label for="rank-N">N</label>
+<input type="radio" name="rank" id="rank-U" value="U" /><label for="rank-U"><img src="img/ui/type-icon-U.gif"
+        alt="U" /></label>
+<input type="radio" name="rank" id="rank-NX" value="NX" /><label for="rank-NX"><img src="img/ui/type-icon-NX.gif"
+        alt="NX" /></label>
+<br />
+等級:
+<input type="radio" name="grade" id="grade-all" value="" checked="checked" /><label for="grade-all">全て</label>
+<input type="radio" name="grade" id="grade-N" value="N" /><label for="grade-N">N</label>
+<input type="radio" name="grade" id="grade-DX" value="DX" /><label for="grade-DX"><img src="img/ui/type-icon-DX.gif"
+        alt="DX" /></label>
+<input type="radio" name="grade" id="grade-UM" value="UM" /><label for="grade-UM"><img src="img/ui/type-icon-UM.gif"
+        alt="UM" /></label>
+<br />
+フィルタ:
+<input type="radio" name="group" id="group-all" value="" checked="checked" /><label for="group-all">全て</label>
+<input type="radio" name="group" id="group-w" value="w" /><label for="group-w">武器</label>
+<input type="radio" name="group" id="group-nw" value="nw" /><label for="group-nw">武器以外</label>
+<br />
+除外設定:
+<input type="checkbox" id="exclude-all">
+(
+<input type="checkbox" id="A" name="A" value="1" /><label for="A">[A]</label>
+<input type="checkbox" id="D" name="D" value="1" /><label for="D">[D]</label>
+<input type="checkbox" id="E" name="E" value="1" /><label for="E">[E]</label>
+<input type="checkbox" id="G" name="G" value="1" /><label for="G">[G]</label>
+<input type="checkbox" id="R" name="R" value="1" /><label for="R">[R]</label>
+)
+<br />
+<button type="submit">検索</button>
+<button type="reset" onclick="storage.clear();">クリア</button>`;
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  form
+    .querySelector<HTMLInputElement>("#exclude-all")!
+    .addEventListener("click", () => {
+      const target = ["A", "D", "E", "G", "R"];
+      const check =
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        form.querySelector<HTMLInputElement>("#exclude-all")!.checked;
+      for (const k of target) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        form.querySelector<HTMLInputElement>(`#${k}`)!.checked = check;
+      }
+    });
 
   const selectoplist = form.querySelector("#selectop-list");
   if (selectoplist == null) throw new Error();
