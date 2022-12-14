@@ -120,7 +120,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=nw&E=1'>1000UMU防具</a>
 <a is='spa-anchor' href='?lv=1100&grade=DX&rank=U&group=nw'>1100DXU防具</a>
 <a is='spa-anchor' href='?id=11976-12023,12155-12158'>1000UMU職鎧</a>
-<a href='?kr=1&id=12818-12853'>[韓国]1250UMU防具</a>
+<a is='spa-anchor' href='?id=12818-12853'>1250UMU防具</a>
 `;
 
   root.appendChild(buildToc(toc));
