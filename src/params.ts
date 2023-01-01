@@ -13,7 +13,7 @@ type Params = {
   grade: string | null;
   group: string | null;
   job: number;
-  lv: number;
+  lv: string | null;
   keyword: string | null;
 
   A: boolean;
@@ -49,7 +49,7 @@ export const getParams = (): Params => {
     grade: searchParams.get("grade"),
     group: searchParams.get("group"),
     job: Number(searchParams.get("job") || "NaN"),
-    lv: Number(searchParams.get("lv") || "NaN"),
+    lv: searchParams.get("lv"),
     keyword: searchParams.get("keyword"),
 
     A: Boolean(searchParams.get("A")),

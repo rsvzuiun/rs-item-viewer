@@ -77,3 +77,30 @@ export const opPrtValue = (item: Item, idx: number): string[] => {
     return `[${min}~${max}]`;
   });
 };
+
+export const str2range = (str: string, max: number) => [
+  ...new Set(
+    str
+      .split(",")
+      .map((e) => {
+        const m = e.match(/^(\d+)(-)?(\d+)?$/);
+        if (m) {
+          if (m[3]) {
+            // begin-end
+            const min = parseInt(m[1]);
+            const max = parseInt(m[3]);
+            return [...Array(max - min + 1)].map((_v, i) => i + min);
+          } else if (m[2]) {
+            // begin-
+            const min = parseInt(m[1]);
+            return [...Array(max - min + 1)].map((_v, i) => i + min);
+          } else if (m[1]) {
+            // id
+            return parseInt(m[1]);
+          }
+        }
+        return NaN;
+      })
+      .flat()
+  ),
+];

@@ -9,6 +9,7 @@ import {
   replaceTextData,
   replaceColorTag,
   opPrtValue,
+  str2range,
 } from "./util";
 import { genSPAAnchor } from "./SPAAnchor";
 import { isIndex, isKr, getParams } from "./params";
@@ -142,32 +143,9 @@ const router = async (app: HTMLElement) => {
 
   if (id) {
     const maxid = parseInt(Object.keys(itemdata).slice(-1)[0]);
-    const range = new Set(
-      id
-        .split(",")
-        .map((e) => {
-          const m = e.match(/^(\d+)(-)?(\d+)?$/);
-          if (m) {
-            if (m[3]) {
-              // begin-end
-              const min = parseInt(m[1]);
-              const max = parseInt(m[3]);
-              return [...Array(max - min + 1)].map((_v, i) => i + min);
-            } else if (m[2]) {
-              // begin-
-              const min = parseInt(m[1]);
-              return [...Array(maxid - min + 1)].map((_v, i) => i + min);
-            } else if (m[1]) {
-              // id
-              return parseInt(m[1]);
-            }
-          }
-          throw "error";
-        })
-        .flat()
-    );
+    const range = str2range(id, maxid);
 
-    if (range.size === 1) {
+    if (range.length === 1) {
       app.appendChild(render([...range.keys()][0]));
       return;
     } else {
@@ -235,10 +213,19 @@ const router = async (app: HTMLElement) => {
   } else if (job === -2) {
     hit = hit.filter((e) => itemdata[e]?.Job.length ?? 0 > 0);
   }
-  if (lv > 0) {
-    hit = hit.filter((e) => itemdata[e]?.Require["0"] === lv);
-  } else if (lv === 0) {
-    hit = hit.filter((e) => itemdata[e]?.Require["0"] == null);
+  if (lv) {
+    const lrange = str2range(lv, C.maxlv);
+    if (lrange.length === 1) {
+      if (lrange[0] === 0) {
+        hit = hit.filter((e) => itemdata[e]?.Require["0"] == null);
+      } else {
+        hit = hit.filter((e) => itemdata[e]?.Require["0"] === lrange[0]);
+      }
+    } else {
+      hit = hit.filter((e) =>
+        lrange.includes(itemdata[e]?.Require?.["0"] ?? -1)
+      );
+    }
   }
   if (A) {
     hit = hit.filter((e) => !itemdata[e]?.Name.includes("[A]"));
@@ -282,10 +269,10 @@ const router = async (app: HTMLElement) => {
   app.appendChild(result);
 
   let restext = "";
-  if (lv > 0) {
-    restext += `装備Lv${lv}`;
-  } else if (lv === 0) {
+  if (lv === "0") {
     restext += "装備Lvなし";
+  } else if (lv) {
+    restext += `装備Lv${lv}`;
   }
   if (query) restext += ` 含む"${query}"`;
   if (not_query) restext += ` 含まない"${not_query}"`;
