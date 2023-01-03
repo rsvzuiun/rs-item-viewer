@@ -146,10 +146,10 @@ const router = async (app: HTMLElement) => {
     const range = str2range(id, maxid);
 
     if (range.length === 1) {
-      app.appendChild(render([...range.keys()][0]));
+      app.appendChild(render(range[0]));
       return;
     } else {
-      hit = [...range.keys()].filter((e) => itemdata[e]);
+      hit = range.filter((e) => itemdata[e]);
     }
   }
 
