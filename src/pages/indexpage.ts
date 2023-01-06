@@ -80,7 +80,9 @@ export const index = (app: HTMLElement, textdata: TextData) => {
   for (const [k, v] of Object.entries(textdata.OptionBasic)) {
     if (typeof v === "undefined") continue;
     const option = document.createElement("option");
-    option.value = `${k}: ${v.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")}`;
+    option.value = `${k}: ${v
+      .replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
+      .replace(/\$func\d+/g, "")}`;
     selectoplist.appendChild(option);
   }
 

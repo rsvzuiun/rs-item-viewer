@@ -278,10 +278,9 @@ const router = async (app: HTMLElement) => {
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${C.item_type[type]}`;
   if (op >= 0)
-    restext += ` "${textdata.OptionBasic[op]?.replace(
-      /<c:([^> ]+?)>(.+?)<n>/g,
-      "$2"
-    )}"`;
+    restext += ` "${textdata.OptionBasic[op]
+      ?.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
+      .replace(/\$func\d+/, "")}"`;
   if (baseop >= 0)
     restext += ` "${textdata.OptionProper[baseop]?.replace(
       /<c:([^> ]+?)>(.+?)<n>/g,
