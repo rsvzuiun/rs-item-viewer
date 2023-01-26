@@ -454,4 +454,19 @@ export const engraved: {
       ],
     },
   },
+  7: {
+    name: "日本18周年指輪",
+    1: {
+      // 18th Anniversaryリング
+      name: "18th",
+      op: [
+        { Id: -1, Text: "最大HP [0]％ 増加", Value: [10] },
+        { Id: -1, Text: "全てのスキルレベル [0] 増加", Value: [3] },
+        { Id: -1, Text: "攻撃速度 [0]％ 増加", Value: [30] },
+        { Id: 0, Value: [75] },
+        { Id: 2, Value: [50] },
+        { Id: 4, Value: [75] },
+      ],
+    },
+  },
 };
