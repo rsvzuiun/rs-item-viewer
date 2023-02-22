@@ -106,34 +106,13 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 
   const link = document.createElement("div");
   root.appendChild(link);
-  link.innerHTML = /* html */ `
-<a is='spa-anchor' href='?lv=775&grade=UM&rank=U&group=w&E=1'>775UMU武器</a>
-<a is='spa-anchor' href='?lv=800&grade=DX&rank=U&group=w&E=1&R=1'>800DXU武器</a>
-<a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=w&E=1'>1000UMU武器</a>
-<a is='spa-anchor' href='?q=%5E%28%E3%83%96%E3%83%AC%E3%82%A4%E3%83%96%7C%E3%83%AD%E3%82%A6%E3%83%90%E3%82%B9%E3%83%88%7C%E3%82%A4%E3%83%B3%E3%83%86%E3%83%AA%29&group=w'>ブレイブ・インテリ・ロウバスト</a>
-<a is='spa-anchor' href='?q=%5E%28%E3%82%AF%E3%83%AD%E3%82%A6%7C%E3%82%B7%E3%83%A3%E3%82%A4%E3%82%A8%E3%83%B3%29'>クロウ・シャイエン</a>
-<a is='spa-anchor' href='?lv=1100&grade=DX&rank=U&group=w'>1100DXU武器</a>
-<a is='spa-anchor' href='?lv=1250&grade=UM&rank=U&group=w'>1250UMU武器</a>
-<br />
-<a is='spa-anchor' href='?id=8285-8301'>BFU防具</a>
-<a is='spa-anchor' href='?q=%5C%5B%E9%81%BA%E7%89%A9%5C%5D'>遺物</a>
-<a is='spa-anchor' href='?lv=775&id=9122-&grade=UM&rank=U&group=nw&E=1'>775UMU防具</a>
-<a is='spa-anchor' href='?lv=800&grade=DX&rank=U&group=nw&E=1&R=1'>800DXU防具</a>
-<a is='spa-anchor' href='?lv=1000&grade=UM&rank=U&group=nw&E=1'>1000UMU防具</a>
-<a is='spa-anchor' href='?lv=1100&grade=DX&rank=U&group=nw'>1100DXU防具</a>
-<a is='spa-anchor' href='?id=11976-12023,12155-12158'>1000UMU職鎧</a>
-<a is='spa-anchor' href='?id=12818-12853'>1250UMU防具</a>
-`;
-
-  root.appendChild(buildToc(toc));
-  const link_foot = document.createElement("div");
-  root.appendChild(link_foot);
-  link_foot.innerHTML = /* html */ `
+  link.innerHTML = /* html */ `<span style="font-size: 1.5em"><a is="spa-anchor" href="?weapon">武器一覧</a> <a is="spa-anchor" href="?protector">防具一覧</a></span><br/>
 <a is='spa-anchor' href='?id=4802-4815'>朱洛星</a>
 <a is='spa-anchor' href='?lv=680&grade=DX&rank=U'>賭博師</a>
 <a is='spa-anchor' href='?id=3626-3639,5651-5653,6403-6404,6939'>伝説</a>
 <a is='spa-anchor' href='?q=インフィニティ.*%27'>IFULT</a>
-/
+<br />
+<a is='spa-anchor' href='?id=8940-8951'>Fate</a>
 <a is='spa-anchor' href='?id=10212-10241'>秘密D</a>
 <a is='spa-anchor' href='?id=10362-10366'>混沌指</a>
 <a is='spa-anchor' href='?id=11351-11361'>ヤティカヌ</a>
@@ -141,11 +120,22 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a is='spa-anchor' href='?id=10242-10261'>デザコン2019</a>
 <a is='spa-anchor' href='?id=11741-11746'>デザコン2021</a>
 <a is='spa-anchor' href='?id=12344-12349'>デザコン2022</a>
+<br />協会装備:
+<a is='spa-anchor' href='?id=12257-12298'>武器(I)</a>
+<a is='spa-anchor' href='?id=12299-12305'>補助武器(I)</a>
+<a is='spa-anchor' href='?id=12306-12324'>防具(I)</a>
 /
-<a is='spa-anchor' href='?id=12257-12298'>新協会武器</a>
-<a is='spa-anchor' href='?id=12299-12305'>新協会補助</a>
-<a is='spa-anchor' href='?id=12306-12324'>新協会防具</a>
+<a is='spa-anchor' href='?q=%5C%5BR%5C%5D&group=w&lv=800'>武器(II)</a>
+<a is='spa-anchor' href='?q=%5C%5BR%5C%5D&group=p&lv=800'>防具(II)</a>
+/
+<a is='spa-anchor' href='?q=%5C%5BR%5C%5D&group=w&lv=0'>武器(旧I)</a>
+<a is='spa-anchor' href='?q=%5C%5BR%5C%5D&group=p&lv=0'>防具(旧I)</a>
 `;
+
+  root.appendChild(buildToc(toc));
+  const link_foot = document.createElement("div");
+  root.appendChild(link_foot);
+  link_foot.innerHTML = /* html */ ``;
   app.appendChild(root);
 };
 
