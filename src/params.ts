@@ -1,4 +1,7 @@
 type Params = {
+  weapon: boolean;
+  protector: boolean;
+
   kr: boolean;
   sandbox: boolean;
   infty: boolean;
@@ -35,9 +38,11 @@ export const getParams = (): Params => {
   const searchParams = new URL(window.location.href).searchParams;
 
   return {
-    kr: Boolean(searchParams.get("kr")),
-    sandbox: Boolean(searchParams.get("sandbox")),
-    infty: Boolean(searchParams.get("oo")),
+    weapon: searchParams.get("weapon") !== null,
+    protector: searchParams.get("protector") !== null,
+    kr: searchParams.get("kr") !== null,
+    sandbox: searchParams.get("sandbox") !== null,
+    infty: searchParams.get("oo") !== null,
 
     id: searchParams.get("id"),
     query: searchParams.get("q"),
@@ -52,12 +57,12 @@ export const getParams = (): Params => {
     lv: searchParams.get("lv"),
     keyword: searchParams.get("keyword"),
 
-    A: Boolean(searchParams.get("A")),
-    D: Boolean(searchParams.get("D")),
-    E: Boolean(searchParams.get("E")),
-    G: Boolean(searchParams.get("G")),
-    R: Boolean(searchParams.get("R")),
+    A: searchParams.get("ADEGR") !== null || searchParams.get("A") !== null,
+    D: searchParams.get("ADEGR") !== null || searchParams.get("D") !== null,
+    E: searchParams.get("ADEGR") !== null || searchParams.get("E") !== null,
+    G: searchParams.get("ADEGR") !== null || searchParams.get("G") !== null,
+    R: searchParams.get("ADEGR") !== null || searchParams.get("R") !== null,
 
-    unknown: Boolean(searchParams.get("unknown")),
+    unknown: searchParams.get("unknown") !== null,
   };
 };

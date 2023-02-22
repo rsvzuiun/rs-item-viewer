@@ -134,3 +134,28 @@ h2 {
 .item-name-T {
   color: #00f800;
 }
+
+table {
+  table-layout: fixed;
+  margin: auto;
+}
+
+table,
+th,
+td {
+  text-align: center;
+  vertical-align: middle;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+th,
+td {
+  padding: 2px;
+  min-width: 46px;
+  min-height: 46px;
+}
+
+td img {
+  vertical-align: middle;
+}

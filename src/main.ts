@@ -13,7 +13,7 @@ import {
 } from "./util";
 import { genSPAAnchor } from "./SPAAnchor";
 import { isIndex, isKr, getParams } from "./params";
-import { index, sandbox } from "./pages";
+import { index, sandbox, weapon, protector } from "./pages";
 
 import FormStorage from "form-storage";
 
@@ -108,6 +108,13 @@ const router = async (app: HTMLElement) => {
 
   const params = getParams();
 
+  if (params.weapon) {
+    return weapon(app);
+  }
+  if (params.protector) {
+    return protector(app);
+  }
+
   if (params.sandbox) {
     return sandbox(app);
   }
@@ -172,6 +179,7 @@ const router = async (app: HTMLElement) => {
   if (grade) {
     hit = hit.filter((e) => itemdata[e]?.Grade === grade);
   }
+  // TODO group条件見直し
   if (group === "w") {
     hit = hit.filter((e) => {
       const item = itemdata[e];
@@ -180,6 +188,16 @@ const router = async (app: HTMLElement) => {
         (item.AtParam.Range > 0 ||
           (item.Job.includes(7) &&
             ![17, 73, ...C.not_equipment].includes(item.Type)))
+      );
+    });
+  }
+  if (group === "p") {
+    hit = hit.filter((e) => {
+      const item = itemdata[e];
+      return (
+        item &&
+        [...C.protector_type].includes(item.Type) &&
+        (!item.Job.includes(7) || [17, 73].includes(item.Type))
       );
     });
   }
@@ -222,8 +240,10 @@ const router = async (app: HTMLElement) => {
         hit = hit.filter((e) => itemdata[e]?.Require["0"] === lrange[0]);
       }
     } else {
-      hit = hit.filter((e) =>
-        lrange.includes(itemdata[e]?.Require?.["0"] ?? -1)
+      hit = hit.filter(
+        (e) =>
+          lrange.includes(itemdata[e]?.Require?.["0"] ?? -1) ||
+          (lrange.includes(0) && itemdata[e]?.Require["0"] == null)
       );
     }
   }
@@ -295,6 +315,7 @@ const router = async (app: HTMLElement) => {
   }
   if (grade) restext += ` ${grade}`;
   if (rank) restext += ` ${rank}`;
+  if (group === "p") restext += " 防具";
   if (group === "w") restext += " 武器";
   if (group === "nw") restext += " 武器以外";
   if (group === "mw") restext += " 手足武器";
