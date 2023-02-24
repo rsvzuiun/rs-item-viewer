@@ -363,7 +363,7 @@ const render = (id: number) => {
   return gen_tooltip(item, nxitem);
 };
 
-const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
+export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
   const tooltip = document.createElement("div");
   tooltip.translate = false;
   tooltip.className = `tooltip ${
