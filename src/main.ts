@@ -1,6 +1,6 @@
 import "./main.css";
 import * as C from "./const";
-import { engraved, engraved_ring } from "./engraved";
+import { carving, carving_ring } from "./carving";
 import { Item, ItemData, TextData } from "./types";
 import {
   equals,
@@ -566,8 +566,8 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       tooltip.appendChild(label);
 
       label.className = "label";
-      label.innerText = engraved[setid]
-        ? `<刻印 - ${engraved[setid].name}[${engraved[setid][equipid].name}]>`
+      label.innerText = carving[setid]
+        ? `<刻印 - ${carving[setid].name}[${carving[setid][equipid].name}]>`
         : `<刻印 - #${setid}>`;
 
       {
@@ -582,10 +582,11 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
         tooltip.appendChild(row);
         row.innerText = "- レベル 30";
       }
-      if (engraved[setid]) {
-        engraved[setid][equipid].op
+      if (carving[setid]) {
+        carving[setid][equipid].op
           .map((option) => {
             const row = document.createElement("div");
+            row.title = `baseop: ${option.Id}, ${JSON.stringify(option)}`;
 
             let opText = "";
             if (option.Id === -1) {
@@ -593,7 +594,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
               opText = replaceOpText(option.Text!, ...option.Value);
             } else {
               opText = replaceOpText(
-                textdata.OptionBasic[option.Id],
+                textdata.OptionProper[option.Id],
                 ...option.Value
               );
               if (!opText) return null;
@@ -613,7 +614,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
   }
   if (
     item?.OpPrt[1]?.Id &&
-    Object.keys(engraved_ring).includes(item?.OpPrt[1]?.Id.toString())
+    Object.keys(carving_ring).includes(item?.OpPrt[1]?.Id.toString())
   ) {
     const label = document.createElement("div");
     tooltip.appendChild(label);
@@ -621,10 +622,11 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     label.className = "label";
     label.innerText = "<刻印効果>";
 
-    if (engraved_ring[item.OpPrt[1].Id]) {
-      engraved_ring[item.OpPrt[1].Id]
+    if (carving_ring[item.OpPrt[1].Id]) {
+      carving_ring[item.OpPrt[1].Id]
         .map((option) => {
           const row = document.createElement("div");
+          row.title = `baseop: ${option.Id}, ${JSON.stringify(option)}`;
 
           let opText = "";
           if (option.Id === -1) {
