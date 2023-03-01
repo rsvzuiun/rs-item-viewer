@@ -36,12 +36,12 @@ h2 {
 .border-normal {
   padding-top: 5px;
   border: 7px solid black;
-  border-image: url("../img/ui/tooltip-border-normal.png") 7;
+  border-image: url("./img/ui/tooltip-border-normal.png") 7;
 }
 .border-nx {
   padding-top: 4px;
   border: 8px solid black;
-  border-image: url("../img/ui/tooltip-border-nx.png") 8;
+  border-image: url("./img/ui/tooltip-border-nx.png") 8;
 }
 
 .item-different-line {
