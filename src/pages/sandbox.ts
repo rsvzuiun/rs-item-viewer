@@ -21,7 +21,6 @@ export const sandbox = (app: HTMLElement) => {
     "Min": 0,
     "Max": 0
   },
-  "Food": 0,
   "ValueTable": [
     [
       40,
