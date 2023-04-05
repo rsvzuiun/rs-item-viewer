@@ -33,6 +33,17 @@ h2 {
   font-size: 12px;
 }
 
+.tooltip br {
+  display: block;
+  content: "";
+  margin: 0px 0;
+}
+
+.tooltip br+br {
+  margin: 5px 0;
+}
+
+
 .border-normal {
   padding-top: 5px;
   border: 7px solid black;
@@ -60,12 +71,12 @@ h2 {
   line-height: 1.2em;
 }
 .label {
-  padding-top: 8px;
+  padding-top: 5px;
   color: #00ffff;
 }
 
 .name {
-  padding-top: 8px;
+  padding-top: 10px;
 }
 
 .image {
@@ -89,13 +100,13 @@ h2 {
   color: #50a0f8;
 }
 .text-color-CTPURPLE {
-  color: #ff73ff;
+  color: #d684ff;
 }
 .text-color-CYAN {
   color: #00ffff;
 }
 .text-color-GOLDYELLOW {
-  color: #ffdf00;
+  color: #efce9c;
 }
 .text-color-GRAY {
   color: #777;
@@ -123,10 +134,10 @@ h2 {
 }
 
 .item-name-U {
-  color: #d8b888;
+  color: #efce9c;
 }
 .item-name-NX {
-  color: #b44444;
+  color: #c66339;
 }
 .item-name-EX {
   color: #b2b2f8;
