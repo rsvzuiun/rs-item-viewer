@@ -437,18 +437,18 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     if (item.Flags?.includes("<取引不可>")) {
       const row = document.createElement("div");
       tooltip.appendChild(row);
-      row.innerHTML = replaceColorTag("<c:CTPURPLE>- 取引不可アイテム<n>");
+      row.innerHTML = replaceColorTag("<c:PURPLE>- 取引不可アイテム<n>");
     }
     if (item.Flags?.includes("<銀行取引不可>")) {
       const row = document.createElement("div");
       tooltip.appendChild(row);
-      row.innerHTML = replaceColorTag("<c:CTPURPLE>- 銀行取引不可<n>");
+      row.innerHTML = replaceColorTag("<c:PURPLE>- 銀行取引不可<n>");
     }
     if (item.Exclusive) {
       const row = document.createElement("div");
       tooltip.appendChild(row);
       row.innerHTML = replaceColorTag(
-        "<c:CTPURPLE>- 装備数制限(<n><c:LTYELLOW>0/1<n><c:CTPURPLE>)<n>"
+        "<c:PURPLE>- 装備数制限(<n><c:LTYELLOW>0/1<n><c:PURPLE>)<n>"
       );
     }
   }
@@ -574,7 +574,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
         const row = document.createElement("div");
         tooltip.appendChild(row);
         row.innerHTML = replaceColorTag(
-          "<c:CTPURPLE>- 同じ刻印装備の着用制限<n> <c:LTYELLOW>0/1<n>"
+          "<c:PURPLE>- 同じ刻印装備の着用制限<n> <c:LTYELLOW>0/1<n>"
         );
       }
       {
