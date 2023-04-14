@@ -51,7 +51,6 @@ h2 {
 .border-nx {
   max-width: 280px;
   padding-top: 4px;
-  padding-right: 9px;
   border: 8px solid black;
   border-image: url("./img/ui/tooltip-border-nx.png") 8;
 }
