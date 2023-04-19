@@ -348,9 +348,9 @@ const footer = () => {
   <hr />
   <div><a href="https://github.com/rsvzuiun/rs-item-viewer">[CODE]</a> ${C.version}</div>
   <footer>
-    当サイトで利用している画像及びデータは、株式会社ゲームオンに帰属します。<br />
+    当サイトで利用している画像及びデータは、株式会社G・O・Pに帰属します。<br />
     許可無くご利用又は転用になられる事は出来ませんので、予めご了承下さい。<br />
-    Copyright (c) L&K Co., Ltd. All Rights Reserved. License to GameOn Co., Ltd.
+    Copyright (c) L&K Co., Ltd. All Rights Reserved. License to GOP Co., Ltd.
   </footer>`;
   return footer;
 };
