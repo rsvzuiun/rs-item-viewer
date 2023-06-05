@@ -9,46 +9,32 @@ export const index = (app: HTMLElement, textdata: TextData) => {
   form.method = "get";
 
   form.innerHTML = /* html */ `
-<label for="q">キーワード:</label> <input type="search" name="q" id="q" /><br />
-(<a target="_blank" href="https://userweb.mnet.ne.jp/nakama/">正規表現</a>が使えます 例:
-<a is="spa-anchor" href="?q=%5Eフ.%2Bン%24">^フ.+ン$</a>
-<a is="spa-anchor" href="?q=ゲージング%7C辛苦">ゲージング|辛苦</a>
-)
-<br />
-<label for="selecttype">部位: </label>
-<input type="search" id="selecttype" name="selecttype" list="selecttype-list" />
-<datalist id="selecttype-list"></datalist>
-<br />
-<label for="selectop">オプション:</label>
-<input type="search" id="selectop" name="selectop" list="selectop-list" />
-<datalist id="selectop-list"></datalist>
-<br />
-<label for="selectjob">職業:</label>
-<input type="search" id="selectjob" name="selectjob" list="selectjob-list" />
-<datalist id="selectjob-list"></datalist>
-<br />
-等級:
+<table>
+<tr><td><label for="q">アイテム名*</label></td><td><input type="search" name="q" id="q" /></td></tr>
+<tr><td><label for="keyword">説明文*</label></td><td><input type="search" name="keyword" id="keyword" /></td></tr>
+<tr><td><label for="selecttype">部位</label></td><td><input type="search" id="selecttype" name="selecttype" list="selecttype-list" /><datalist id="selecttype-list"></datalist></td></tr>
+<tr><td><label for="selectop">オプション</label></td><td><input type="search" id="selectop" name="selectop" list="selectop-list" /><datalist id="selectop-list"></datalist></td></tr>
+<tr><td><label for="selectop">オプション(baseop)</label></td><td><input type="search" id="selectbaseop" name="selectbaseop" list="selectbaseop-list" /><datalist id="selectbaseop-list"></datalist></td></tr>
+<tr><td><label for="selectjob">職業</label></td><td><input type="search" id="selectjob" name="selectjob" list="selectjob-list" /><datalist id="selectjob-list"></datalist></td></tr>
+<tr><td></td><td>
 <input type="radio" name="rank" id="rank-all" value="" checked="checked" /><label for="rank-all">全て</label>
 <input type="radio" name="rank" id="rank-N" value="N" /><label for="rank-N">N</label>
-<input type="radio" name="rank" id="rank-U" value="U" /><label for="rank-U"><img src="img/ui/type-icon-U.gif"
-        alt="U" /></label>
-<input type="radio" name="rank" id="rank-NX" value="NX" /><label for="rank-NX"><img src="img/ui/type-icon-NX.gif"
-        alt="NX" /></label>
-<br />
-等級:
+<input type="radio" name="rank" id="rank-U" value="U" /><label for="rank-U"><img src="img/ui/type-icon-U.gif" alt="U" /></label>
+<input type="radio" name="rank" id="rank-NX" value="NX" /><label for="rank-NX"><img src="img/ui/type-icon-NX.gif" alt="NX" /></label>
+</td></tr>
+<tr><td></td><td>
 <input type="radio" name="grade" id="grade-all" value="" checked="checked" /><label for="grade-all">全て</label>
 <input type="radio" name="grade" id="grade-N" value="N" /><label for="grade-N">N</label>
-<input type="radio" name="grade" id="grade-DX" value="DX" /><label for="grade-DX"><img src="img/ui/type-icon-DX.gif"
-        alt="DX" /></label>
-<input type="radio" name="grade" id="grade-UM" value="UM" /><label for="grade-UM"><img src="img/ui/type-icon-UM.gif"
-        alt="UM" /></label>
-<br />
-フィルタ:
+<input type="radio" name="grade" id="grade-DX" value="DX" /><label for="grade-DX"><img src="img/ui/type-icon-DX.gif" alt="DX" /></label>
+<input type="radio" name="grade" id="grade-UM" value="UM" /><label for="grade-UM"><img src="img/ui/type-icon-UM.gif" alt="UM" /></label>
+
+</td></tr>
+<tr><td></td><td>
 <input type="radio" name="group" id="group-all" value="" checked="checked" /><label for="group-all">全て</label>
 <input type="radio" name="group" id="group-w" value="w" /><label for="group-w">武器</label>
 <input type="radio" name="group" id="group-nw" value="nw" /><label for="group-nw">武器以外</label>
-<br />
-除外設定:
+</td></tr>
+<tr><td>除外設定</td><td>
 <input type="checkbox" id="exclude-all">
 (
 <input type="checkbox" id="A" name="A" value="1" /><label for="A">[A]</label>
@@ -57,9 +43,11 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <input type="checkbox" id="G" name="G" value="1" /><label for="G">[G]</label>
 <input type="checkbox" id="R" name="R" value="1" /><label for="R">[R]</label>
 )
-<br />
-<button type="submit">検索</button>
-<button type="reset" onclick="storage.clear();">クリア</button>`;
+</td></tr>
+<tr><td colspan="2"><button type="submit">検索</button> <button type="reset" onclick="storage.clear();">クリア</button></td></tr>
+</table>
+<p>* が付いてる項目は<a target="_blank" href="https://userweb.mnet.ne.jp/nakama/">正規表現</a>が使えます 例: <a is="spa-anchor" href="?q=%5Eフ.%2Bン%24">^フ.+ン$</a> <a is="spa-anchor" href="?q=ゲージング%7C辛苦">ゲージング|辛苦</a></p>
+`;
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   form
@@ -84,6 +72,17 @@ export const index = (app: HTMLElement, textdata: TextData) => {
       .replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
       .replace(/\$func\d+/g, "")}`;
     selectoplist.appendChild(option);
+  }
+
+  const selectbaseoplist = form.querySelector("#selectbaseop-list");
+  if (selectbaseoplist == null) throw new Error();
+  for (const [k, v] of Object.entries(textdata.OptionProper)) {
+    if (typeof v === "undefined") continue;
+    const option = document.createElement("option");
+    option.value = `${k}: ${v
+      .replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
+      .replace(/\$func\d+/g, "")}`;
+    selectbaseoplist.appendChild(option);
   }
 
   const selecttypelist = form.querySelector("#selecttype-list");

@@ -238,7 +238,9 @@ const body: Body = [
 ];
 
 const row_header = () => {
+  const thead = document.createElement("thead");
   const tr = document.createElement("tr");
+  thead.appendChild(tr);
   tr.appendChild(document.createElement("th"));
   tr.innerHTML = header.reduce(
     (a, e) =>
@@ -247,17 +249,19 @@ const row_header = () => {
       }">${e.name.replace(/&/g, "&amp;")}</a></th>`,
     "<th></th>"
   );
-  return tr;
+  return thead;
 };
 
 const table = cache(() => {
   const table = document.createElement("table");
+  table.className = "sticky_table";
   table.innerHTML += /* html */ `<caption style="font-size: 2em">武器一覧</caption>`;
+  table.appendChild(row_header());
   const tbody = document.createElement("tbody");
   table.appendChild(tbody);
 
   for (let i = 0; i < body.length; i++) {
-    if (i % 6 == 0) tbody.appendChild(row_header());
+    // if (i % 6 == 0) tbody.appendChild(row_header());
     const e = body[i];
     const tr = document.createElement("tr");
     tr.innerHTML = e.img.reduce(
@@ -270,7 +274,7 @@ const table = cache(() => {
     );
     tbody.appendChild(tr);
   }
-  tbody.appendChild(row_header());
+  // tbody.appendChild(row_header());
   return table;
 });
 

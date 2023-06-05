@@ -75,6 +75,7 @@ const update = async () => {
         if (m) url.searchParams.set(dst, m[1]);
       };
       proc_select("#selectop", "op");
+      proc_select("#selectbaseop", "baseop");
       proc_select("#selecttype", "type");
       proc_select("#selectjob", "job");
 

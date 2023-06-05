@@ -173,3 +173,29 @@ td {
 td img {
   vertical-align: middle;
 }
+
+input[type="search"] {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.sticky_table thead th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+  border: solid black 1px;
+}
+
+.sticky_table th:first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  background-color: white;
+  border: solid black 1px;
+}
+
+.sticky_table thead th:first-child {
+  z-index: 2;
+}
