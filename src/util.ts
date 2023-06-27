@@ -44,7 +44,7 @@ export function replaceOpSpecial(text: string, ..._args: (string | number)[]) {
     )
     .replace("$func942[0]", `<c:LTYELLOW>${["物理", "魔法"][args[0]]}<n>`)
     // NOTE: たぶん 0 が増加
-    .replace("$func945[1]", `<c:LTYELLOW>${["減少", "減少"][args[1]]}<n>`);
+    .replace("$func945[1]", `<c:LTYELLOW>${["増加", "減少"][args[1]]}<n>`);
   return text;
 }
 
