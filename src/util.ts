@@ -32,7 +32,7 @@ export function replaceOpSpecial(text: string, ..._args: (string | number)[]) {
     .replace("$func838[0]", args[0] === 14 ? "<c:LTYELLOW>出血<n>" : "[0]")
     .replace(
       "$func843[1]",
-      `<c:LTYELLOW>${["火", "1", "2", "3", "光"][args[1]]}<n>`
+      `<c:LTYELLOW>${["火", "水", "2", "3", "光"][args[1]]}<n>`
     )
     .replace(
       "$func844[0]",
