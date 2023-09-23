@@ -23,7 +23,10 @@ let itemdata: ItemData;
 let textdata: TextData;
 
 let SEARCH_LIMIT = 2000;
-let storage: FormStorage;
+const storage = new FormStorage("form", {
+  name: "rs-item-viewer",
+  ignores: ['[type="hidden"]'],
+});
 let aborted = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -56,6 +59,37 @@ document.addEventListener("DOMContentLoaded", async () => {
   update();
 });
 
+function submit_handler(this: HTMLFormElement, e: SubmitEvent) {
+  {
+    e.preventDefault();
+    const url = new URL(window.location.href);
+
+    const proc_select = (src: string, dst: string) => {
+      const m = (this.querySelector(src) as HTMLInputElement).value.match(
+        /^(\d+)/
+      );
+      if (m) url.searchParams.set(dst, m[1]);
+    };
+    proc_select("#selectop", "op");
+    proc_select("#selectbaseop", "baseop");
+    proc_select("#selecttype", "type");
+    proc_select("#selectjob", "job");
+
+    for (const input of this.getElementsByTagName("input")) {
+      if (input.type === "radio" || input.type === "checkbox") {
+        if (input.value && input.checked) {
+          url.searchParams.set(input.name, input.value);
+        }
+      } else if (!input.name.includes("select") && input.value) {
+        url.searchParams.set(input.name, input.value);
+      }
+    }
+    storage.save();
+    window.history.pushState(null, "", url.search);
+    update();
+  }
+}
+
 const update = async () => {
   const app = document.getElementById("app");
   if (app == null) throw new Error();
@@ -64,40 +98,9 @@ const update = async () => {
   await router(app);
   app.appendChild(footer());
   for (const form of document.getElementsByTagName("form")) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const url = new URL(window.location.href);
-
-      const proc_select = (src: string, dst: string) => {
-        const m = (form.querySelector(src) as HTMLInputElement).value.match(
-          /^(\d+)/
-        );
-        if (m) url.searchParams.set(dst, m[1]);
-      };
-      proc_select("#selectop", "op");
-      proc_select("#selectbaseop", "baseop");
-      proc_select("#selecttype", "type");
-      proc_select("#selectjob", "job");
-
-      for (const input of form.getElementsByTagName("input")) {
-        if (input.type === "radio" || input.type === "checkbox") {
-          if (input.value && input.checked) {
-            url.searchParams.set(input.name, input.value);
-          }
-        } else if (!input.name.includes("select") && input.value) {
-          url.searchParams.set(input.name, input.value);
-        }
-      }
-      storage.save();
-      window.history.pushState(null, "", url.search);
-      update();
-    });
+    form.addEventListener("submit", submit_handler);
   }
   if (isIndex()) {
-    storage = new FormStorage("form", {
-      name: "rs-item-viewer",
-      ignores: ['[type="hidden"]'],
-    });
     storage.apply();
   }
 };
