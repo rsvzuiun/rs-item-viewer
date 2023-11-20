@@ -763,7 +763,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
-  if (item.Id >= 0) {
+  if (!nodiff && item.Id >= 0) {
     const row = document.createElement("div");
     tooltip.appendChild(row);
 
