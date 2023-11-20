@@ -360,19 +360,25 @@ const footer = () => {
 };
 
 const render = (id: number) => {
+  const { nodiff } = getParams();
+
   const item = itemdata[id] as Item;
   const nxitem =
-    item.NxId && item.NxId !== item.Id ? itemdata[item.NxId] : undefined;
+    !nodiff && item.NxId && item.NxId !== item.Id
+      ? itemdata[item.NxId]
+      : undefined;
 
   return gen_tooltip(item, nxitem);
 };
 
 export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
+  const { nodiff } = getParams();
+
   const tooltip = document.createElement("div");
   tooltip.translate = false;
-  tooltip.className = `tooltip ${
-    item.Rank === "NX" ? "border-nx" : "border-normal"
-  }`;
+  tooltip.className = "tooltip";
+  tooltip.classList.add(item.Rank === "NX" ? "border-nx" : "border-normal");
+  if (!nodiff) tooltip.classList.add("diff");
 
   {
     const row = document.createElement("div");

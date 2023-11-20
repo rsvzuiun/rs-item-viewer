@@ -25,6 +25,7 @@ type Params = {
   G: boolean;
   R: boolean;
 
+  nodiff: boolean;
   unknown: boolean;
 };
 
@@ -32,7 +33,7 @@ export const isIndex = (): boolean =>
   new URL(window.location.href).searchParams.toString() === "";
 
 export const isKr = (): boolean =>
-  Boolean(new URL(window.location.href).searchParams.get("kr"));
+  new URL(window.location.href).searchParams.get("kr") !== null;
 
 export const getParams = (): Params => {
   const searchParams = new URL(window.location.href).searchParams;
@@ -63,6 +64,7 @@ export const getParams = (): Params => {
     G: searchParams.get("ADEGR") !== null || searchParams.get("G") !== null,
     R: searchParams.get("ADEGR") !== null || searchParams.get("R") !== null,
 
+    nodiff: searchParams.get("nodiff") !== null,
     unknown: searchParams.get("unknown") !== null,
   };
 };

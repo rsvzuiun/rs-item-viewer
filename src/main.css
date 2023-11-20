@@ -55,16 +55,13 @@ h2 {
   border-image: url("./img/ui/tooltip-border-nx.png") 8;
 }
 
-.item-different-line {
-  border-left-color: #00f800 !important;
+.diff .item-different-line {
+  border-left-color: #00f800;
 }
-.item-differentOp-line {
-  border-left-color: #00f800 !important;
-  color: #00f800 !important;
+.diff .item-different-line .text-color-LTYELLOW {
+  color: #00f800;
 }
-.item-different-line .text-color-LTYELLOW {
-  color: #00f800 !important;
-}
+
 .tooltip > div {
   border-left: solid #000 3px;
   padding-left: 3px;
