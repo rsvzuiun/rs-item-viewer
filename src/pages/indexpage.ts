@@ -110,6 +110,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <a is='spa-anchor' href='?lv=680&grade=DX&rank=U'>賭博師</a>
 <a is='spa-anchor' href='?id=3626-3639,5651-5653,6403-6404,6939'>伝説</a>
 <a is='spa-anchor' href='?q=インフィニティ.*%27'>IFULT</a>
+<a is='spa-anchor' href='?q=%5E%5C%5B復帰者%5C%5D'>復帰者</a>
 <br />
 <a is='spa-anchor' href='?id=8940-8951'>Fate</a>
 <a is='spa-anchor' href='?id=10212-10241'>秘密D</a>
