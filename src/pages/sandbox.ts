@@ -43,14 +43,12 @@ export const sandbox = (app: HTMLElement) => {
   root.appendChild(button);
   button.textContent = "変換!";
   button.onclick = () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const output = document.getElementById("output")!;
     output.textContent = "";
     try {
       output.appendChild(
         gen_tooltip(
           JSON.parse(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             (document.getElementById("json")! as HTMLTextAreaElement).value
           ),
           undefined
