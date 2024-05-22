@@ -598,7 +598,6 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
             let opText = "";
             if (option.Id === -1) {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               opText = replaceOpText(option.Text!, ...option.Value);
             } else {
               opText = replaceOpText(
@@ -638,7 +637,6 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
           let opText = "";
           if (option.Id === -1) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             opText = replaceOpText(option.Text!, ...option.Value);
           } else {
             opText = replaceOpText(

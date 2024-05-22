@@ -49,16 +49,13 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 <p>* が付いてる項目は<a target="_blank" href="https://userweb.mnet.ne.jp/nakama/">正規表現</a>が使えます 例: <a is="spa-anchor" href="?q=%5Eフ.%2Bン%24">^フ.+ン$</a> <a is="spa-anchor" href="?q=ゲージング%7C辛苦">ゲージング|辛苦</a></p>
 `;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   form
     .querySelector<HTMLInputElement>("#exclude-all")!
     .addEventListener("click", () => {
       const target = ["A", "D", "E", "G", "R"];
       const check =
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         form.querySelector<HTMLInputElement>("#exclude-all")!.checked;
       for (const k of target) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         form.querySelector<HTMLInputElement>(`#${k}`)!.checked = check;
       }
     });
