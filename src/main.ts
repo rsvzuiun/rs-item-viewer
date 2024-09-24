@@ -154,7 +154,7 @@ const router = async (app: HTMLElement) => {
 
   const keyword = params.keyword;
   if (keyword) {
-    hit = hit.filter((e) => itemdata[e]?.Text.match(keyword));
+    hit = hit.filter((e) => itemtext[e].match(keyword));
   }
 
   if (id) {
@@ -169,8 +169,8 @@ const router = async (app: HTMLElement) => {
     }
   }
 
-  if (query) hit = hit.filter((e) => itemdata[e]?.Name.match(query));
-  if (not_query) hit = hit.filter((e) => !itemdata[e]?.Name.match(not_query));
+  if (query) hit = hit.filter((e) => itemname[e].match(query));
+  if (not_query) hit = hit.filter((e) => !itemname[e].match(not_query));
   if (type >= 0) hit = hit.filter((e) => itemdata[e]?.Type === type);
   if (op >= 0) {
     hit = hit.filter(
@@ -257,19 +257,19 @@ const router = async (app: HTMLElement) => {
     }
   }
   if (A) {
-    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[A]"));
+    hit = hit.filter((e) => !itemname[e].includes("[A]"));
   }
   if (D) {
-    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[D]"));
+    hit = hit.filter((e) => !itemname[e].includes("[D]"));
   }
   if (E) {
-    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[E]"));
+    hit = hit.filter((e) => !itemname[e].includes("[E]"));
   }
   if (G) {
-    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[G]"));
+    hit = hit.filter((e) => !itemname[e].includes("[G]"));
   }
   if (R) {
-    hit = hit.filter((e) => !itemdata[e]?.Name.includes("[R]"));
+    hit = hit.filter((e) => !itemname[e].includes("[R]"));
   }
 
   if (params.unknown) {
@@ -431,7 +431,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     if (item.Rank !== "N") {
       item_name.className = "item-name-" + item.Rank;
     }
-    if (nxitem && item.Name !== nxitem.Name) {
+    if (nxitem && itemname[item.Id] !== itemname[nxitem.Id]) {
       row.classList.add("item-different-line");
     }
   }
