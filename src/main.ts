@@ -40,9 +40,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   [itemdata, textdata, itemname, itemtext] = await Promise.all(
-    [itemdata_url, textdata_url, "data/japan/item_name.json", "data/japan/item_text.json"].map((url) =>
-      fetch(url).then((response) => response.json())
-    )
+    [
+      itemdata_url,
+      textdata_url,
+      "data/japan/item_name.json",
+      "data/japan/item_text.json",
+    ].map((url) => fetch(url).then((response) => response.json()))
   );
   customElements.define(
     "spa-anchor",
