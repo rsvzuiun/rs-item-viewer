@@ -21,6 +21,8 @@ let itemdata_url: string = C.itemdata_url;
 const textdata_url = C.textdata_url;
 let itemdata: ItemData;
 let textdata: TextData;
+let itemname: string[];
+let itemtext: string[];
 
 let SEARCH_LIMIT = 2000;
 const storage = new FormStorage("form", {
@@ -37,8 +39,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     itemdata_url = C.itemdata_url;
   }
 
-  [itemdata, textdata] = await Promise.all(
-    [itemdata_url, textdata_url].map((url) =>
+  [itemdata, textdata, itemname, itemtext] = await Promise.all(
+    [itemdata_url, textdata_url, "data/japan/item_name.json", "data/japan/item_text.json"].map((url) =>
       fetch(url).then((response) => response.json())
     )
   );
@@ -421,7 +423,8 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
     const item_name = document.createElement("span");
     row.appendChild(item_name);
-    item_name.innerHTML = replaceColorTag(item.Name);
+    // item_name.innerHTML = replaceColorTag(item.Name);
+    item_name.innerHTML = replaceColorTag(itemname[item.Id]);
     if (item.Rank !== "N") {
       item_name.className = "item-name-" + item.Rank;
     }
@@ -712,7 +715,8 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     row.translate = true;
     tooltip.appendChild(row);
 
-    row.innerHTML = "- " + replaceTextData(item.Text);
+    // row.innerHTML = "- " + replaceTextData(item.Text);
+    row.innerHTML = "- " + replaceTextData(itemtext[item.Id]);
   }
   if (item.Require && Object.keys(item.Require).length) {
     const row = document.createElement("div");

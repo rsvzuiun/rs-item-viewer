@@ -43,7 +43,10 @@ export function replaceOpSpecial(text: string, ..._args: (string | number)[]) {
       `<c:LTYELLOW>${["0", "1", "風", "3", "4"][args[1]]}<n>`
     )
     .replace("$func942[0]", `<c:LTYELLOW>${["物理", "魔法"][args[0]]}<n>`)
-    .replace("$func945[1]", `<c:LTYELLOW>${["増加", "減少"][args[1]]}<n>`);
+    .replace("$func945[1]", `<c:LTYELLOW>${["増加", "減少"][args[1]]}<n>`)
+    .replace("$func342[0]", `<c:LTYELLOW>+${(args[0] / 10).toFixed(1)}％<n>`)
+    .replace("$func342[1]", `<c:LTYELLOW>+${(args[1] / 10).toFixed(1)}％<n>`)
+    ;
   return text;
 }
 
