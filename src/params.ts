@@ -3,7 +3,6 @@ type Params = {
   protector: boolean;
 
   kr: boolean;
-  sandbox: boolean;
   infty: boolean;
 
   id: string | null;
@@ -42,7 +41,6 @@ export const getParams = (): Params => {
     weapon: searchParams.get("weapon") !== null,
     protector: searchParams.get("protector") !== null,
     kr: searchParams.get("kr") !== null,
-    sandbox: searchParams.get("sandbox") !== null,
     infty: searchParams.get("oo") !== null,
 
     id: searchParams.get("id"),

@@ -13,12 +13,10 @@ import {
 } from "./util";
 import { genSPAAnchor } from "./SPAAnchor";
 import { isIndex, isKr, getParams } from "./params";
-import { index, sandbox, weapon, protector } from "./pages";
+import { index, weapon, protector } from "./pages";
 
 import FormStorage from "form-storage";
 
-let itemdata_url: string = C.itemdata_url;
-const textdata_url = C.textdata_url;
 let itemdata: ItemData;
 let textdata: TextData;
 let itemname: string[];
@@ -32,20 +30,10 @@ const storage = new FormStorage("form", {
 let aborted = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (isKr()) {
-    itemdata_url = C.itemdatakr_url;
-    document.body.lang = "kr";
-  } else {
-    itemdata_url = C.itemdata_url;
-  }
-
   [itemdata, textdata, itemname, itemtext] = await Promise.all(
-    [
-      itemdata_url,
-      textdata_url,
-      "data/japan/item_name.json",
-      "data/japan/item_text.json",
-    ].map((url) => fetch(url).then((response) => response.json()))
+    [C.itemdata_url, C.textdata_url, C.itemname_url, C.itemtext_url].map(
+      (url) => fetch(url).then((response) => response.json())
+    )
   );
   customElements.define(
     "spa-anchor",
@@ -124,10 +112,6 @@ const router = async (app: HTMLElement) => {
     return protector(app);
   }
 
-  if (params.sandbox) {
-    return sandbox(app);
-  }
-
   if (params.infty) {
     SEARCH_LIMIT = Infinity;
   }
@@ -154,7 +138,7 @@ const router = async (app: HTMLElement) => {
 
   const keyword = params.keyword;
   if (keyword) {
-    hit = hit.filter((e) => itemtext[e].match(keyword));
+    hit = hit.filter((e) => itemtext[e]?.match(keyword));
   }
 
   if (id) {
@@ -169,8 +153,8 @@ const router = async (app: HTMLElement) => {
     }
   }
 
-  if (query) hit = hit.filter((e) => itemname[e].match(query));
-  if (not_query) hit = hit.filter((e) => !itemname[e].match(not_query));
+  if (query) hit = hit.filter((e) => itemname[e]?.match(query));
+  if (not_query) hit = hit.filter((e) => !itemname[e]?.match(not_query));
   if (type >= 0) hit = hit.filter((e) => itemdata[e]?.Type === type);
   if (op >= 0) {
     hit = hit.filter(
@@ -257,19 +241,19 @@ const router = async (app: HTMLElement) => {
     }
   }
   if (A) {
-    hit = hit.filter((e) => !itemname[e].includes("[A]"));
+    hit = hit.filter((e) => !itemname[e]?.includes("[A]"));
   }
   if (D) {
-    hit = hit.filter((e) => !itemname[e].includes("[D]"));
+    hit = hit.filter((e) => !itemname[e]?.includes("[D]"));
   }
   if (E) {
-    hit = hit.filter((e) => !itemname[e].includes("[E]"));
+    hit = hit.filter((e) => !itemname[e]?.includes("[E]"));
   }
   if (G) {
-    hit = hit.filter((e) => !itemname[e].includes("[G]"));
+    hit = hit.filter((e) => !itemname[e]?.includes("[G]"));
   }
   if (R) {
-    hit = hit.filter((e) => !itemname[e].includes("[R]"));
+    hit = hit.filter((e) => !itemname[e]?.includes("[R]"));
   }
 
   if (params.unknown) {
@@ -426,8 +410,12 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
     const item_name = document.createElement("span");
     row.appendChild(item_name);
-    // item_name.innerHTML = replaceColorTag(item.Name);
-    item_name.innerHTML = replaceColorTag(itemname[item.Id]);
+    if (isKr()) {
+      item_name.innerHTML = replaceColorTag(item.Name);
+      item_name.lang = "kr";
+    } else {
+      item_name.innerHTML = replaceColorTag(itemname[item.Id]);
+    }
     if (item.Rank !== "N") {
       item_name.className = "item-name-" + item.Rank;
     }
@@ -718,8 +706,12 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     row.translate = true;
     tooltip.appendChild(row);
 
-    // row.innerHTML = "- " + replaceTextData(item.Text);
-    row.innerHTML = "- " + replaceTextData(itemtext[item.Id]);
+    if (isKr()) {
+      row.innerHTML = "- " + replaceTextData(item.Text);
+      row.lang = "kr";
+    } else {
+      row.innerHTML = "- " + replaceTextData(itemtext[item.Id]);
+    }
   }
   if (item.Require && Object.keys(item.Require).length) {
     const row = document.createElement("div");
