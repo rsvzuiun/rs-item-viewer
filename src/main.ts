@@ -13,7 +13,7 @@ import {
 } from "./util";
 import { genSPAAnchor } from "./SPAAnchor";
 import { isIndex, isKr, getParams } from "./params";
-import { index, sandbox, weapon, protector } from "./pages";
+import { index, weapon, protector } from "./pages";
 
 import FormStorage from "form-storage";
 
@@ -110,10 +110,6 @@ const router = async (app: HTMLElement) => {
   }
   if (params.protector) {
     return protector(app);
-  }
-
-  if (params.sandbox) {
-    return sandbox(app);
   }
 
   if (params.infty) {
