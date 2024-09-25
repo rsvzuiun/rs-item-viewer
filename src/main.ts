@@ -17,6 +17,7 @@ import { index, weapon, protector } from "./pages";
 
 import FormStorage from "form-storage";
 
+let itemdata_url: string = C.itemdata_url;
 let itemdata: ItemData;
 let textdata: TextData;
 let itemname: string[];
@@ -30,9 +31,15 @@ const storage = new FormStorage("form", {
 let aborted = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  if (isKr()) {
+    itemdata_url = C.itemdatakr_url;
+  } else {
+    itemdata_url = C.itemdata_url;
+  }
+
   [itemdata, textdata, itemname, itemtext] = await Promise.all(
-    [C.itemdata_url, C.textdata_url, C.itemname_url, C.itemtext_url].map(
-      (url) => fetch(url).then((response) => response.json())
+    [itemdata_url, C.textdata_url, C.itemname_url, C.itemtext_url].map((url) =>
+      fetch(url).then((response) => response.json())
     )
   );
   customElements.define(
@@ -412,7 +419,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     row.appendChild(item_name);
     if (isKr()) {
       item_name.innerHTML = replaceColorTag(item.Name);
-      item_name.lang = "kr";
+      item_name.lang = "ko";
     } else {
       item_name.innerHTML = replaceColorTag(itemname[item.Id]);
     }
@@ -708,7 +715,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
     if (isKr()) {
       row.innerHTML = "- " + replaceTextData(item.Text);
-      row.lang = "kr";
+      row.lang = "ko";
     } else {
       row.innerHTML = "- " + replaceTextData(itemtext[item.Id]);
     }
