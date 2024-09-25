@@ -3,6 +3,8 @@ export const version = "2024/09/20 v0.0826";
 export const itemdata_url = "data/itemData.json";
 export const itemdatakr_url = "data/itemData-kr.json";
 export const textdata_url = "data/textData.json";
+export const itemname_url = "data/japan/item_name.json";
+export const itemtext_url = "data/japan/item_text.json";
 
 export const maxlv = 2000;
 
