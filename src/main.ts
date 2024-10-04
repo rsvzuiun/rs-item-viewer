@@ -84,6 +84,13 @@ function submit_handler(this: HTMLFormElement, e: SubmitEvent) {
         url.searchParams.set(input.name, input.value);
       }
     }
+    const exclude_opts = ["A", "D", "E", "G", "R"];
+    if (
+      exclude_opts.reduce((p, c) => p && url.searchParams.get(c) !== null, true)
+    ) {
+      exclude_opts.forEach((v) => url.searchParams.delete(v));
+      url.searchParams.set("ADEGR", "");
+    }
     storage.save();
     window.history.pushState(null, "", url.search);
     update();
