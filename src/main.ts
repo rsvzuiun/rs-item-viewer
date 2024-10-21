@@ -473,6 +473,11 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       );
     }
   }
+  if (item.Grade !== "N") {
+    const row = document.createElement("div");
+    tooltip.appendChild(row);
+    row.innerHTML = replaceColorTag("- 耐久力 <c:LTYELLOW>100％<n>");
+  }
   {
     const atmin = item.AtParam?.Min || 0;
     const atmax = item.AtParam?.Max || 0;
