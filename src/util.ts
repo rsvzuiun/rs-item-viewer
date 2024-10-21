@@ -19,10 +19,7 @@ export const yellow = (text: string | number) =>
 export function replaceOpSpecial(text: string, ..._args: (string | number)[]) {
   const args = _args.map((v) => (typeof v === "number" ? v : parseInt(v)));
   text = String(text)
-    .replace(
-      "スキルレベル [+0]([1]系列 職業)",
-      `<c:LTYELLOW>${C.job_type[args[1]]}<n> スキルレベル [+0]`
-    )
+    .replace("$func103[1]", `<c:LTYELLOW>${C.job_type[args[1]]}<n>`)
     .replace(
       "$func837[0]",
       `<c:LTYELLOW>${["異常系", "呪い系", "低下系"][args[0]]}<n>`

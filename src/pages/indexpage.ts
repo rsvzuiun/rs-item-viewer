@@ -62,7 +62,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 
   const selectoplist = form.querySelector("#selectop-list");
   if (selectoplist == null) throw new Error();
-  for (const [k, v] of Object.entries(textdata.OptionBasic)) {
+  for (const [k, v] of Object.entries(textdata.op)) {
     if (typeof v === "undefined") continue;
     const option = document.createElement("option");
     option.value = `${k}: ${v
@@ -73,7 +73,7 @@ export const index = (app: HTMLElement, textdata: TextData) => {
 
   const selectbaseoplist = form.querySelector("#selectbaseop-list");
   if (selectbaseoplist == null) throw new Error();
-  for (const [k, v] of Object.entries(textdata.OptionProper)) {
+  for (const [k, v] of Object.entries(textdata.baseop)) {
     if (typeof v === "undefined") continue;
     const option = document.createElement("option");
     option.value = `${k}: ${v

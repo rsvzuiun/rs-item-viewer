@@ -2,7 +2,8 @@ export const version = "2024/09/20 v0.0826";
 
 export const itemdata_url = "data/itemData.json";
 export const itemdatakr_url = "data/itemData-kr.json";
-export const textdata_url = "data/textData.json";
+export const baseop_url = "data/japan/baseop.json";
+export const op_url = "data/japan/op.json";
 export const itemname_url = "data/japan/item_name.json";
 export const itemtext_url = "data/japan/item_text.json";
 
@@ -122,7 +123,7 @@ export const item_type: { [type: number]: string } = {
   52: "BOX",
   53: "",
   54: "鎌",
-  55: "クロー",
+  55: "爪武器",
   56: "本",
   57: "ほうき",
   58: "双剣",
@@ -130,7 +131,7 @@ export const item_type: { [type: number]: string } = {
   60: "クレスト",
   61: "ダークコア",
   62: "",
-  63: "双拳銃",
+  63: "二丁拳銃",
   64: "魔弾石",
   65: "超越N",
   66: "超越R",

@@ -78,6 +78,6 @@ export type Item = {
 export type ItemData = ArrayLike<Item | undefined>;
 
 export type TextData = {
-  OptionProper: ArrayLike<string | undefined>;
-  OptionBasic: ArrayLike<string | undefined>;
+  baseop: ArrayLike<string | undefined>;
+  op: ArrayLike<string | undefined>;
 };

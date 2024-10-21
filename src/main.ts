@@ -19,7 +19,7 @@ import FormStorage from "form-storage";
 
 let itemdata_url: string = C.itemdata_url;
 let itemdata: ItemData;
-let textdata: TextData;
+const textdata: TextData = { baseop: [], op: [] };
 let itemname: string[];
 let itemtext: string[];
 
@@ -37,11 +37,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     itemdata_url = C.itemdata_url;
   }
 
-  [itemdata, textdata, itemname, itemtext] = await Promise.all(
-    [itemdata_url, C.textdata_url, C.itemname_url, C.itemtext_url].map((url) =>
-      fetch(url).then((response) => response.json())
-    )
-  );
+  [itemdata, textdata.baseop, textdata.op, itemname, itemtext] =
+    await Promise.all(
+      [
+        itemdata_url,
+        C.baseop_url,
+        C.op_url,
+        C.itemname_url,
+        C.itemtext_url,
+      ].map((url) => fetch(url).then((response) => response.json()))
+    );
   customElements.define(
     "spa-anchor",
     genSPAAnchor(async () => {
@@ -271,8 +276,8 @@ const router = async (app: HTMLElement) => {
   }
 
   if (params.unknown) {
-    const ops = Object.keys(textdata.OptionBasic).map((e) => parseInt(e));
-    const baseops = Object.keys(textdata.OptionProper).map((e) => parseInt(e));
+    const ops = Object.keys(textdata.op).map((e) => parseInt(e));
+    const baseops = Object.keys(textdata.baseop).map((e) => parseInt(e));
     hit = hit.filter(
       (e) =>
         itemdata[e]?.OpPrt.filter((baseop) => !baseops.includes(baseop.Id))
@@ -305,11 +310,11 @@ const router = async (app: HTMLElement) => {
   if (not_query) restext += ` 含まない"${not_query}"`;
   if (type >= 0) restext += ` ${C.item_type[type]}`;
   if (op >= 0)
-    restext += ` "${textdata.OptionBasic[op]
+    restext += ` "${textdata.op[op]
       ?.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
       .replace(/\$func\d+/, "")}"`;
   if (baseop >= 0)
-    restext += ` "${textdata.OptionProper[baseop]?.replace(
+    restext += ` "${textdata.baseop[baseop]?.replace(
       /<c:([^> ]+?)>(.+?)<n>/g,
       "$2"
     )}"`;
@@ -468,6 +473,11 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       );
     }
   }
+  if (item.Grade !== "N") {
+    const row = document.createElement("div");
+    tooltip.appendChild(row);
+    row.innerHTML = replaceColorTag("- 耐久力 <c:LTYELLOW>100％<n>");
+  }
   {
     const atmin = item.AtParam?.Min || 0;
     const atmax = item.AtParam?.Max || 0;
@@ -479,7 +489,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
       let html = /* html */ `- 攻撃力 <span class='text-color-LTYELLOW'>${atmin}~${atmax}</span>`;
       if (speed) {
-        html += /* html */ ` (<span class='text-color-LTYELLOW'>${(
+        html += /* html */ `(<span class='text-color-LTYELLOW'>${(
           speed / 100
         ).toFixed(2)}</span>秒)`;
       }
@@ -509,7 +519,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
       const Value = opPrtValue(item, idx);
       row.title = `baseop: ${baseop.Id}, ${JSON.stringify(Value)}`;
-      let opText = replaceOpText(textdata.OptionProper[baseop.Id], ...Value);
+      let opText = replaceOpText(textdata.baseop[baseop.Id], ...Value);
       if (!opText) return null;
       if (opText === "undefined") {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
@@ -543,10 +553,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       } else if (option.Id === -1) {
         return null;
       } else {
-        opText = replaceOpText(
-          textdata.OptionBasic[option.Id],
-          ...option.Value
-        );
+        opText = replaceOpText(textdata.op[option.Id], ...option.Value);
         if (!opText) return null;
         if (opText === "undefined") {
           opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
@@ -609,7 +616,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
               opText = replaceOpText(option.Text!, ...option.Value);
             } else {
               opText = replaceOpText(
-                textdata.OptionProper[option.Id],
+                textdata.baseop[option.Id],
                 ...option.Value
               );
               if (!opText) return null;
@@ -647,10 +654,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
           if (option.Id === -1) {
             opText = replaceOpText(option.Text!, ...option.Value);
           } else {
-            opText = replaceOpText(
-              textdata.OptionBasic[option.Id],
-              ...option.Value
-            );
+            opText = replaceOpText(textdata.op[option.Id], ...option.Value);
             if (!opText) return null;
             if (opText === "undefined") {
               opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
@@ -681,10 +685,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       } else if (option.Id === -1) {
         return null;
       } else {
-        opText = replaceOpText(
-          textdata.OptionBasic[option.Id],
-          ...option.Value
-        );
+        opText = replaceOpText(textdata.op[option.Id], ...option.Value);
         if (!opText) return null;
         if (opText === "undefined") {
           opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
