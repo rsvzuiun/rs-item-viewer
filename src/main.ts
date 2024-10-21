@@ -484,7 +484,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
       let html = /* html */ `- 攻撃力 <span class='text-color-LTYELLOW'>${atmin}~${atmax}</span>`;
       if (speed) {
-        html += /* html */ ` (<span class='text-color-LTYELLOW'>${(
+        html += /* html */ `(<span class='text-color-LTYELLOW'>${(
           speed / 100
         ).toFixed(2)}</span>秒)`;
       }
