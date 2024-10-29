@@ -63,6 +63,7 @@ export const job_type: { [type: number]: string } = {
   22: "マスケッティア",
   23: "アルケミスト",
   24: "キャプテン",
+  25: "キャノニア",
   40: "男性キャラクター専用", // original
   41: "女性キャラクター専用", // original
 };
@@ -149,6 +150,7 @@ export const item_type: { [type: number]: string } = {
   78: "コサージュ",
   80: "チェインアンカー",
   81: "ラム酒",
+  82: "<推定> 魔導砲",
 };
 
 export const not_equipment = [
