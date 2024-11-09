@@ -23,7 +23,7 @@ const value = (
   if (typeof arg === "number") {
     return `${func ? func(arg) : arg.toLocaleString()}`;
   } else {
-    return func ? `${func(arg[0])}~${func(arg[1])}` : `${arg[0]}~${arg[1]}`;
+    return func ? `[${func(arg[0])}~${func(arg[1])}]` : `[${arg[0]}~${arg[1]}]`;
   }
 };
 
