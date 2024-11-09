@@ -71,7 +71,7 @@ export type Item = {
   PriceType: number;
   PriceFactor: number;
   Flags: string;
-  Extra: number;
+  Extra: [number, number, number, number];
   Exclusive: boolean;
 };
 

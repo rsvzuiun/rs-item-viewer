@@ -16,46 +16,68 @@ export const equals = (a: object, b: object) =>
 export const yellow = (text: string | number) =>
   /* html */ `<span class='text-color-LTYELLOW'>${text}</span>`;
 
-export function replaceOpSpecial(text: string, ..._args: (string | number)[]) {
-  const args = _args.map((v) => (typeof v === "number" ? v : parseInt(v)));
-  text = String(text)
-    .replace("$func103[1]", `<c:LTYELLOW>${C.job_type[args[1]]}<n>`)
-    .replace(
-      "$func837[0]",
-      `<c:LTYELLOW>${["異常系", "呪い系", "低下系"][args[0]]}<n>`
-    )
-    .replace("$func837[1]", args[1] > 0 ? "物理 攻撃力[1]％ 増加" : "")
-    .replace("$func837[2]", args[2] > 0 ? "魔法 攻撃力[2]％ 増加" : "")
-    .replace("$func838[0]", args[0] === 14 ? "<c:LTYELLOW>出血<n>" : "[0]")
-    .replace(
-      "$func843[1]",
-      `<c:LTYELLOW>${["火", "水", "2", "3", "光"][args[1]]}<n>`
-    )
-    .replace(
-      "$func844[0]",
-      `<c:LTYELLOW>${["火", "1", "2", "3", "光"][args[0]]}<n>`
-    )
-    .replace(
-      "$func853[1]",
-      `<c:LTYELLOW>${["0", "1", "風", "3", "4"][args[1]]}<n>`
-    )
-    .replace("$func942[0]", `<c:LTYELLOW>${["物理", "魔法"][args[0]]}<n>`)
-    .replace("$func945[1]", `<c:LTYELLOW>${["増加", "減少"][args[1]]}<n>`)
-    .replace("$func342[0]", `<c:LTYELLOW>+${(args[0] / 10).toFixed(1)}％<n>`)
-    .replace("$func342[1]", `<c:LTYELLOW>+${(args[1] / 10).toFixed(1)}％<n>`);
-  return text;
-}
+const value = (
+  arg: number | [number, number],
+  func?: (x: number) => string
+): string => {
+  if (typeof arg === "number") {
+    return `${func ? func(arg) : arg.toLocaleString()}`;
+  } else {
+    return func ? `${func(arg[0])}~${func(arg[1])}` : `${arg[0]}~${arg[1]}`;
+  }
+};
+
+const special_option = (kind: string, v: number): string | undefined => {
+  switch (kind) {
+    case "abnormal":
+      switch (v) {
+        case 0:
+          return "異常系";
+        case 1:
+          return "呪い系";
+        case 2:
+          return "低下系";
+        case 14:
+          return "出血";
+        default:
+          return undefined;
+      }
+    case "damage_attr":
+      return `${["火", "水", "風", "大地", "光", "闇"][v]}`;
+    case "damage_type":
+      return `${["物理", "魔法"][v]}`;
+    case "inc_or_dec":
+      return `${["増加", "減少"][v]}`;
+    case "jobtype":
+      return C.job_type[v];
+    default:
+      return undefined;
+  }
+};
 
 export function replaceOpText(
   text: string | undefined,
-  ...args: (string | number)[]
+  args: (number | [number, number])[],
+  extra: [number, number, number, number]
 ) {
   if (typeof text === "undefined") return "undefined";
-  text = replaceOpSpecial(text, ...args)
+  text = text
     .replace(/\r\n/g, "<br />&nbsp;")
-    .replace(/\[([+-]?)([0-7])\](0*％?)/g, (_org, sign, opid, post) => {
-      return yellow(`${sign}${args[parseInt(opid)].toLocaleString()}${post}`);
-    });
+    .replace(
+      /\[(?<sign>[+-]?)(?<special>[^[]*?)(?<idx>[0-7])(?<div>\.1)?(?<post>[%％]?)\]/g,
+      (_org, sign, special, idx, div, post) => {
+        let body = "";
+        const v = special === "F" ? extra[idx] : args[idx];
+        const func = div ? (x: number) => (x / 10).toFixed(1) : undefined;
+        if (typeof v === "number") {
+          body = special_option(special, v) ?? value(v, func);
+        } else {
+          body = value(v, func);
+        }
+        return yellow(`${sign}${body}${post}`);
+      }
+    )
+    .replace("%", "％");
   return replaceColorTag(text);
 }
 
@@ -72,13 +94,16 @@ export const replaceColorTag = (text: string): string => {
   );
 };
 
-export const opPrtValue = (item: Item, idx: number): string[] => {
+export const opPrtValue = (
+  item: Item,
+  idx: number
+): (number | [number, number])[] => {
   return item.OpPrt[idx].ValueIndex.map((index) => {
-    if (index == 2) return "null";
+    if (index == 2) return NaN;
     const min = item.ValueTable?.[index]?.[0];
     const max = item.ValueTable?.[index]?.[1];
-    if (min === max) return `${min}`;
-    return `[${min}~${max}]`;
+    if (min === max) return min;
+    return [min, max];
   });
 };
 

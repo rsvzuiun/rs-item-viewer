@@ -4,6 +4,7 @@ export const itemdata_url = "data/itemData.json";
 export const itemdatakr_url = "data/itemData-kr.json";
 export const baseop_url = "data/japan/baseop.json";
 export const op_url = "data/japan/op.json";
+export const opov_url = "data/japan/op_override.json";
 export const itemname_url = "data/japan/item_name.json";
 export const itemtext_url = "data/japan/item_text.json";
 

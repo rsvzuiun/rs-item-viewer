@@ -37,16 +37,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     itemdata_url = C.itemdata_url;
   }
 
-  [itemdata, textdata.baseop, textdata.op, itemname, itemtext] =
-    await Promise.all(
-      [
-        itemdata_url,
-        C.baseop_url,
-        C.op_url,
-        C.itemname_url,
-        C.itemtext_url,
-      ].map((url) => fetch(url).then((response) => response.json()))
-    );
+  let op = {};
+  let opov = {};
+  [itemdata, textdata.baseop, op, opov, itemname, itemtext] = await Promise.all(
+    [
+      itemdata_url,
+      C.baseop_url,
+      C.op_url,
+      C.opov_url,
+      C.itemname_url,
+      C.itemtext_url,
+    ].map((url) => fetch(url).then((response) => response.json()))
+  );
+  textdata.op = { ...textdata.baseop, ...op, ...opov };
+
   customElements.define(
     "spa-anchor",
     genSPAAnchor(async () => {
@@ -519,14 +523,10 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
       const Value = opPrtValue(item, idx);
       row.title = `baseop: ${baseop.Id}, ${JSON.stringify(Value)}`;
-      let opText = replaceOpText(textdata.baseop[baseop.Id], ...Value);
+      let opText = replaceOpText(textdata.baseop[baseop.Id], Value, item.Extra);
       if (!opText) return null;
       if (opText === "undefined") {
         opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
-      } else {
-        opText = opText.replace(/\[([+-]?)e\](0*％?)/g, (_org, sign, post) => {
-          return yellow(`${sign}${item.Extra.toLocaleString()}${post}`);
-        });
       }
       row.innerHTML = "- " + opText;
       if (
@@ -549,11 +549,15 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
       let opText = "";
       if (option.Text) {
-        opText = replaceOpText(option.Text, ...option.Value);
+        opText = replaceOpText(option.Text, option.Value, item.Extra);
       } else if (option.Id === -1) {
         return null;
       } else {
-        opText = replaceOpText(textdata.op[option.Id], ...option.Value);
+        opText = replaceOpText(
+          textdata.op[option.Id],
+          option.Value,
+          item.Extra
+        );
         if (!opText) return null;
         if (opText === "undefined") {
           opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
@@ -613,11 +617,12 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
             let opText = "";
             if (option.Id === -1) {
-              opText = replaceOpText(option.Text!, ...option.Value);
+              opText = replaceOpText(option.Text!, option.Value, item.Extra);
             } else {
               opText = replaceOpText(
                 textdata.baseop[option.Id],
-                ...option.Value
+                option.Value,
+                item.Extra
               );
               if (!opText) return null;
               if (opText === "undefined") {
@@ -652,9 +657,13 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
           let opText = "";
           if (option.Id === -1) {
-            opText = replaceOpText(option.Text!, ...option.Value);
+            opText = replaceOpText(option.Text!, option.Value, item.Extra);
           } else {
-            opText = replaceOpText(textdata.op[option.Id], ...option.Value);
+            opText = replaceOpText(
+              textdata.op[option.Id],
+              option.Value,
+              item.Extra
+            );
             if (!opText) return null;
             if (opText === "undefined") {
               opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
@@ -681,11 +690,15 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
 
       let opText = "";
       if (option.Text) {
-        opText = replaceOpText(option.Text, ...option.Value);
+        opText = replaceOpText(option.Text, option.Value, item.Extra);
       } else if (option.Id === -1) {
         return null;
       } else {
-        opText = replaceOpText(textdata.op[option.Id], ...option.Value);
+        opText = replaceOpText(
+          textdata.op[option.Id],
+          option.Value,
+          item.Extra
+        );
         if (!opText) return null;
         if (opText === "undefined") {
           opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
@@ -783,6 +796,7 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     const Id = document.createElement("div");
     tooltip.appendChild(Id);
     Id.innerHTML = `- ID ${yellow(item.Id)}`;
+    Id.title = JSON.stringify(item);
 
     if (item.StackSize > 1) {
       const StackSize = document.createElement("div");
