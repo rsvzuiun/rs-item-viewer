@@ -62,7 +62,7 @@ export function replaceOpText(
 ) {
   if (typeof text === "undefined") return "undefined";
   text = text
-    .replace(/\r\n/g, "<br />&nbsp;")
+    .replace(/\r?\n/g, "<br />&nbsp;")
     .replace(
       /\[(?<sign>[+-]?)(?<special>[^[]*?)(?<idx>[0-7])(?<div>\.1)?(?<post>[%％]?)\]/g,
       (_org, sign, special, idx, div, post) => {
@@ -82,7 +82,7 @@ export function replaceOpText(
 }
 
 export const replaceTextData = (text: string): string => {
-  return replaceColorTag(String(text).replace(/\r\n/g, "<br />"));
+  return replaceColorTag(String(text).replace(/\r?\n/g, "<br />"));
 };
 
 export const replaceColorTag = (text: string): string => {
