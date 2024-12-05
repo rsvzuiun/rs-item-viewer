@@ -152,6 +152,7 @@ export const item_type: { [type: number]: string } = {
   80: "チェインアンカー",
   81: "ラム酒",
   82: "<推定> 魔導砲",
+  83: "<推定> 魔導弾",
 };
 
 export const not_equipment = [

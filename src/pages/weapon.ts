@@ -57,6 +57,7 @@ const header = [
 ] as const satisfies readonly { name: string; query: string }[];
 
 type Body = {
+  nospa?: boolean;
   name: string;
   query: string;
   img: Tuple<number, typeof header.length>;
@@ -235,6 +236,14 @@ const body: Body = [
       4088, -1, 4216, -1, 4223, 4213, 4211, 4218, 4220, 4217, 4227, 4495, 4214,
     ],
   },
+  {
+    nospa: true,
+    name: "[KR]魔導砲",
+    query: "type=82&kr",
+    img: [
+      4943, -1, 4953, -1, NaN, 4979, 4975, NaN, NaN, 4981, 4977, 4983, 4980,
+    ],
+  },
 ];
 
 const row_header = () => {
@@ -269,8 +278,8 @@ const table = cache(() => {
         a +
         (imgid === -1
           ? /* html */ `<td>-</td>`
-          : /* html */ `<td><a is="spa-anchor" href="?${header[idx].query}&${e.query}"><img src="img/item/${imgid}.png" width="34" height="34" /></td>`),
-      /* html */ `<th><a is="spa-anchor" href="?${e.query}">${e.name}</a></th>`
+          : /* html */ `<td><a ${e.nospa? "":'is="spa-anchor" '}href="?${header[idx].query}&${e.query}"><img src="img/item/${imgid}.png" width="34" height="34" /></td>`),
+      /* html */ `<th><a ${e.nospa? "":'is="spa-anchor" '}href="?${e.query}">${e.name}</a></th>`
     );
     tbody.appendChild(tr);
   }

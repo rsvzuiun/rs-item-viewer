@@ -142,6 +142,7 @@ type IndexItem = {
   text: string;
 };
 type IndexToc = {
+  spa?: boolean;
   label?: string;
   content: (number | IndexItem | IndexToc)[];
 };
@@ -268,6 +269,20 @@ const toc: IndexToc = {
           label: "キャプテン",
           content: [80, 81],
         },
+        {
+          label: "キャノニア (JP未実装)",
+          content: [{
+            spa: false,
+            href: "?type=82&kr",
+            icon: "img/item/5009.png",
+            text: "魔導砲",
+          }, {
+            spa: false,
+            href: "?type=83&kr",
+            icon: "img/item/5001.png",
+            text: "魔導弾",
+          },],
+        },
       ],
     },
     {
@@ -301,7 +316,8 @@ const buildToc = (toc: IndexToc): HTMLDivElement => {
     } else if ("href" in i) {
       const cell = document.createElement("div");
       cell.className = "index-image";
-      cell.innerHTML = /* html */ `<a is='spa-anchor' href='${i.href}'><img src='${i.icon}' width="34" height="34" /><br />${i.text}</a>`;
+      const spa = ("spa" in i && i.spa === true) ? "" : "is='spa-anchor'";
+      cell.innerHTML = /* html */ `<a ${spa} href='${i.href}'><img src='${i.icon}' width="34" height="34" /><br />${i.text}</a>`;
       frag.appendChild(cell);
     } else if ("content" in i) {
       frag.appendChild(buildToc(i));
