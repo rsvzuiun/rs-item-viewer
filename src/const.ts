@@ -1,4 +1,4 @@
-export const version = "2024/11/08 v0.0830";
+export const version = "2024/12/12 v0.0836";
 
 export const itemdata_url = "data/itemData.json";
 export const itemdatakr_url = "data/itemData-kr.json";
@@ -151,7 +151,8 @@ export const item_type: { [type: number]: string } = {
   78: "コサージュ",
   80: "チェインアンカー",
   81: "ラム酒",
-  82: "<推定> 魔導砲",
+  82: "大砲",
+  83: "エネルギーチャージャー",
 };
 
 export const not_equipment = [
@@ -161,5 +162,5 @@ export const not_equipment = [
 
 export const protector_type = [
   0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 27, 31, 64, 69,
-  71, 72, 73, 74, 75, 76, 77, 78, 81,
+  71, 72, 73, 74, 75, 76, 77, 78, 81, 83,
 ];
