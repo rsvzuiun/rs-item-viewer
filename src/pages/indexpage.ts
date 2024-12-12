@@ -268,6 +268,21 @@ const toc: IndexToc = {
           label: "キャプテン",
           content: [80, 81],
         },
+        {
+          label: "キャノニア",
+          content: [
+            {
+              href: "?type=82",
+              icon: "img/item/5009.png",
+              text: "大砲",
+            },
+            {
+              href: "?type=83",
+              icon: "img/item/5001.png",
+              text: "エネルギーチャージャー",
+            },
+          ],
+        },
       ],
     },
     {
