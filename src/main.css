@@ -108,6 +108,9 @@ h2 {
 .text-color-GOLDYELLOW {
   color: #efce9c;
 }
+.text-color-LTGRAY {
+  color: #aaa;  /* TODO */
+}
 .text-color-GRAY {
   color: #777;
 }
@@ -123,14 +126,35 @@ h2 {
 .text-color-LTORANGE {
   color: #ff9900;
 }
+.text-color-ORANGE {
+  color: #ff8400;  /* TODO */
+}
 .text-color-LTRED {
   color: #f80000;
+}
+.text-color-RED {
+  color: #ff0000;
+}
+.text-color-LTPINK {
+  color: #ffb6c1;  /* TODO */
 }
 .text-color-LTYELLOW {
   color: #f8f800;
 }
+.text-color-YELLOW {
+  color: #ffff00;
+}
 .text-color-WHITE {
   color: #fff;
+}
+.text-color-DKGRAY {
+  color: #848484;  /* TODO */
+}
+.text-color-DKRED {
+  color: #840000;
+}
+.text-color-DKYELLOW {
+  color: #848400;
 }
 
 .item-name-U {
