@@ -39,16 +39,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let op = {};
   let opov = {};
-  [itemdata, textdata.baseop, op, opov, itemname, itemtext] = await Promise.all(
+  let baseop = [];
+  let baseopov = [];
+  [itemdata, baseop, baseopov, op, opov, itemname, itemtext] = await Promise.all(
     [
       itemdata_url,
       C.baseop_url,
+      C.baseopov_url,
       C.op_url,
       C.opov_url,
       C.itemname_url,
       C.itemtext_url,
     ].map((url) => fetch(url).then((response) => response.json()))
   );
+  textdata.baseop = {...baseop, ...baseopov};
   textdata.op = { ...textdata.baseop, ...op, ...opov };
 
   customElements.define(

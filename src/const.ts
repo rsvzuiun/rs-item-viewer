@@ -3,6 +3,7 @@ export const version = "2024/12/12 v0.0836";
 export const itemdata_url = "data/itemData.json";
 export const itemdatakr_url = "data/itemData-kr.json";
 export const baseop_url = "data/japan/baseop.json";
+export const baseopov_url = "data/japan/baseop_override.json";
 export const op_url = "data/japan/op.json";
 export const opov_url = "data/japan/op_override.json";
 export const itemname_url = "data/japan/item_name.json";

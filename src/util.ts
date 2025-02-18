@@ -1,5 +1,6 @@
 import * as C from "./const";
 import { Item } from "./types";
+import { carving } from "./carving";
 
 const none = Symbol();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +51,8 @@ const special_option = (kind: string, v: number): string | undefined => {
       return `${["増加", "減少"][v]}`;
     case "jobtype":
       return C.job_type[v];
+    case "carving":
+      return carving[v].name;
     default:
       return undefined;
   }
