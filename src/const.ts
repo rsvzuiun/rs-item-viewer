@@ -10,6 +10,7 @@ export const itemname_url = "data/japan/item_name.json";
 export const itemtext_url = "data/japan/item_text.json";
 
 export const maxlv = 2000;
+export const SEARCH_LIMIT = 2000;
 
 export const status_type: { [type: number]: string } = {
   0: "レベル",

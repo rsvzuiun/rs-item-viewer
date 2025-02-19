@@ -1,7 +1,7 @@
-import { TextData } from "../types";
+import { textdata } from "../store";
 import * as C from "../const";
 
-export const index = (app: HTMLElement, textdata: TextData) => {
+export const index = (app: HTMLElement) => {
   const root = document.createDocumentFragment();
   const form = document.createElement("form");
   root.appendChild(form);

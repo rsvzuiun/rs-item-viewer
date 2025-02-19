@@ -29,5 +29,5 @@ const textdata: TextData = {
   baseop: { ..._baseop, ...(await baseopovP) },
   op: { ..._baseop, ...(await opP), ...(await opovP) },
 };
-
-export { itemdata, itemname, itemtext, textdata };
+const state = { abort_render: false };
+export { itemdata, itemname, itemtext, textdata, state };
