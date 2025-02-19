@@ -1,10 +1,10 @@
 import "./main.css";
-import { version } from "./const";
-import { state } from "./store";
-import { genSPAAnchor } from "./SPAAnchor";
-import { isIndex, getParams } from "./params";
-import { index, weapon, protector, search } from "./pages";
 import FormStorage from "form-storage";
+import { genSPAAnchor } from "./components/SPAAnchor";
+import { version } from "./const";
+import { index, protector, search, weapon } from "./pages";
+import { getParams, isIndex } from "./params";
+import { state } from "./store";
 
 const storage = new FormStorage("form", {
   name: "rs-item-viewer",

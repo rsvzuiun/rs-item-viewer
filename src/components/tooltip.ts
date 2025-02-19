@@ -1,16 +1,16 @@
-import * as C from "../const";
 import { carving, carving_ring } from "../carving";
-import { Item } from "../types";
+import * as C from "../const";
+import { getParams, isKr } from "../params";
 import { itemdata, itemname, itemtext, textdata } from "../store";
 import {
-  equals,
-  yellow,
+  opPrtValue,
+  replaceColorTag,
   replaceOpText,
   replaceTextData,
-  replaceColorTag,
-  opPrtValue,
-} from "../util";
-import { isKr, getParams } from "../params";
+  yellow,
+} from "../text";
+import { Item } from "../types";
+import { equals } from "../util";
 
 export const tooltip = (id: number) => {
   const { nodiff } = getParams();

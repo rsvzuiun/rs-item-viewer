@@ -1,8 +1,8 @@
-import * as C from "../const";
-import { itemdata, itemname, itemtext, textdata, state } from "../store";
-import { str2range } from "../util";
-import { getParams } from "../params";
 import { tooltip } from "../components/tooltip";
+import * as C from "../const";
+import { getParams } from "../params";
+import { itemdata, itemname, itemtext, state, textdata } from "../store";
+import { str2range } from "../util";
 
 export const search = async (app: HTMLElement) => {
   const params = getParams();

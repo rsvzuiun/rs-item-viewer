@@ -1,5 +1,5 @@
-import { textdata } from "../store";
 import * as C from "../const";
+import { textdata } from "../store";
 
 export const index = (app: HTMLElement) => {
   const root = document.createDocumentFragment();

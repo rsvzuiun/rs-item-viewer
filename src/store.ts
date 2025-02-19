@@ -1,12 +1,12 @@
 import {
-  itemdata_url,
-  itemdatakr_url,
   baseop_url,
   baseopov_url,
-  op_url,
-  opov_url,
+  itemdata_url,
+  itemdatakr_url,
   itemname_url,
   itemtext_url,
+  op_url,
+  opov_url,
 } from "./const";
 import { isKr } from "./params";
 import { ItemData, TextData } from "./types";
@@ -30,4 +30,4 @@ const textdata: TextData = {
   op: { ..._baseop, ...(await opP), ...(await opovP) },
 };
 const state = { abort_render: false };
-export { itemdata, itemname, itemtext, textdata, state };
+export { itemdata, itemname, itemtext, state, textdata };
