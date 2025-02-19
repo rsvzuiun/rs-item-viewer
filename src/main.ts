@@ -1,7 +1,8 @@
 import "./main.css";
 import * as C from "./const";
 import { carving, carving_ring } from "./carving";
-import { Item, ItemData, TextData } from "./types";
+import { Item } from "./types";
+import { itemdata, itemname, itemtext, textdata } from "./store";
 import {
   equals,
   yellow,
@@ -17,61 +18,12 @@ import { index, weapon, protector } from "./pages";
 
 import FormStorage from "form-storage";
 
-let itemdata_url: string = C.itemdata_url;
-let itemdata: ItemData;
-const textdata: TextData = { baseop: [], op: [] };
-let itemname: string[];
-let itemtext: string[];
-
 let SEARCH_LIMIT = 2000;
 const storage = new FormStorage("form", {
   name: "rs-item-viewer",
   ignores: ['[type="hidden"]'],
 });
 let aborted = false;
-
-document.addEventListener("DOMContentLoaded", async () => {
-  if (isKr()) {
-    itemdata_url = C.itemdatakr_url;
-  } else {
-    itemdata_url = C.itemdata_url;
-  }
-
-  let op = {};
-  let opov = {};
-  let baseop = [];
-  let baseopov = [];
-  [itemdata, baseop, baseopov, op, opov, itemname, itemtext] =
-    await Promise.all(
-      [
-        itemdata_url,
-        C.baseop_url,
-        C.baseopov_url,
-        C.op_url,
-        C.opov_url,
-        C.itemname_url,
-        C.itemtext_url,
-      ].map((url) => fetch(url).then((response) => response.json()))
-    );
-  textdata.baseop = { ...baseop, ...baseopov };
-  textdata.op = { ...textdata.baseop, ...op, ...opov };
-
-  customElements.define(
-    "spa-anchor",
-    genSPAAnchor(async () => {
-      aborted = true;
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      update();
-    }),
-    { extends: "a" }
-  );
-  window.addEventListener("popstate", async () => {
-    aborted = true;
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    update();
-  });
-  update();
-});
 
 function submit_handler(this: HTMLFormElement, e: SubmitEvent) {
   {
@@ -852,3 +804,26 @@ export const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     return tooltip;
   }
 };
+
+const onload = async () => {
+  customElements.define(
+    "spa-anchor",
+    genSPAAnchor(async () => {
+      aborted = true;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      update();
+    }),
+    { extends: "a" }
+  );
+  window.addEventListener("popstate", async () => {
+    aborted = true;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    update();
+  });
+  update();
+};
+if (document.readyState !== "loading") {
+  await onload();
+} else {
+  document.addEventListener("DOMContentLoaded", onload);
+}
