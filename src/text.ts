@@ -13,7 +13,8 @@ export const value = (
   } else {
     return func ? `[${func(arg[0])}~${func(arg[1])}]` : `[${arg[0]}~${arg[1]}]`;
   }
-};export const special_option = (kind: string, v: number): string | undefined => {
+};
+export const special_option = (kind: string, v: number): string | undefined => {
   switch (kind) {
     case "abnormal":
       switch (v) {
@@ -90,4 +91,3 @@ export const opPrtValue = (
     return [min, max];
   });
 };
-
