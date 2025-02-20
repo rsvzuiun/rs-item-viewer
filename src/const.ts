@@ -1,4 +1,4 @@
-export const version = "2024/12/12 v0.0836";
+export const version = "2025/02/20 v0.0844";
 
 export const itemdata_url = "data/itemData.json";
 export const itemdatakr_url = "data/itemData-kr.json";
