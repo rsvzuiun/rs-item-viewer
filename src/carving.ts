@@ -1,52 +1,48 @@
-import { Option } from "./types";
+import { ChaosRingOption, Option } from "./types";
 
-export const carving_ring: { [id: number]: Option[] } = {
+export const carving_ring: { [id: number]: ChaosRingOption[] } = {
   708: [
     // 混沌
-    { Id: -1, Text: "ダブルクリティカルダメージ増加 +[0]％", Value: [1] },
-    { Id: -1, Text: "魔法致命打確率増加 +[0]％", Value: [1] },
+    { Text: "ダブルクリティカルダメージ増加 +[0]％", Value: [1] },
+    { Text: "魔法致命打確率増加 +[0]％", Value: [1] },
     {
-      Id: -1,
+      
       Text: "<c:GRAY>最終刻印効果 : 最終ダメージ増加 [0]％<n>",
       Value: [4],
     },
   ],
   709: [
     // 破壊
-    { Id: -1, Text: "全ての能力値[0]増加", Value: [12] },
-    { Id: -1, Text: "能力値低下防止[0]％", Value: [1] },
-    { Id: -1, Text: "抵抗値低下防止[0]％", Value: [1] },
+    { Text: "全ての能力値[0]増加", Value: [12] },
+    { Text: "能力値低下防止[0]％", Value: [1] },
+    { Text: "抵抗値低下防止[0]％", Value: [1] },
     {
-      Id: -1,
       Text: "<c:GRAY>最終刻印効果 : 最終ダメージ増加 [0]％<n>",
       Value: [4],
     },
   ],
   710: [
     // 破滅
-    { Id: -1, Text: "最大体力増加[0]％", Value: [2] },
-    { Id: -1, Text: "防御力増加[0]％", Value: [2] },
+    { Text: "最大体力増加[0]％", Value: [2] },
+    { Text: "防御力増加[0]％", Value: [2] },
     {
-      Id: -1,
       Text: "<c:GRAY>最終刻印効果 : 最終ダメージ増加 [0]％<n>",
       Value: [4],
     },
   ],
   711: [
     // 滅亡
-    { Id: -1, Text: "PVP物理攻撃力と魔法攻撃力増加 [0]％", Value: [1] },
+    { Text: "PVP物理攻撃力と魔法攻撃力増加 [0]％", Value: [1] },
     {
-      Id: -1,
       Text: "<c:GRAY>最終刻印効果 : 最終ダメージ増加 [0]％<n>",
       Value: [4],
     },
   ],
   712: [
     // 災厄
-    { Id: -1, Text: "ダメージ +[0]％", Value: [2] },
-    { Id: -1, Text: "魔法ダメージ +[0]％", Value: [1] },
+    { Text: "ダメージ +[0]％", Value: [2] },
+    { Text: "魔法ダメージ +[0]％", Value: [1] },
     {
-      Id: -1,
       Text: "<c:GRAY>最終刻印効果 : 最終ダメージ増加 [0]％<n>",
       Value: [4],
     },

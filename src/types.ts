@@ -19,14 +19,13 @@ export type BaseOption = {
   ValueIndex: Tuple<number, 4>;
 };
 
-// type OrdinalOption = { Id: Exclude<number, -1>; Value: number[] }
-// type SpecialOption = { Id: -1; Text: string; Value: number[] }
-
-// export type Option = OrdinalOption | SpecialOption
+export type ChaosRingOption = {
+  Text: string;
+  Value: number[];
+}
 export type Option = {
   Id: number;
   Value: number[];
-  Text?: string;
 };
 
 export type Require = {

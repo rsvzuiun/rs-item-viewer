@@ -25,6 +25,7 @@ type Params = {
   R: boolean;
 
   nodiff: boolean;
+  noimage: boolean;
   unknown: boolean;
 };
 
@@ -63,6 +64,7 @@ export const getParams = (): Params => {
     R: searchParams.get("ADEGR") !== null || searchParams.get("R") !== null,
 
     nodiff: searchParams.get("nodiff") !== null,
+    noimage: searchParams.get("noimage") !== null,
     unknown: searchParams.get("unknown") !== null,
   };
 };

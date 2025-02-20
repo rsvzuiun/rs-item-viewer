@@ -7,7 +7,6 @@ import {
   replaceColorTag,
   replaceOpText,
   replaceTextData,
-  yellow,
 } from "../text";
 import { Item } from "../types";
 import { equals } from "../util";
@@ -24,99 +23,98 @@ export const tooltip = (id: number) => {
   return gen_tooltip(item, nxitem);
 };
 
-const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
-  const { nodiff } = getParams();
+const diffline = (cond: boolean | undefined) => cond && "item-different-line";
 
-  const tooltip = document.createElement("div");
-  tooltip.translate = false;
-  tooltip.className = "tooltip";
-  tooltip.classList.add(item.Rank === "NX" ? "border-nx" : "border-normal");
-  if (!nodiff) tooltip.classList.add("diff");
+const gen_tooltip = (item: Item, other: Item | undefined) => {
+  const { nodiff, noimage } = getParams();
 
-  {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
+  const tooltip = (
+    <div
+      translate={false}
+      class={[
+        "tooltip",
+        item.Rank === "NX" ? "border-nx" : "border-normal",
+        !nodiff && "diff",
+      ]}
+    ></div>
+  );
 
-    const image = document.createElement("div");
+  if (!noimage) {
+    const image = (
+      <div class="image">
+        {item.ImageId >= 0 && (
+          <img src={`img/item/${item.ImageId}.png`} width="34" height="34" />
+        )}
+        {item.Rank !== "N" && (
+          <img class="rank" src={`img/ui/type-icon-${item.Rank}.gif`} />
+        )}
+        {item.Grade !== "N" && (
+          <img class="grade" src={`img/ui/type-icon-${item.Grade}.gif`} />
+        )}
+      </div>
+    );
     if (item.Id >= 0) {
-      const anchor = document.createElement("a", { is: "spa-anchor" });
-      row.appendChild(anchor);
-      anchor.href = `?${isKr() ? "kr=1&" : ""}id=${item.Id}`;
-      anchor.appendChild(image);
+      tooltip.appendChild(
+        <div>
+          <a is="spa-anchor" href={`?${isKr() ? "kr=1&" : ""}id=${item.Id}`}>
+            {image}
+          </a>
+        </div>
+      );
     } else {
-      row.appendChild(image);
-    }
-    image.className = "image";
-
-    if (item.ImageId >= 0) {
-      image.insertAdjacentHTML(
-        "beforeend",
-        /* html */ `<img src="img/item/${item.ImageId}.png" width="34" height="34" />`
-      );
-    }
-
-    if (item.Rank !== "N") {
-      image.insertAdjacentHTML(
-        "beforeend",
-        /* html */ `<img class="rank" src="img/ui/type-icon-${item.Rank}.gif" />`
-      );
-    }
-    if (item.Grade !== "N") {
-      image.insertAdjacentHTML(
-        "beforeend",
-        /* html */ `<img class="grade" src="img/ui/type-icon-${item.Grade}.gif" />`
-      );
+      tooltip.appendChild(<div>{image}</div>);
     }
   }
   {
-    const row = document.createElement("div");
-    row.translate = true;
-    tooltip.appendChild(row);
-    row.className = "name";
-
-    const item_name = document.createElement("span");
-    row.appendChild(item_name);
-    if (isKr()) {
-      item_name.innerHTML = replaceColorTag(item.Name);
-      item_name.lang = "ko";
-    } else {
-      item_name.innerHTML = replaceColorTag(itemname[item.Id]);
-    }
-    if (item.Rank !== "N") {
-      item_name.className = "item-name-" + item.Rank;
-    }
-    if (nxitem && itemname[item.Id] !== itemname[nxitem.Id]) {
-      row.classList.add("item-different-line");
-    }
+    tooltip.appendChild(
+      <div
+        class={[
+          "name",
+          diffline(other && itemname[item.Id] !== itemname[other.Id]),
+        ]}
+        translate={true}
+      >
+        {isKr() ? (
+          <span
+            class={item.Rank !== "N" && "item-name-" + item.Rank}
+            lang="ko"
+            dangerouslySetInnerHTML={replaceColorTag(item.Name)}
+          ></span>
+        ) : (
+          <span
+            class={item.Rank !== "N" && "item-name-" + item.Rank}
+            dangerouslySetInnerHTML={replaceColorTag(itemname[item.Id] || item.Name)}
+          ></span>
+        )}
+      </div>
+    );
   }
   if (item.AtParam?.Max || item.OpPrt.length || item.OpBit.length) {
-    {
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-
-      row.className = "label";
-      row.innerText = "<基本情報>";
-    }
+    tooltip.appendChild(<div class="label">&lt;基本情報&gt;</div>);
     if (!C.not_equipment.includes(item.Type)) {
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-      row.innerText = "- " + C.item_type[item.Type];
+      tooltip.appendChild(<div>- {C.item_type[item.Type]}</div>);
     }
     if (item.Flags?.includes("<取引不可>")) {
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-      row.innerHTML = replaceColorTag("<c:PURPLE>- 取引不可アイテム<n>");
+      tooltip.appendChild(
+        <div>
+          <span class="text-color-PURPLE">- 取引不可アイテム</span>
+        </div>
+      );
     }
     if (item.Flags?.includes("<銀行取引不可>")) {
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-      row.innerHTML = replaceColorTag("<c:PURPLE>- 銀行取引不可<n>");
+      tooltip.appendChild(
+        <div>
+          <span class="text-color-PURPLE">- 銀行取引不可</span>
+        </div>
+      );
     }
     if (item.Exclusive) {
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-      row.innerHTML = replaceColorTag(
-        "<c:PURPLE>- 装備数制限(<n><c:LTYELLOW>0/1<n><c:PURPLE>)<n>"
+      tooltip.appendChild(
+        <div>
+          <span class="text-color-PURPLE">
+            - 装備数制限(<span class="text-color-LTYELLOW">0/1</span>)
+          </span>
+        </div>
       );
     }
   }
@@ -133,271 +131,193 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     const speed = item.AtParam?.Speed || 0;
 
     if (atmin !== 0 || atmax !== 0) {
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-
-      let html = /* html */ `- 攻撃力 <span class='text-color-LTYELLOW'>${atmin}~${atmax}</span>`;
-      if (speed) {
-        html += /* html */ `(<span class='text-color-LTYELLOW'>${(
-          speed / 100
-        ).toFixed(2)}</span>秒)`;
-      }
-      row.innerHTML = html;
-      if (nxitem && !equals(item.AtParam, nxitem.AtParam)) {
-        row.className = "item-different-line";
-      }
+      tooltip.appendChild(
+        <div class={diffline(other && !equals(item.AtParam, other.AtParam))}>
+          - 攻撃力{" "}
+          <span class="text-color-LTYELLOW">
+            {atmin}~{atmax}
+          </span>
+          {speed && [
+            "(",
+            <span class="text-color-LTYELLOW">{(speed / 100).toFixed(2)}</span>,
+            "秒)",
+          ]}
+        </div>
+      );
     }
   }
   {
     const range = item.AtParam?.Range || 0;
     if (range !== 0) {
-      const html = /* html */ `- 射程距離 <span class='text-color-LTYELLOW'>${range}</span>`;
-      const row = document.createElement("div");
-      tooltip.appendChild(row);
-      row.innerHTML = html;
-      if (nxitem && item.AtParam.Range !== nxitem.AtParam.Range) {
-        row.className = "item-different-line";
-      }
+      tooltip.appendChild(
+        <div
+          class={diffline(other && item.AtParam.Range !== other.AtParam.Range)}
+        >
+          - 射程距離 <span class="text-color-LTYELLOW">{range}</span>
+        </div>
+      );
     }
   }
   if (item.OpPrt) {
     item.OpPrt.map((baseop, idx) => {
-      if (baseop.Id === -1) return null;
-
-      const row = document.createElement("div");
+      if (baseop.Id === -1 || textdata.baseop[baseop.Id] === "") return null;
 
       const Value = opPrtValue(item, idx);
-      row.title = `baseop: ${baseop.Id}, ${JSON.stringify(Value)}`;
-      let opText = replaceOpText(textdata.baseop[baseop.Id], Value, item.Extra);
-      if (!opText) return null;
-      if (opText === "undefined") {
-        opText = `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`;
-      }
-      row.innerHTML = "- " + opText;
-      if (
-        nxitem &&
-        (item.OpPrt[idx]?.Id !== nxitem.OpPrt[idx]?.Id ||
-          !equals(Value, opPrtValue(nxitem, idx)))
-      ) {
-        row.className = "item-different-line";
-      }
-      return row;
+      const opText =
+        typeof textdata.baseop[baseop.Id] === "undefined"
+          ? `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`
+          : replaceOpText(textdata.baseop[baseop.Id], Value, item.Extra);
+
+      return (
+        <div
+          class={diffline(
+            other &&
+              (item.OpPrt[idx]?.Id !== other.OpPrt[idx]?.Id ||
+                !equals(Value, opPrtValue(other, idx)))
+          )}
+          title={`baseop: ${baseop.Id}, ${JSON.stringify(Value)}`}
+          dangerouslySetInnerHTML={`- ${opText}`}
+        ></div>
+      );
     })
       .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
   if (item.OpBit.some((e) => e.Id !== 0)) {
-    // TODO: 例外系の見直し
     item.OpBit.map((option, idx) => {
-      const row = document.createElement("div");
-      row.title = `op: ${option.Id}, ${JSON.stringify(option.Value)}`;
+      if (option.Id === -1 || textdata.op[option.Id] === "") return null;
 
-      let opText = "";
-      if (option.Text) {
-        opText = replaceOpText(option.Text, option.Value, item.Extra);
-      } else if (option.Id === -1) {
-        return null;
-      } else {
-        opText = replaceOpText(
-          textdata.op[option.Id],
-          option.Value,
-          item.Extra
-        );
-        if (!opText) return null;
-        if (opText === "undefined") {
-          opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
-        }
-      }
-
-      row.innerHTML = "- " + opText;
-      if (nxitem && !equals(item.OpBit[idx], nxitem.OpBit[idx])) {
-        row.className = "item-different-line";
-      }
-      return row;
+      const opText =
+        typeof textdata.op[option.Id] === "undefined"
+          ? `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`
+          : replaceOpText(textdata.op[option.Id], option.Value, item.Extra);
+      return (
+        <div
+          class={diffline(other && !equals(item.OpBit[idx], other.OpBit[idx]))}
+          title={`op: ${option.Id}, ${JSON.stringify(option.Value)}`}
+          dangerouslySetInnerHTML={`- ${opText}`}
+        ></div>
+      );
     })
       .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   } else {
     // console.log(item);
   }
-  if (nxitem && item.OpBit.length < nxitem.OpBit.length) {
-    for (let i = 0; i < nxitem.OpBit.length - item.OpBit.length; i++) {
-      const row = document.createElement("div");
-      row.className = "text-color-GRAY item-different-line";
-      row.innerText = "- なし";
-      tooltip.appendChild(row);
+  if (other && item.OpBit.length < other.OpBit.length) {
+    for (let i = 0; i < other.OpBit.length - item.OpBit.length; i++) {
+      tooltip.appendChild(
+        <div class="text-color-GRAY item-different-line">- なし</div>
+      );
     }
   }
   if (item?.OpPrt[0]?.Id === 773) {
     const q = item.OpBit.find((e) => e.Id === 774);
-    try {
-      if (q == null) throw new Error();
-      const [setid, equipid] = q.Value;
+    if (q == null) throw new Error();
+    const [setid, equipid] = q.Value;
 
-      const label = document.createElement("div");
-      tooltip.appendChild(label);
+    tooltip.appendChild(
+      <div class="label">
+        {carving[setid]
+          ? `<刻印 - ${carving[setid].name}[${carving[setid][equipid].name}]>`
+          : `<刻印 - #${setid}>`}
+      </div>
+    );
+    tooltip.appendChild(
+      <div>
+        <span class="text-color-PURPLE">
+          - 同じ刻印装備の着用制限 <span class="text-color-LTYELLOW">0/1</span>
+        </span>
+      </div>
+    );
+    tooltip.appendChild(<div>- レベル 30</div>);
+    if (carving[setid]) {
+      carving[setid][equipid].op
+        .map((option) => {
+          // NOTE OpBit との違い
+          // * op -> baseop
+          // * diffline 不要
+          if (option.Id === -1 || textdata.baseop[option.Id] === "")
+            return null;
 
-      label.className = "label";
-      label.innerText = carving[setid]
-        ? `<刻印 - ${carving[setid].name}[${carving[setid][equipid].name}]>`
-        : `<刻印 - #${setid}>`;
-
-      {
-        const row = document.createElement("div");
-        tooltip.appendChild(row);
-        row.innerHTML = replaceColorTag(
-          "<c:PURPLE>- 同じ刻印装備の着用制限<n> <c:LTYELLOW>0/1<n>"
-        );
-      }
-      {
-        const row = document.createElement("div");
-        tooltip.appendChild(row);
-        row.innerText = "- レベル 30";
-      }
-      if (carving[setid]) {
-        carving[setid][equipid].op
-          .map((option) => {
-            const row = document.createElement("div");
-            row.title = `baseop: ${option.Id}, ${JSON.stringify(option)}`;
-
-            let opText = "";
-            if (option.Id === -1) {
-              opText = replaceOpText(option.Text!, option.Value, item.Extra);
-            } else {
-              opText = replaceOpText(
-                textdata.baseop[option.Id],
-                option.Value,
-                item.Extra
-              );
-              if (!opText) return null;
-              if (opText === "undefined") {
-                opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
-              }
-            }
-            row.innerHTML = "- " + opText;
-            return row;
-          })
-          .flatMap((v) => v ?? [])
-          .map((elm) => tooltip.appendChild(elm));
-      }
-    } catch (error) {
-      console.error(error);
+          const opText =
+            typeof textdata.baseop[option.Id] === "undefined"
+              ? `&lt;unknown_baseop id=${option.Id} value=${option.Value}&gt;`
+              : replaceOpText(textdata.baseop[option.Id], option.Value, item.Extra);
+          return (
+            <div
+              title={`baseop: ${option.Id}, ${JSON.stringify(option)}`}
+              dangerouslySetInnerHTML={`- ${opText}`}
+            ></div>
+          );
+        })
+        .flatMap((v) => v ?? [])
+        .map((elm) => tooltip.appendChild(elm));
     }
   }
   if (
     item?.OpPrt[1]?.Id &&
     Object.keys(carving_ring).includes(item?.OpPrt[1]?.Id.toString())
   ) {
-    const label = document.createElement("div");
-    tooltip.appendChild(label);
-
-    label.className = "label";
-    label.innerText = "<刻印効果>";
+    tooltip.appendChild(<div class="label">&lt;刻印効果&gt;</div>);
 
     if (carving_ring[item.OpPrt[1].Id]) {
       carving_ring[item.OpPrt[1].Id]
         .map((option) => {
-          const row = document.createElement("div");
-          row.title = `baseop: ${option.Id}, ${JSON.stringify(option)}`;
-
-          let opText = "";
-          if (option.Id === -1) {
-            opText = replaceOpText(option.Text!, option.Value, item.Extra);
-          } else {
-            opText = replaceOpText(
-              textdata.op[option.Id],
-              option.Value,
-              item.Extra
-            );
-            if (!opText) return null;
-            if (opText === "undefined") {
-              opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
-            }
-          }
-          row.innerHTML = "- " + opText;
-          return row;
+          const opText = replaceOpText(option.Text, option.Value, item.Extra);
+          return <div dangerouslySetInnerHTML={`- ${opText}`}></div>;
         })
         .flatMap((v) => v ?? [])
         .map((elm) => tooltip.appendChild(elm));
     }
   }
-  if (nxitem || item.Rank === "NX") {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
-
-    row.className = "label";
-    row.innerText = "<錬成 オプション 情報>";
+  if (other || item.Rank === "NX") {
+    tooltip.appendChild(<div class="label">&lt;錬成 オプション 情報&gt;</div>);
   }
   if (item.Rank === "NX") {
     item.OpNxt.map((option) => {
-      const row = document.createElement("div");
-      row.title = `op: ${option.Id}, ${JSON.stringify(option.Value)}`;
+      if (option.Id === -1 || textdata.op[option.Id] === "") return null;
 
-      let opText = "";
-      if (option.Text) {
-        opText = replaceOpText(option.Text, option.Value, item.Extra);
-      } else if (option.Id === -1) {
-        return null;
-      } else {
-        opText = replaceOpText(
-          textdata.op[option.Id],
-          option.Value,
-          item.Extra
-        );
-        if (!opText) return null;
-        if (opText === "undefined") {
-          opText = `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`;
-        }
-      }
-
-      row.innerHTML = "- " + opText;
-      if (nxitem) {
-        row.className = "item-different-line";
-      }
-      return row;
+      const opText =
+        typeof textdata.op[option.Id] === "undefined"
+          ? `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`
+          : replaceOpText(textdata.op[option.Id], option.Value, item.Extra);
+      return (
+        <div
+          class={diffline(other != null)}
+          title={`op: ${option.Id}, ${JSON.stringify(option.Value)}`}
+          dangerouslySetInnerHTML={`- ${opText}`}
+        ></div>
+      );
     })
       .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
-  if (nxitem && item.Rank !== "NX") {
+  if (other && item.Rank !== "NX") {
     for (let i = 0; i < 4; i++) {
-      const row = document.createElement("div");
-      row.className = "text-color-GRAY item-different-line";
-      row.innerText = "- なし";
-      tooltip.appendChild(row);
+      tooltip.appendChild(
+        <div class="text-color-GRAY item-different-line">- なし</div>
+      );
     }
   }
-  {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
+  tooltip.appendChild(<div class="label">&lt;説明&gt;</div>);
+  tooltip.appendChild(
+    <div
+      translate={true}
+      lang={isKr() ? "ko" : undefined}
+      dangerouslySetInnerHTML={`- ${replaceTextData(isKr() ? item.Text : itemtext[item.Id] || item.Text)}`}
+    ></div>
+  );
 
-    row.className = "label";
-    row.innerText = "<説明>";
-  }
-  {
-    const row = document.createElement("div");
-    row.translate = true;
-    tooltip.appendChild(row);
-
-    if (isKr()) {
-      row.innerHTML = "- " + replaceTextData(item.Text);
-      row.lang = "ko";
-    } else {
-      row.innerHTML = "- " + replaceTextData(itemtext[item.Id]);
-    }
-  }
   if (item.Require && Object.keys(item.Require).length) {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
-
-    row.className = "label";
-    row.innerText = "<要求能力値>";
+    tooltip.appendChild(<div class="label">&lt;要求能力値&gt;</div>);
 
     (Object.keys(item.Require) as (keyof typeof item.Require)[])
       .map((key) => {
+        // TODO
         const value = item.Require[key];
         if (typeof value === "undefined") throw Error();
-        const row = document.createElement("div");
+        const row = <div></div>;
         if (typeof value === "number") {
           const html = /* html */ `- ${
             C.status_type[key as number]
@@ -417,76 +337,80 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
       .map((elm) => tooltip.appendChild(elm));
   }
   if (item.Job?.length) {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
-
-    row.className = "label";
-    row.innerText = "<着用/使用可能な職業>";
-
-    item.Job.map((job) => {
-      const row = document.createElement("div");
-      row.innerHTML = "- " + C.job_type[job];
-      return row;
-    })
+    tooltip.appendChild(<div class="label">&lt;着用/使用可能な職業&gt;</div>);
+    item.Job.map((job) => <div>- {C.job_type[job]}</div>)
       .flatMap((v) => v ?? [])
       .map((elm) => tooltip.appendChild(elm));
   }
   if (!nodiff && item.Id >= 0) {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
+    tooltip.appendChild(<div class="label">&lt;システム情報&gt;</div>);
 
-    row.className = "label";
-    row.innerText = "<システム情報>";
-
-    const Id = document.createElement("div");
-    tooltip.appendChild(Id);
-    Id.innerHTML = `- ID ${yellow(item.Id)}`;
-    Id.title = JSON.stringify(item);
+    tooltip.appendChild(
+      <div title={JSON.stringify(item)}>
+        - ID <span class="text-color-LTYELLOW">{item.Id}</span>
+      </div>
+    );
 
     if (item.StackSize > 1) {
-      const StackSize = document.createElement("div");
-      tooltip.appendChild(StackSize);
-      StackSize.innerHTML = `- 重ね置き ${yellow(item.StackSize)}`;
+      tooltip.appendChild(
+        <div>
+          - 重ね置き <span class="text-color-LTYELLOW">{item.StackSize}</span>
+        </div>
+      );
     }
 
     if (item.Durability) {
-      const Durability = document.createElement("div");
-      tooltip.appendChild(Durability);
-      Durability.innerHTML = `- 耐久減少 ${yellow(item.Durability)}型`;
+      tooltip.appendChild(
+        <div>
+          - 耐久減少 <span class="text-color-LTYELLOW">{item.Durability}</span>
+          型
+        </div>
+      );
     }
 
     if (item.DropLv) {
-      const DropLv = document.createElement("div");
-      tooltip.appendChild(DropLv);
-      DropLv.innerHTML = `- ドロップレベル ${yellow(item.DropLv)}`;
+      tooltip.appendChild(
+        <div>
+          - ドロップレベル{" "}
+          <span class="text-color-LTYELLOW">{item.DropLv}</span>
+        </div>
+      );
     }
 
     if (item.DropFactor) {
-      const DropFactor = document.createElement("div");
-      tooltip.appendChild(DropFactor);
-      DropFactor.innerHTML = `- ドロップ係数 ${yellow(item.DropFactor)}`;
+      tooltip.appendChild(
+        <div>
+          - ドロップ係数{" "}
+          <span class="text-color-LTYELLOW">{item.DropFactor}</span>
+        </div>
+      );
     }
 
     if (item.Price && item.PriceFactor) {
-      const Price = document.createElement("div");
-      tooltip.appendChild(Price);
-      Price.innerHTML = `- 価格 ${yellow(
-        Math.floor((item.Price * item.PriceFactor) / 100).toLocaleString()
-      )} Gold`;
+      tooltip.appendChild(
+        <div>
+          - 価格{" "}
+          <span class="text-color-LTYELLOW">
+            {Math.floor((item.Price * item.PriceFactor) / 100).toLocaleString()}{" "}
+            Gold
+          </span>
+        </div>
+      );
     }
 
     if (item.Flags) {
-      const Flags = document.createElement("div");
-      tooltip.appendChild(Flags);
-      Flags.innerHTML = `- Flags ${yellow(item.Flags)}`;
+      tooltip.appendChild(
+        <div>
+          - Flags <span class="text-color-LTYELLOW">{item.Flags}</span>
+        </div>
+      );
     }
   }
 
-  if (nxitem && item.Rank !== "NX") {
-    const root = document.createElement("div");
-    root.className = "nx-pair";
+  if (other && item.Rank !== "NX") {
+    const root = <div class="nx-pair"></div>;
     root.appendChild(tooltip);
-    root.appendChild(gen_tooltip(nxitem, item));
+    root.appendChild(gen_tooltip(other, item));
     return root;
   } else {
     return tooltip;

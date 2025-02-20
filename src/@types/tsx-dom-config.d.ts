@@ -7,3 +7,9 @@ declare module "tsx-dom" {
     // html: false;
   }
 }
+
+declare module "tsx-dom-types" {
+  export interface HTMLAttributes {
+    translate?: boolean;
+  }
+}
