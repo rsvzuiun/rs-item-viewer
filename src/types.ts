@@ -22,7 +22,7 @@ export type BaseOption = {
 export type ChaosRingOption = {
   Text: string;
   Value: number[];
-}
+};
 export type Option = {
   Id: number;
   Value: number[];

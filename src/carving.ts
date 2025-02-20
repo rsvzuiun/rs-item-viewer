@@ -6,7 +6,6 @@ export const carving_ring: { [id: number]: ChaosRingOption[] } = {
     { Text: "ダブルクリティカルダメージ増加 +[0]％", Value: [1] },
     { Text: "魔法致命打確率増加 +[0]％", Value: [1] },
     {
-      
       Text: "<c:GRAY>最終刻印効果 : 最終ダメージ増加 [0]％<n>",
       Value: [4],
     },

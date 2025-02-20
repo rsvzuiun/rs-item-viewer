@@ -60,7 +60,7 @@ export function replaceOpText(
         } else {
           body = value(v, func);
         }
-        return (/* html */ `<span class='text-color-LTYELLOW'>${sign}${body}${post}</span>`);
+        return /* html */ `<span class='text-color-LTYELLOW'>${sign}${body}${post}</span>`;
       }
     )
     .replace("%", "％");

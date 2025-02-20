@@ -83,7 +83,9 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
         ) : (
           <span
             class={item.Rank !== "N" && "item-name-" + item.Rank}
-            dangerouslySetInnerHTML={replaceColorTag(itemname[item.Id] || item.Name)}
+            dangerouslySetInnerHTML={replaceColorTag(
+              itemname[item.Id] || item.Name
+            )}
           ></span>
         )}
       </div>
@@ -243,7 +245,11 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           const opText =
             typeof textdata.baseop[option.Id] === "undefined"
               ? `&lt;unknown_baseop id=${option.Id} value=${option.Value}&gt;`
-              : replaceOpText(textdata.baseop[option.Id], option.Value, item.Extra);
+              : replaceOpText(
+                  textdata.baseop[option.Id],
+                  option.Value,
+                  item.Extra
+                );
           return (
             <div
               title={`baseop: ${option.Id}, ${JSON.stringify(option)}`}
