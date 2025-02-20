@@ -24,6 +24,7 @@
     "vite": "^6.1.0"
   },
   "dependencies": {
-    "form-storage": "github:rsvzuiun/form-storage"
+    "form-storage": "github:rsvzuiun/form-storage",
+    "tsx-dom": "^3.1.0"
   }
 }

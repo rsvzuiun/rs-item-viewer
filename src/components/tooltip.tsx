@@ -121,9 +121,11 @@ const gen_tooltip = (item: Item, nxitem: Item | undefined) => {
     }
   }
   if (item.Grade !== "N") {
-    const row = document.createElement("div");
-    tooltip.appendChild(row);
-    row.innerHTML = replaceColorTag("- 耐久力 <c:LTYELLOW>100％<n>");
+    tooltip.appendChild(
+      <div>
+        - 耐久力 <span class="text-color-LTYELLOW">100％</span>
+      </div>
+    );
   }
   {
     const atmin = item.AtParam?.Min || 0;
