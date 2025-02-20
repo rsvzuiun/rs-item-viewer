@@ -2,8 +2,6 @@ import { carving } from "./carving";
 import * as C from "./const";
 import { Item } from "./types";
 
-export const yellow = (text: string | number) =>
-  /* html */ `<span class='text-color-LTYELLOW'>${text}</span>`;
 export const value = (
   arg: number | [number, number],
   func?: (x: number) => string
@@ -38,7 +36,7 @@ export const special_option = (kind: string, v: number): string | undefined => {
     case "jobtype":
       return C.job_type[v];
     case "carving":
-      return carving[v].name;
+      return carving[v]?.name || `${v}`;
     default:
       return undefined;
   }
@@ -62,7 +60,7 @@ export function replaceOpText(
         } else {
           body = value(v, func);
         }
-        return yellow(`${sign}${body}${post}`);
+        return /* html */ `<span class='text-color-LTYELLOW'>${sign}${body}${post}</span>`;
       }
     )
     .replace("%", "％");

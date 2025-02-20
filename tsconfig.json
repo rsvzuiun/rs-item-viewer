@@ -20,6 +20,8 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "useDefineForClassFields": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "tsx-dom",
   },
   "include": [
     "src/**/*",
