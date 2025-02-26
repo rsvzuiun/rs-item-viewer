@@ -11,7 +11,8 @@ import {
 import { isKr } from "./params";
 import { ItemData, TextData } from "./types";
 
-const itemdataP = fetch(isKr() ? itemdata_url : itemdatakr_url).then((r) =>
+console.log(isKr())
+const itemdataP = fetch(isKr() ? itemdatakr_url : itemdata_url).then((r) =>
   r.json()
 );
 const baseopP = fetch(baseop_url).then((r) => r.json());
