@@ -139,7 +139,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           <span class="text-color-LTYELLOW">
             {atmin}~{atmax}
           </span>
-          {speed && [
+          {speed > 0 && [
             "(",
             <span class="text-color-LTYELLOW">{(speed / 100).toFixed(2)}</span>,
             "秒)",
