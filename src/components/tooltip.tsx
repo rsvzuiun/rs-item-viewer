@@ -30,7 +30,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
 
   const tooltip = (
     <div
-      translate={false}
+      translate="no"
       class={[
         "tooltip",
         item.Rank === "NX" ? "border-nx" : "border-normal",
@@ -72,7 +72,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           "name",
           diffline(other && itemname[item.Id] !== itemname[other.Id]),
         ]}
-        translate={true}
+        translate="yes"
       >
         {isKr() ? (
           <span
@@ -314,7 +314,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
   tooltip.appendChild(<div class="label">&lt;説明&gt;</div>);
   tooltip.appendChild(
     <div
-      translate={true}
+      translate="yes"
       lang={isKr() ? "ko" : undefined}
       dangerouslySetInnerHTML={`- ${replaceTextData(isKr() ? item.Text : itemtext[item.Id] || item.Text)}`}
     ></div>

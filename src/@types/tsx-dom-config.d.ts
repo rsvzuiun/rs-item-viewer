@@ -10,6 +10,6 @@ declare module "tsx-dom" {
 
 declare module "tsx-dom-types" {
   export interface HTMLAttributes {
-    translate?: boolean;
+    translate?: "yes" | "no";
   }
 }
