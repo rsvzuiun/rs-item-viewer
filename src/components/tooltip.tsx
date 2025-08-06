@@ -94,7 +94,12 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
   if (item.AtParam?.Max || item.OpPrt.length || item.OpBit.length) {
     tooltip.appendChild(<div class="label">&lt;基本情報&gt;</div>);
     if (!C.not_equipment.includes(item.Type)) {
-      tooltip.appendChild(<div>- {C.item_type[item.Type]}</div>);
+      tooltip.appendChild(
+        <div>
+          - Type{" "}
+          <span class="text-color-LTYELLOW">{C.item_type[item.Type]}</span>
+        </div>
+      );
     }
     if (item.Flags?.includes("<取引不可>")) {
       tooltip.appendChild(
