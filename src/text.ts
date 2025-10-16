@@ -15,6 +15,7 @@ export const value = (
 export const special_option = (kind: string, v: number): string | undefined => {
   switch (kind) {
     case "abnormal":
+    case "abnormal_status":
       switch (v) {
         case 0:
           return "異常系";
@@ -24,6 +25,8 @@ export const special_option = (kind: string, v: number): string | undefined => {
           return "低下系";
         case 14:
           return "出血";
+        case 15:
+          return "中毒";
         default:
           return undefined;
       }
@@ -37,6 +40,13 @@ export const special_option = (kind: string, v: number): string | undefined => {
       return C.job_type[v];
     case "carving":
       return carving[v]?.name || `${v}`;
+    case "skill":
+      switch (v) {
+        case 2141:
+          return "バジリスクパス";
+        default:
+          return undefined;
+      }
     default:
       return undefined;
   }
