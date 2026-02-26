@@ -62,14 +62,12 @@ export function replaceOpText(
     .replace(
       /\[(?<sign>[+-]?)(?<special>[^[]*?)(?<idx>[0-7])(?<div>\.1)?(?<post>[%％]?)\]/g,
       (_org, sign, special, idx, div, post) => {
-        let body = "";
         const v = special === "F" ? extra[idx] : args[idx];
         const func = div ? (x: number) => (x / 10).toFixed(1) : undefined;
-        if (typeof v === "number") {
-          body = special_option(special, v) ?? value(v, func);
-        } else {
-          body = value(v, func);
-        }
+        const body =
+          typeof v === "number"
+            ? (special_option(special, v) ?? value(v, func))
+            : value(v, func);
         return /* html */ `<span class='text-color-LTYELLOW'>${sign}${body}${post}</span>`;
       }
     )
