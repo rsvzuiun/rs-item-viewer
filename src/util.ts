@@ -1,14 +1,13 @@
 const none = Symbol();
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
 export function cache<T extends (...args: any[]) => any>(
-  func: T
+  func: T,
 ): (...args: Parameters<T>) => ReturnType<T> {
   let ret: ReturnType<T> | typeof none = none;
   return (...args) => (ret === none ? (ret = func(...args)) : ret);
 }
 
-export const equals = (a: object, b: object) =>
-  JSON.stringify(a) === JSON.stringify(b);
+export const equals = (a: object, b: object) => JSON.stringify(a) === JSON.stringify(b);
 
 export const str2range = (str: string, max: number) => [
   ...new Set(
@@ -33,6 +32,6 @@ export const str2range = (str: string, max: number) => [
         }
         return NaN;
       })
-      .flat()
+      .flat(),
   ),
 ];

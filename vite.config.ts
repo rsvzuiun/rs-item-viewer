@@ -1,10 +1,22 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vite-plus";
 import { VitePluginRadar } from "vite-plugin-radar";
 
 export default defineConfig({
-  build: {
-    target: ["es2022", "edge89", "firefox89", "chrome89", "safari15"],
+  lint: {
+    overrides: [
+      {
+        files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+      },
+    ],
+    options: {
+      typeAware: true,
+      typeCheck: true,
+    },
   },
+  fmt: {
+    ignorePatterns: ["public/**/*"],
+  },
+  staged: { "*": "vp check --fix" },
   base: "/rs-item-viewer/",
   plugins: [
     VitePluginRadar({
