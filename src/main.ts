@@ -40,7 +40,7 @@ function submit_handler(this: HTMLFormElement, e: SubmitEvent) {
   }
   storage.save();
   window.history.pushState(null, "", url.search);
-  update();
+  void update();
 }
 
 const update = async () => {
@@ -94,16 +94,16 @@ const onload = async () => {
     genSPAAnchor(async () => {
       state.abort_render = true;
       await new Promise((resolve) => setTimeout(resolve, 0));
-      update();
+      void update();
     }),
     { extends: "a" },
   );
   window.addEventListener("popstate", async () => {
     state.abort_render = true;
     await new Promise((resolve) => setTimeout(resolve, 0));
-    update();
+    void update();
   });
-  update();
+  void update();
 };
 if (document.readyState !== "loading") {
   await onload();

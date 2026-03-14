@@ -108,7 +108,7 @@ export const search = async (app: HTMLElement) => {
   } else if (job === -1) {
     hit = hit.filter((e) => itemdata[e]?.Job.length === 0);
   } else if (job === -2) {
-    hit = hit.filter((e) => itemdata[e]?.Job.length ?? 0 > 0);
+    hit = hit.filter((e) => (itemdata[e]?.Job.length ?? 0) > 0);
   }
   if (lv) {
     const lrange = str2range(lv, C.maxlv);
@@ -199,7 +199,7 @@ export const search = async (app: HTMLElement) => {
   window.scroll(0, 0);
 
   state.abort_render = false;
-  for await (const e of hit.slice(0, SEARCH_LIMIT)) {
+  for (const e of hit.slice(0, SEARCH_LIMIT)) {
     if (state.abort_render) break;
     app.appendChild(tooltip(e));
     await new Promise((resolve) => setTimeout(resolve, 0));

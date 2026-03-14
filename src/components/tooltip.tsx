@@ -146,7 +146,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
       const Value = opPrtValue(item, idx);
       const opText =
         typeof textdata.baseop[baseop.Id] === "undefined"
-          ? `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`
+          ? `&lt;unknown_base id=${baseop.Id} value=[${JSON.stringify(Value)}]&gt;`
           : replaceOpText(textdata.baseop[baseop.Id], Value, item.Extra);
 
       return (
@@ -170,7 +170,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
 
       const opText =
         typeof textdata.op[option.Id] === "undefined"
-          ? `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`
+          ? `&lt;unknown_op id=${option.Id} value=${JSON.stringify(option.Value)}&gt;`
           : replaceOpText(textdata.op[option.Id], option.Value, item.Extra);
       return (
         <div
@@ -220,7 +220,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
 
           const opText =
             typeof textdata.baseop[option.Id] === "undefined"
-              ? `&lt;unknown_baseop id=${option.Id} value=${option.Value}&gt;`
+              ? `&lt;unknown_baseop id=${option.Id} value=${JSON.stringify(option.Value)}&gt;`
               : replaceOpText(textdata.baseop[option.Id], option.Value, item.Extra);
           return (
             <div
@@ -255,7 +255,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
 
       const opText =
         typeof textdata.op[option.Id] === "undefined"
-          ? `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`
+          ? `&lt;unknown_op id=${option.Id} value=${JSON.stringify(option.Value)}&gt;`
           : replaceOpText(textdata.op[option.Id], option.Value, item.Extra);
       return (
         <div
