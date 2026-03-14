@@ -52,8 +52,7 @@ export const search = async (app: HTMLElement) => {
   if (op >= 0) {
     hit = hit.filter(
       (e) =>
-        itemdata[e]?.OpBit.some((i) => i.Id === op) ||
-        itemdata[e]?.OpNxt.some((i) => i.Id === op)
+        itemdata[e]?.OpBit.some((i) => i.Id === op) || itemdata[e]?.OpNxt.some((i) => i.Id === op),
     );
   }
   if (baseop >= 0) {
@@ -72,8 +71,7 @@ export const search = async (app: HTMLElement) => {
       return (
         item &&
         (item.AtParam.Range > 0 ||
-          (item.Job.includes(7) &&
-            ![17, 73, ...C.not_equipment].includes(item.Type)))
+          (item.Job.includes(7) && ![17, 73, ...C.not_equipment].includes(item.Type)))
       );
     });
   }
@@ -91,9 +89,7 @@ export const search = async (app: HTMLElement) => {
     hit = hit.filter((e) => {
       const item = itemdata[e];
       return (
-        item &&
-        item.Job.includes(7) &&
-        ![17, 22, 70, 73, ...C.not_equipment].includes(item.Type)
+        item && item.Job.includes(7) && ![17, 22, 70, 73, ...C.not_equipment].includes(item.Type)
       );
     });
   }
@@ -103,10 +99,7 @@ export const search = async (app: HTMLElement) => {
       return (
         item &&
         item.AtParam.Range <= 0 &&
-        !(
-          item.Job.includes(7) &&
-          ![17, 73, ...C.not_equipment].includes(item.Type)
-        )
+        !(item.Job.includes(7) && ![17, 73, ...C.not_equipment].includes(item.Type))
       );
     });
   }
@@ -129,7 +122,7 @@ export const search = async (app: HTMLElement) => {
       hit = hit.filter(
         (e) =>
           lrange.includes(itemdata[e]?.Require?.["0"] ?? -1) ||
-          (lrange.includes(0) && itemdata[e]?.Require["0"] == null)
+          (lrange.includes(0) && itemdata[e]?.Require["0"] == null),
       );
     }
   }
@@ -154,18 +147,15 @@ export const search = async (app: HTMLElement) => {
     const baseops = Object.keys(textdata.baseop).map((e) => parseInt(e));
     hit = hit.filter(
       (e) =>
-        itemdata[e]?.OpPrt.filter((baseop) => !baseops.includes(baseop.Id))
-          .length ||
+        itemdata[e]?.OpPrt.filter((baseop) => !baseops.includes(baseop.Id)).length ||
         itemdata[e]?.OpBit.filter((op) => !ops.includes(op.Id)).length ||
-        itemdata[e]?.OpNxt.filter((op) => !ops.includes(op.Id)).length
+        itemdata[e]?.OpNxt.filter((op) => !ops.includes(op.Id)).length,
     );
   } else {
     const nxids = hit
       .filter(
         (e) =>
-          itemdata[e]?.Rank !== "NX" &&
-          itemdata[e]?.Id !== itemdata[e]?.NxId &&
-          itemdata[e]?.NxId
+          itemdata[e]?.Rank !== "NX" && itemdata[e]?.Id !== itemdata[e]?.NxId && itemdata[e]?.NxId,
       )
       .map((e) => itemdata[e]?.NxId);
     hit = hit.filter((e) => !nxids.includes(e));
@@ -188,10 +178,7 @@ export const search = async (app: HTMLElement) => {
       ?.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
       .replace(/\$func\d+/, "")}"`;
   if (baseop >= 0)
-    restext += ` "${textdata.baseop[baseop]?.replace(
-      /<c:([^> ]+?)>(.+?)<n>/g,
-      "$2"
-    )}"`;
+    restext += ` "${textdata.baseop[baseop]?.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")}"`;
   if (job >= 0) {
     restext += ` ${C.job_type[job]}`;
   } else if (job === -1) {
@@ -206,8 +193,7 @@ export const search = async (app: HTMLElement) => {
   if (group === "nw") restext += " 武器以外";
   if (group === "mw") restext += " 手足武器";
   restext += ` ${hit.length}件`;
-  if (hit.length > SEARCH_LIMIT)
-    restext += ` (${SEARCH_LIMIT}件に制限しています)`;
+  if (hit.length > SEARCH_LIMIT) restext += ` (${SEARCH_LIMIT}件に制限しています)`;
   result.innerText = restext;
 
   window.scroll(0, 0);

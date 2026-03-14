@@ -16,9 +16,7 @@ function submit_handler(this: HTMLFormElement, e: SubmitEvent) {
   const url = new URL(window.location.href);
 
   const proc_select = (src: string, dst: string) => {
-    const m = (this.querySelector(src) as HTMLInputElement).value.match(
-      /^(\d+)/
-    );
+    const m = (this.querySelector(src) as HTMLInputElement).value.match(/^(\d+)/);
     if (m) url.searchParams.set(dst, m[1]);
   };
   proc_select("#selectop", "op");
@@ -36,9 +34,7 @@ function submit_handler(this: HTMLFormElement, e: SubmitEvent) {
     }
   }
   const exclude_opts = ["A", "D", "E", "G", "R"];
-  if (
-    exclude_opts.reduce((p, c) => p && url.searchParams.get(c) !== null, true)
-  ) {
+  if (exclude_opts.reduce((p, c) => p && url.searchParams.get(c) !== null, true)) {
     exclude_opts.forEach((v) => url.searchParams.delete(v));
     url.searchParams.set("ADEGR", "");
   }
@@ -100,7 +96,7 @@ const onload = async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
       update();
     }),
-    { extends: "a" }
+    { extends: "a" },
   );
   window.addEventListener("popstate", async () => {
     state.abort_render = true;

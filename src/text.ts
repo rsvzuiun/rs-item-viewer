@@ -2,10 +2,7 @@ import { carving } from "./carving";
 import * as C from "./const";
 import { Item } from "./types";
 
-export const value = (
-  arg: number | [number, number],
-  func?: (x: number) => string
-): string => {
+export const value = (arg: number | [number, number], func?: (x: number) => string): string => {
   if (typeof arg === "number") {
     return `${func ? func(arg) : arg.toLocaleString()}`;
   } else {
@@ -54,7 +51,7 @@ export const special_option = (kind: string, v: number): string | undefined => {
 export function replaceOpText(
   text: string | undefined,
   args: (number | [number, number])[],
-  extra: [number, number, number, number]
+  extra: [number, number, number, number],
 ) {
   if (typeof text === "undefined") return "undefined";
   text = text
@@ -65,11 +62,9 @@ export function replaceOpText(
         const v = special === "F" ? extra[idx] : args[idx];
         const func = div ? (x: number) => (x / 10).toFixed(1) : undefined;
         const body =
-          typeof v === "number"
-            ? (special_option(special, v) ?? value(v, func))
-            : value(v, func);
+          typeof v === "number" ? (special_option(special, v) ?? value(v, func)) : value(v, func);
         return /* html */ `<span class='text-color-LTYELLOW'>${sign}${body}${post}</span>`;
-      }
+      },
     )
     .replace("%", "％");
   return replaceColorTag(text);
@@ -78,17 +73,11 @@ export const replaceTextData = (text: string): string => {
   return replaceColorTag(String(text).replace(/\r?\n/g, "<br />"));
 };
 export const replaceColorTag = (text: string): string => {
-  return text.replace(
-    /<c:([^> ]+?)>(.+?)<n>/g,
-    (_string, matched1, matched2) => {
-      return /* html */ `<span class='text-color-${matched1}'>${matched2}</span>`;
-    }
-  );
+  return text.replace(/<c:([^> ]+?)>(.+?)<n>/g, (_string, matched1, matched2) => {
+    return /* html */ `<span class='text-color-${matched1}'>${matched2}</span>`;
+  });
 };
-export const opPrtValue = (
-  item: Item,
-  idx: number
-): (number | [number, number])[] => {
+export const opPrtValue = (item: Item, idx: number): (number | [number, number])[] => {
   return item.OpPrt[idx].ValueIndex.map((index) => {
     if (index == 2) return NaN;
     const min = item.ValueTable?.[index]?.[0];

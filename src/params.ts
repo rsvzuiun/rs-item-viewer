@@ -29,11 +29,9 @@ type Params = {
   unknown: boolean;
 };
 
-export const isIndex = (): boolean =>
-  new URL(window.location.href).searchParams.toString() === "";
+export const isIndex = (): boolean => new URL(window.location.href).searchParams.toString() === "";
 
-export const isKr = (): boolean =>
-  new URL(window.location.href).searchParams.get("kr") !== null;
+export const isKr = (): boolean => new URL(window.location.href).searchParams.get("kr") !== null;
 
 export const getParams = (): Params => {
   const searchParams = new URL(window.location.href).searchParams;

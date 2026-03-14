@@ -49,25 +49,20 @@ export const index = (app: HTMLElement) => {
 <p>* が付いてる項目は<a target="_blank" href="https://userweb.mnet.ne.jp/nakama/">正規表現</a>が使えます 例: <a is="spa-anchor" href="?q=%5Eフ.%2Bン%24">^フ.+ン$</a> <a is="spa-anchor" href="?q=ゲージング%7C辛苦">ゲージング|辛苦</a></p>
 `;
 
-  form
-    .querySelector<HTMLInputElement>("#exclude-all")!
-    .addEventListener("click", () => {
-      const target = ["A", "D", "E", "G", "R"];
-      const check =
-        form.querySelector<HTMLInputElement>("#exclude-all")!.checked;
-      for (const k of target) {
-        form.querySelector<HTMLInputElement>(`#${k}`)!.checked = check;
-      }
-    });
+  form.querySelector<HTMLInputElement>("#exclude-all")!.addEventListener("click", () => {
+    const target = ["A", "D", "E", "G", "R"];
+    const check = form.querySelector<HTMLInputElement>("#exclude-all")!.checked;
+    for (const k of target) {
+      form.querySelector<HTMLInputElement>(`#${k}`)!.checked = check;
+    }
+  });
 
   const selectoplist = form.querySelector("#selectop-list");
   if (selectoplist == null) throw new Error();
   for (const [k, v] of Object.entries(textdata.op)) {
     if (typeof v === "undefined") continue;
     const option = document.createElement("option");
-    option.value = `${k}: ${v
-      .replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
-      .replace(/\$func\d+/g, "")}`;
+    option.value = `${k}: ${v.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2").replace(/\$func\d+/g, "")}`;
     selectoplist.appendChild(option);
   }
 
@@ -76,9 +71,7 @@ export const index = (app: HTMLElement) => {
   for (const [k, v] of Object.entries(textdata.baseop)) {
     if (typeof v === "undefined") continue;
     const option = document.createElement("option");
-    option.value = `${k}: ${v
-      .replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2")
-      .replace(/\$func\d+/g, "")}`;
+    option.value = `${k}: ${v.replace(/<c:([^> ]+?)>(.+?)<n>/g, "$2").replace(/\$func\d+/g, "")}`;
     selectbaseoplist.appendChild(option);
   }
 
@@ -184,12 +177,7 @@ const toc: IndexToc = {
         },
         {
           label: "ビショップ・追放天使",
-          content: [
-            23,
-            { href: "?type=19&job=4", icon: "img/item/428.png", text: "盾" },
-            24,
-            15,
-          ],
+          content: [23, { href: "?type=19&job=4", icon: "img/item/428.png", text: "盾" }, 24, 15],
         },
         {
           label: "ビーストテイマー・サマナー",
@@ -292,8 +280,8 @@ const toc: IndexToc = {
     {
       label: "その他",
       content: [
-        34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
-        52, 59, 60, 65, 66, 67,
+        34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 59, 60, 65, 66,
+        67,
       ],
     },
   ],
