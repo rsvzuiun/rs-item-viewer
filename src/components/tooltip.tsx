@@ -2,12 +2,7 @@ import { carving, carving_ring } from "../carving";
 import * as C from "../const";
 import { getParams, isKr } from "../params";
 import { itemdata, itemname, itemtext, textdata } from "../store";
-import {
-  opPrtValue,
-  replaceColorTag,
-  replaceOpText,
-  replaceTextData,
-} from "../text";
+import { opPrtValue, replaceColorTag, replaceOpText, replaceTextData } from "../text";
 import { Item } from "../types";
 import { equals } from "../util";
 
@@ -15,10 +10,7 @@ export const tooltip = (id: number) => {
   const { nodiff } = getParams();
 
   const item = itemdata[id]!;
-  const nxitem =
-    !nodiff && item.NxId && item.NxId !== item.Id
-      ? itemdata[item.NxId]
-      : undefined;
+  const nxitem = !nodiff && item.NxId && item.NxId !== item.Id ? itemdata[item.NxId] : undefined;
 
   return gen_tooltip(item, nxitem);
 };
@@ -31,26 +23,16 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
   const tooltip = (
     <div
       translate="no"
-      class={[
-        "tooltip",
-        item.Rank === "NX" ? "border-nx" : "border-normal",
-        !nodiff && "diff",
-      ]}
+      class={["tooltip", item.Rank === "NX" ? "border-nx" : "border-normal", !nodiff && "diff"]}
     ></div>
   );
 
   if (!noimage) {
     const image = (
       <div class="image">
-        {item.ImageId >= 0 && (
-          <img src={`img/item/${item.ImageId}.png`} width="34" height="34" />
-        )}
-        {item.Rank !== "N" && (
-          <img class="rank" src={`img/ui/type-icon-${item.Rank}.gif`} />
-        )}
-        {item.Grade !== "N" && (
-          <img class="grade" src={`img/ui/type-icon-${item.Grade}.gif`} />
-        )}
+        {item.ImageId >= 0 && <img src={`img/item/${item.ImageId}.png`} width="34" height="34" />}
+        {item.Rank !== "N" && <img class="rank" src={`img/ui/type-icon-${item.Rank}.gif`} />}
+        {item.Grade !== "N" && <img class="grade" src={`img/ui/type-icon-${item.Grade}.gif`} />}
       </div>
     );
     if (item.Id >= 0) {
@@ -59,7 +41,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           <a is="spa-anchor" href={`?${isKr() ? "kr=1&" : ""}id=${item.Id}`}>
             {image}
           </a>
-        </div>
+        </div>,
       );
     } else {
       tooltip.appendChild(<div>{image}</div>);
@@ -68,10 +50,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
   {
     tooltip.appendChild(
       <div
-        class={[
-          "name",
-          diffline(other && itemname[item.Id] !== itemname[other.Id]),
-        ]}
+        class={["name", diffline(other && itemname[item.Id] !== itemname[other.Id])]}
         translate="yes"
       >
         {isKr() ? (
@@ -83,12 +62,10 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
         ) : (
           <span
             class={item.Rank !== "N" && "item-name-" + item.Rank}
-            dangerouslySetInnerHTML={replaceColorTag(
-              itemname[item.Id] || item.Name
-            )}
+            dangerouslySetInnerHTML={replaceColorTag(itemname[item.Id] || item.Name)}
           ></span>
         )}
-      </div>
+      </div>,
     );
   }
   if (item.AtParam?.Max || item.OpPrt.length || item.OpBit.length) {
@@ -96,23 +73,22 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
     if (!C.not_equipment.includes(item.Type)) {
       tooltip.appendChild(
         <div>
-          - Type{" "}
-          <span class="text-color-LTYELLOW">{C.item_type[item.Type]}</span>
-        </div>
+          - Type <span class="text-color-LTYELLOW">{C.item_type[item.Type]}</span>
+        </div>,
       );
     }
     if (item.Flags?.includes("<取引不可>")) {
       tooltip.appendChild(
         <div>
           <span class="text-color-PURPLE">- 取引不可アイテム</span>
-        </div>
+        </div>,
       );
     }
     if (item.Flags?.includes("<銀行取引不可>")) {
       tooltip.appendChild(
         <div>
           <span class="text-color-PURPLE">- 銀行取引不可</span>
-        </div>
+        </div>,
       );
     }
     if (item.Exclusive) {
@@ -121,7 +97,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           <span class="text-color-PURPLE">
             - 装備数制限(<span class="text-color-LTYELLOW">0/1</span>)
           </span>
-        </div>
+        </div>,
       );
     }
   }
@@ -129,7 +105,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
     tooltip.appendChild(
       <div>
         - 耐久力 <span class="text-color-LTYELLOW">100％</span>
-      </div>
+      </div>,
     );
   }
   {
@@ -149,7 +125,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
             <span class="text-color-LTYELLOW">{(speed / 100).toFixed(2)}</span>,
             "秒)",
           ]}
-        </div>
+        </div>,
       );
     }
   }
@@ -157,11 +133,9 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
     const range = item.AtParam?.Range || 0;
     if (range !== 0) {
       tooltip.appendChild(
-        <div
-          class={diffline(other && item.AtParam.Range !== other.AtParam.Range)}
-        >
+        <div class={diffline(other && item.AtParam.Range !== other.AtParam.Range)}>
           - 射程距離 <span class="text-color-LTYELLOW">{range}</span>
-        </div>
+        </div>,
       );
     }
   }
@@ -172,7 +146,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
       const Value = opPrtValue(item, idx);
       const opText =
         typeof textdata.baseop[baseop.Id] === "undefined"
-          ? `&lt;unknown_base id=${baseop.Id} value=[${Value}]&gt;`
+          ? `&lt;unknown_base id=${baseop.Id} value=[${JSON.stringify(Value)}]&gt;`
           : replaceOpText(textdata.baseop[baseop.Id], Value, item.Extra);
 
       return (
@@ -180,7 +154,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           class={diffline(
             other &&
               (item.OpPrt[idx]?.Id !== other.OpPrt[idx]?.Id ||
-                !equals(Value, opPrtValue(other, idx)))
+                !equals(Value, opPrtValue(other, idx))),
           )}
           title={`baseop: ${baseop.Id}, ${JSON.stringify(Value)}`}
           dangerouslySetInnerHTML={`- ${opText}`}
@@ -196,7 +170,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
 
       const opText =
         typeof textdata.op[option.Id] === "undefined"
-          ? `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`
+          ? `&lt;unknown_op id=${option.Id} value=${JSON.stringify(option.Value)}&gt;`
           : replaceOpText(textdata.op[option.Id], option.Value, item.Extra);
       return (
         <div
@@ -213,9 +187,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
   }
   if (other && item.OpBit.length < other.OpBit.length) {
     for (let i = 0; i < other.OpBit.length - item.OpBit.length; i++) {
-      tooltip.appendChild(
-        <div class="text-color-GRAY item-different-line">- なし</div>
-      );
+      tooltip.appendChild(<div class="text-color-GRAY item-different-line">- なし</div>);
     }
   }
   if (item?.OpPrt[0]?.Id === 773) {
@@ -228,14 +200,14 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
         {carving[setid]
           ? `<刻印 - ${carving[setid].name}[${carving[setid][equipid].name}]>`
           : `<刻印 - #${setid}>`}
-      </div>
+      </div>,
     );
     tooltip.appendChild(
       <div>
         <span class="text-color-PURPLE">
           - 同じ刻印装備の着用制限 <span class="text-color-LTYELLOW">0/1</span>
         </span>
-      </div>
+      </div>,
     );
     tooltip.appendChild(<div>- レベル 30</div>);
     if (carving[setid]) {
@@ -244,17 +216,12 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
           // NOTE OpBit との違い
           // * op -> baseop
           // * diffline 不要
-          if (option.Id === -1 || textdata.baseop[option.Id] === "")
-            return null;
+          if (option.Id === -1 || textdata.baseop[option.Id] === "") return null;
 
           const opText =
             typeof textdata.baseop[option.Id] === "undefined"
-              ? `&lt;unknown_baseop id=${option.Id} value=${option.Value}&gt;`
-              : replaceOpText(
-                  textdata.baseop[option.Id],
-                  option.Value,
-                  item.Extra
-                );
+              ? `&lt;unknown_baseop id=${option.Id} value=${JSON.stringify(option.Value)}&gt;`
+              : replaceOpText(textdata.baseop[option.Id], option.Value, item.Extra);
           return (
             <div
               title={`baseop: ${option.Id}, ${JSON.stringify(option)}`}
@@ -266,10 +233,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
         .map((elm) => tooltip.appendChild(elm));
     }
   }
-  if (
-    item?.OpPrt[1]?.Id &&
-    Object.keys(carving_ring).includes(item?.OpPrt[1]?.Id.toString())
-  ) {
+  if (item?.OpPrt[1]?.Id && Object.keys(carving_ring).includes(item?.OpPrt[1]?.Id.toString())) {
     tooltip.appendChild(<div class="label">&lt;刻印効果&gt;</div>);
 
     if (carving_ring[item.OpPrt[1].Id]) {
@@ -291,7 +255,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
 
       const opText =
         typeof textdata.op[option.Id] === "undefined"
-          ? `&lt;unknown_op id=${option.Id} value=${option.Value}&gt;`
+          ? `&lt;unknown_op id=${option.Id} value=${JSON.stringify(option.Value)}&gt;`
           : replaceOpText(textdata.op[option.Id], option.Value, item.Extra);
       return (
         <div
@@ -306,9 +270,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
   }
   if (other && item.Rank !== "NX") {
     for (let i = 0; i < 4; i++) {
-      tooltip.appendChild(
-        <div class="text-color-GRAY item-different-line">- なし</div>
-      );
+      tooltip.appendChild(<div class="text-color-GRAY item-different-line">- なし</div>);
     }
   }
   tooltip.appendChild(<div class="label">&lt;説明&gt;</div>);
@@ -317,7 +279,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
       translate="yes"
       lang={isKr() ? "ko" : undefined}
       dangerouslySetInnerHTML={`- ${replaceTextData(isKr() ? item.Text : itemtext[item.Id] || item.Text)}`}
-    ></div>
+    ></div>,
   );
 
   if (item.Require && Object.keys(item.Require).length) {
@@ -337,9 +299,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
         } else {
           const base = item.ValueTable[value.ValueIndex];
           const html = /* html */ `- ${C.extra_status_type[value.StatusType]}
-<span class='text-color-LTYELLOW'>${value.MulValue} * [${base[0]}~${
-            base[1]
-          }]</span>`;
+<span class='text-color-LTYELLOW'>${value.MulValue} * [${base[0]}~${base[1]}]</span>`;
           row.innerHTML = html;
         }
         return row;
@@ -359,41 +319,38 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
     tooltip.appendChild(
       <div title={JSON.stringify(item)}>
         - ID <span class="text-color-LTYELLOW">{item.Id}</span>
-      </div>
+      </div>,
     );
 
     if (item.StackSize > 1) {
       tooltip.appendChild(
         <div>
           - 重ね置き <span class="text-color-LTYELLOW">{item.StackSize}</span>
-        </div>
+        </div>,
       );
     }
 
     if (item.Durability) {
       tooltip.appendChild(
         <div>
-          - 耐久減少 <span class="text-color-LTYELLOW">{item.Durability}</span>
-          型
-        </div>
+          - 耐久減少 <span class="text-color-LTYELLOW">{item.Durability}</span>型
+        </div>,
       );
     }
 
     if (item.DropLv) {
       tooltip.appendChild(
         <div>
-          - ドロップレベル{" "}
-          <span class="text-color-LTYELLOW">{item.DropLv}</span>
-        </div>
+          - ドロップレベル <span class="text-color-LTYELLOW">{item.DropLv}</span>
+        </div>,
       );
     }
 
     if (item.DropFactor) {
       tooltip.appendChild(
         <div>
-          - ドロップ係数{" "}
-          <span class="text-color-LTYELLOW">{item.DropFactor}</span>
-        </div>
+          - ドロップ係数 <span class="text-color-LTYELLOW">{item.DropFactor}</span>
+        </div>,
       );
     }
 
@@ -402,10 +359,9 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
         <div>
           - 価格{" "}
           <span class="text-color-LTYELLOW">
-            {Math.floor((item.Price * item.PriceFactor) / 100).toLocaleString()}{" "}
-            Gold
+            {Math.floor((item.Price * item.PriceFactor) / 100).toLocaleString()} Gold
           </span>
-        </div>
+        </div>,
       );
     }
 
@@ -413,7 +369,7 @@ const gen_tooltip = (item: Item, other: Item | undefined) => {
       tooltip.appendChild(
         <div>
           - Flags <span class="text-color-LTYELLOW">{item.Flags}</span>
-        </div>
+        </div>,
       );
     }
   }
