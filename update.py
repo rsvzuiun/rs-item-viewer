@@ -53,7 +53,7 @@ def _(RSPath, decode_item, is_cli):
 
         if not kr:
             print("\n" + "=" * COLUMNS)
-            fp_japan_llt = RSPath("Data/language/japan.llt")
+            fp_japan_llt = RSPath("Data/language/japanese.llt")
             fp_itemname = DEST / "public/data/japan/item_name.json"
             fp_itemtext = DEST / "public/data/japan/item_text.json"
             fp_baseop = DEST / "public/data/japan/baseop.json"
@@ -1023,7 +1023,7 @@ def _(is_cli):
 def _(RSPath, is_cli, kr):
     mo.stop(is_cli)
 
-    fp_japan_llt = RSPath("Data/language/japan.llt")
+    fp_japan_llt = RSPath("Data/language/japanese.llt")
     fp_item = RSPath("Data/Scenario/Red Stone/item.dat", kr=kr.value)
     fp_iconitem = RSPath("Data/Misc/iconItem.smi", kr=kr.value)
 
