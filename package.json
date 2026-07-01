@@ -11,7 +11,7 @@
   "devDependencies": {
     "typescript": "^6.0.3",
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-    "vite-plugin-radar": "^0.10.1",
+    "vite-plugin-radar": "^0.11.0",
     "vite-plus": "latest"
   },
   "overrides": {
