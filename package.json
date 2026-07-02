@@ -10,13 +10,12 @@
   },
   "devDependencies": {
     "typescript": "^6.0.3",
-    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-    "vite-plugin-radar": "^0.10.1",
-    "vite-plus": "latest"
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.2",
+    "vite-plugin-radar": "^0.11.0",
+    "vite-plus": "0.2.2"
   },
   "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.2"
   },
   "packageManager": "npm@11.11.1"
 }
