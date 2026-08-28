@@ -5,17 +5,18 @@
   "type": "module",
   "scripts": {},
   "dependencies": {
-    "form-storage": "github:rsvzuiun/form-storage",
     "tsx-dom": "^3.1.0"
   },
   "devDependencies": {
     "typescript": "^7.0.2",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
     "vite-plugin-radar": "^0.11.0",
-    "vite-plus": "0.2.6"
+    "vite-plus": "0.3.0",
+    "vitest": "4.1.11"
   },
   "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.2"
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
+    "vitest": "4.1.11"
   },
   "packageManager": "npm@11.11.1"
 }

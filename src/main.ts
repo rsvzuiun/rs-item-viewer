@@ -1,5 +1,5 @@
 import "./main.css";
-import FormStorage from "form-storage";
+import FormStorage from "./form-storage";
 import { genSPAAnchor } from "./components/SPAAnchor";
 import { version } from "./const";
 import { index, protector, search, weapon } from "./pages";
