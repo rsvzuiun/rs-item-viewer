@@ -103,7 +103,8 @@ class FormStorage {
     [...formdata.keys()].forEach((k) => {
       if (!targetNames.includes(k)) formdata.delete(k);
     });
-    return new URLSearchParams([...formdata].map(([k, v]) => [k, JSON.stringify(v)])).toString();
+    // oxlint-disable-next-line no-base-to-string
+    return new URLSearchParams([...formdata].map(([k, v]) => [k, String(v)])).toString();
   }
 
   private _setCheckbox(): void {
